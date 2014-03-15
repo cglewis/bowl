@@ -14,27 +14,13 @@ from punt.cli_opts import info
 from punt.cli_opts import list
 from punt.cli_opts import login
 from punt.cli_opts import logs
-from punt.cli_opts import register
-from punt.cli_opts import search
-from punt.cli_opts import start
-from punt.cli_opts import stop
-from punt.cli_opts import unwatch
+from punt.cli_opts import new
 from punt.cli_opts import version
-from punt.cli_opts import watch
 
 class cli(object):
     """
     This class is responsible for all commandline operations.
     """
-    def __init__(self, redis_host='localhost', redis_port=6379, redis_db=0):
-        try:
-            self.r = redis.StrictRedis(host=redis_host,
-                                       port=redis_port,
-                                       db=redis_db)
-        except:
-            print "Failed to connect to redis, at %s:%s", redis_host, redis_port 
-
-
     def parse_args(self):
         parser = argparse.ArgumentParser()
 
@@ -52,13 +38,12 @@ class cli(object):
 
         # list
         parse_list = subparsers.add_parser('list',
-                                           help='list directories being watched')
+                                           help='list containers running')
         parse_list.set_defaults(func=list.list.main)
 
         # login
         parse_login = subparsers.add_parser('login',
-                                            help='login with credentials for \
-                                                  access to the index')
+                                            help='login with credentials')
         parse_login.add_argument('-e', '--email',
                                  help='email address')
         parse_login.add_argument('-u', '--username',
@@ -74,6 +59,11 @@ class cli(object):
                                 default="localhost",
                                 help='specify host to get logs from')
         parse_logs.set_defaults(func=logs.logs.main)
+
+        # new
+        parse_new = subparsers.add_parser('new',
+                                           help='new container')
+        parse_new.set_defaults(func=new.new.main)
 
         # version
         parse_version = subparsers.add_parser('version',
