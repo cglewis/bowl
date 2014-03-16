@@ -26,6 +26,20 @@ class cli(object):
 
         subparsers = parser.add_subparsers(title='punt commands')
 
+        # connect
+        parse_connect = subparsers.add_parser('connect',
+                                           help='connect to a docker host')
+        parse_connect.add_argument('DOCKER_HOST',
+                                help='specify docker host to connect to')
+        parse_connect.set_defaults(func=connect.connect.main)
+
+        # disconnect
+        parse_disconnect = subparsers.add_parser('disconnect',
+                                           help='disconnect from a docker host')
+        parse_disconnect.add_argument('DOCKER_HOST',
+                                help='specify docker host to disconnect from')
+        parse_disconnect.set_defaults(func=disconnect.disconnect.main)
+
         # hosts
         parse_hosts = subparsers.add_parser('hosts',
                                             help='list hosts that are registered')
@@ -35,6 +49,13 @@ class cli(object):
         parse_info = subparsers.add_parser('info',
                                            help='display system-wide information')
         parse_info.set_defaults(func=info.info.main)
+
+        # kill
+        parse_kill = subparsers.add_parser('kill',
+                                           help='kill running container')
+        parse_kill.add_argument('CONTAINER',
+                                help='specify container to kill')
+        parse_kill.set_defaults(func=kill.kill.main)
 
         # list
         parse_list = subparsers.add_parser('list',
@@ -64,6 +85,13 @@ class cli(object):
         parse_new = subparsers.add_parser('new',
                                            help='new container')
         parse_new.set_defaults(func=new.new.main)
+
+        # snapshot
+        parse_snapshot = subparsers.add_parser('snapshot',
+                                           help='snapshot running container')
+        parse_snapshot.add_argument('CONTAINER',
+                                help='specify container to snapshot')
+        parse_snapshot.set_defaults(func=snapshot.snapshot.main)
 
         # version
         parse_version = subparsers.add_parser('version',
