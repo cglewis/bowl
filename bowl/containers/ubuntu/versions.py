@@ -5,7 +5,7 @@ Created on 16 March 2014
 @author: Charlie Lewis
 """
 
-class os(object):
+class versions(object):
     """
     This class is responsible for all available versions for ubuntu.
     """
