@@ -6,6 +6,15 @@ Created on 15 March 2014
 """
 
 import curses
+from bowl.containers import os
+
+# !! TODO this needs to be refactored when there are multiple OSes
+from bowl.containers.ubuntu import version
+
+# !! TODO this needs to be refactored when there are multiple versions
+from bowl.containers.ubuntu.precise.databases import databases
+from bowl.containers.ubuntu.precise.environment import environment
+from bowl.containers.ubuntu.precise.services import services
 
 class new(object):
     """
