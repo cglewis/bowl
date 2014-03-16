@@ -17,6 +17,7 @@ class new(object):
         self.win.keypad(1)
         self.build_dict = {}
         self.build_dict['services'] = []
+        self.launch = False
 
         # init curses stuff
         curses.noecho()
@@ -80,6 +81,10 @@ class new(object):
                 },
                ]
               },
+              {
+               'title': "Launch Container",
+               'type': "launch"
+              },
              ]
             },
            ]
@@ -116,12 +121,14 @@ class new(object):
                     textstyle = highlighted
                 if menu['options'][index]['type'] == "choice_menu":
                     self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
+                elif menu['options'][index]['type'] == "launch":
+                    self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
                 else:
                     self.win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
             textstyle = normal
             if position == option_size:
                 textstyle = highlighted
-            self.win.addstr(option_size+5, 4, "%d - %s" % (option_size+1, back), textstyle)
+            self.win.addstr(option_size+6, 4, "%d - %s" % (option_size+1, back), textstyle)
             self.win.refresh()
 
             key = self.win.getch()
@@ -137,7 +144,8 @@ class new(object):
                     position += -1
                 else:
                     position = option_size
-            elif key == 32:
+            # !! TODO error check this!!
+            elif key == 32 and menu['options'][position]['type'] == "choice_menu":
                 if choice[position] == " ":
                     choice[position] = "x"
                     # add to build_dict
@@ -155,9 +163,11 @@ class new(object):
     def process_menu(self, menu, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
-        while not exit_menu:
+        while not exit_menu and not self.launch:
             position = self.display_menu(self, menu, parent)
             if position == option_size:
                 exit_menu = True
             elif menu['options'][position]['type'] == "menu":
                 self.process_menu(self, menu['options'][position], menu)
+            elif menu['options'][position]['type'] == "launch":
+                self.launch = True
