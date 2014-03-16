@@ -13,9 +13,12 @@ class new(object):
     """
     @classmethod
     def main(self, args):
+        self.win = curses.initscr()
+        self.win.keypad(1)
+        self.build_dict = {}
+        self.build_dict['services'] = []
+
         # init curses stuff
-        win = curses.initscr()
-        win.keypad(1)
         curses.noecho()
         curses.cbreak()
         curses.start_color()
@@ -83,11 +86,12 @@ class new(object):
           },
          ]
         }
-        self.process_menu(self, win, menu_dict)
+        self.process_menu(self, menu_dict)
         curses.endwin()
+        print self.build_dict
 
     @staticmethod
-    def display_menu(self, win, menu, parent):
+    def display_menu(self, menu, parent):
         if parent is None:
             back = "Exit"
         else:
@@ -101,26 +105,26 @@ class new(object):
         choice = [" "]*(option_size+1)
 
         while key != ord('\n'):
-            win.clear()
-            win.border(0)
-            win.addstr(2,2, menu['title'], curses.A_STANDOUT)
-            win.addstr(4,2, menu['subtitle'], curses.A_BOLD)
+            self.win.clear()
+            self.win.border(0)
+            self.win.addstr(2,2, menu['title'], curses.A_STANDOUT)
+            self.win.addstr(4,2, menu['subtitle'], curses.A_BOLD)
 
             for index in range(option_size):
                 textstyle = normal
                 if position == index:
                     textstyle = highlighted
                 if menu['options'][index]['type'] == "choice_menu":
-                    win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
+                    self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
                 else:
-                    win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+                    self.win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
             textstyle = normal
             if position == option_size:
                 textstyle = highlighted
-            win.addstr(option_size+5, 4, "%d - %s" % (option_size+1, back), textstyle)
-            win.refresh()
+            self.win.addstr(option_size+5, 4, "%d - %s" % (option_size+1, back), textstyle)
+            self.win.refresh()
 
-            key = win.getch()
+            key = self.win.getch()
             if key >= ord('1') and key <= ord(str(option_size+1)):
                 position = key - ord('0') - 1
             elif key == 258:
@@ -136,19 +140,24 @@ class new(object):
             elif key == 32:
                 if choice[position] == " ":
                     choice[position] = "x"
+                    # add to build_dict
+                    self.build_dict['services'].append(menu['options'][position]['command'])
                 else:
                     choice[position] = " "
+                    # remove from build_dict
+                    # TODO check if exists first
+                    self.build_dict['services'].remove(menu['options'][position]['command'])
             elif key != ord('\n'):
                 curses.flash()
         return position
 
     @staticmethod
-    def process_menu(self, win, menu, parent=None):
+    def process_menu(self, menu, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
         while not exit_menu:
-            position = self.display_menu(self, win, menu, parent)
+            position = self.display_menu(self, menu, parent)
             if position == option_size:
                 exit_menu = True
             elif menu['options'][position]['type'] == "menu":
-                self.process_menu(self, win, menu['options'][position], menu)
+                self.process_menu(self, menu['options'][position], menu)
