@@ -32,8 +32,15 @@ class new(object):
                                   'options': [
                                               {
                                                'title': "12.04 LTS Precise",
-                                               'type': "command",
-                                               'command': "ubuntu:precise"
+                                               'type': "choice_menu",
+                                               'subtitle': "Please select services...",
+                                               'options': [
+                                                           {
+                                                            'title': "SSH Server",
+                                                            'type': "command",
+                                                            'command': "ubuntu:precise:sshd"
+                                                           },
+                                                          ]
                                               },
                                              ]
                                  },
@@ -51,29 +58,31 @@ class new(object):
 
         option_size = len(menu['options'])
         position = 0
-        prev_pos = None
         key = None
         highlighted = curses.color_pair(1)
         normal = curses.A_NORMAL
+        choice = [" "]*(option_size+1)
 
         while key != ord('\n'):
-            if position != prev_pos:
-                prev_pos = position
-                win.clear()
-                win.border(0)
-                win.addstr(2,2, menu['title'], curses.A_STANDOUT)
-                win.addstr(4,2, menu['subtitle'], curses.A_BOLD)
+            win.clear()
+            win.border(0)
+            win.addstr(2,2, menu['title'], curses.A_STANDOUT)
+            win.addstr(4,2, menu['subtitle'], curses.A_BOLD)
 
-                for index in range(option_size):
-                    textstyle = normal
-                    if position == index:
-                        textstyle = highlighted
-                    win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+            for index in range(option_size):
                 textstyle = normal
-                if position == option_size:
+                if position == index:
                     textstyle = highlighted
-                win.addstr(option_size+5, 4, "%d - %s" % (option_size+1, back), textstyle)
-                win.refresh()
+                if menu['options'][index]['type'] == "choice_menu":
+                    win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
+                else:
+                    win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+            textstyle = normal
+            if position == option_size:
+                textstyle = highlighted
+            win.addstr(option_size+5, 4, "%d - %s" % (option_size+1, back), textstyle)
+            win.refresh()
+
             key = win.getch()
             if key >= ord('1') and key <= ord(str(option_size+1)):
                 position = key - ord('0') - 1
@@ -87,6 +96,11 @@ class new(object):
                     position += -1
                 else:
                     position = option_size
+            elif key == 32:
+                if choice[position] == " ":
+                    choice[position] = "x"
+                else:
+                    choice[position] = " "
             elif key != ord('\n'):
                 curses.flash()
         return position
@@ -96,8 +110,8 @@ class new(object):
         option_size = len(menu['options'])
         exit_menu = False
         while not exit_menu:
-            getin = self.display_menu(self, win, menu, parent)
-            if getin == option_size:
+            position = self.display_menu(self, win, menu, parent)
+            if position == option_size:
                 exit_menu = True
-            elif menu['options'][getin]['type'] == "menu":
-                self.process_menu(self, win, menu['options'][getin], menu)
+            elif menu['options'][position]['type'] == "menu":
+                self.process_menu(self, win, menu['options'][position], menu)
