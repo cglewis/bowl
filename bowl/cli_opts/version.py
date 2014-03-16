@@ -1,5 +1,5 @@
 """
-This module is the version command of punt.
+This module is the version command of bowl.
 
 Created on 14 March 2014
 @author: Charlie Lewis
@@ -13,4 +13,4 @@ class version(object):
     """
     @classmethod
     def main(self, args):
-        print pkg_resources.get_distribution("punt").version
+        print pkg_resources.get_distribution("bowl").version

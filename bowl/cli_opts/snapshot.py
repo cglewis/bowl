@@ -1,13 +1,13 @@
 """
-This module is the disconnect command of punt.
+This module is the snapshot command of bowl.
 
 Created on 15 March 2014
 @author: Charlie Lewis
 """
 
-class disconnect(object):
+class snapshot(object):
     """
-    This class is responsible for the disconnect command of the cli.
+    This class is responsible for the snapshot command of the cli.
     """
     @classmethod
     def main(self, args):

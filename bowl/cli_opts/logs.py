@@ -1,13 +1,13 @@
 """
-This module is the list command of punt.
+This module is the logs command of bowl.
 
 Created on 14 March 2014
 @author: Charlie Lewis
 """
 
-class list(object):
+class logs(object):
     """
-    This class is responsible for the list command of the cli.
+    This class is responsible for the logs command of the cli.
     """
     @classmethod
     def main(self, args):

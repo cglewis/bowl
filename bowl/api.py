@@ -1,5 +1,5 @@
 """
-This module is the web server for running the REST API of punt.
+This module is the web server for running the REST API of bowl.
 
 Created on 14 March 2014
 @author: Charlie Lewis

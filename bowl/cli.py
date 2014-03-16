@@ -1,5 +1,5 @@
 """
-This module is the commandline interface of punt.
+This module is the commandline interface of bowl.
 
 Created on 14 March 2014
 @author: Charlie Lewis
@@ -9,13 +9,17 @@ import argparse
 import redis
 import socket
 import sys
-from punt.cli_opts import hosts
-from punt.cli_opts import info
-from punt.cli_opts import list
-from punt.cli_opts import login
-from punt.cli_opts import logs
-from punt.cli_opts import new
-from punt.cli_opts import version
+from bowl.cli_opts import connect
+from bowl.cli_opts import disconnect
+from bowl.cli_opts import hosts
+from bowl.cli_opts import info
+from bowl.cli_opts import kill
+from bowl.cli_opts import list
+from bowl.cli_opts import login
+from bowl.cli_opts import logs
+from bowl.cli_opts import new
+from bowl.cli_opts import snapshot
+from bowl.cli_opts import version
 
 class cli(object):
     """
@@ -24,7 +28,7 @@ class cli(object):
     def parse_args(self):
         parser = argparse.ArgumentParser()
 
-        subparsers = parser.add_subparsers(title='punt commands')
+        subparsers = parser.add_subparsers(title='bowl commands')
 
         # connect
         parse_connect = subparsers.add_parser('connect',

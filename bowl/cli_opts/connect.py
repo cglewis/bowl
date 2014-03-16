@@ -1,5 +1,5 @@
 """
-This module is the connect command of punt.
+This module is the connect command of bowl.
 
 Created on 15 March 2014
 @author: Charlie Lewis

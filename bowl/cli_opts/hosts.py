@@ -1,5 +1,5 @@
 """
-This module is the hosts command of punt.
+This module is the hosts command of bowl.
 
 Created on 14 March 2014
 @author: Charlie Lewis
