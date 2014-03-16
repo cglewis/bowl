@@ -6,10 +6,8 @@ Created on 15 March 2014
 """
 
 import curses
-from bowl.containers import os
-
-# !! TODO this needs to be refactored when there are multiple OSes
-from bowl.containers.ubuntu import version
+import inspect
+from bowl.containers import oses
 
 # !! TODO this needs to be refactored when there are multiple versions
 from bowl.containers.ubuntu.precise.databases import databases
@@ -20,8 +18,21 @@ class new(object):
     """
     This class is responsible for the new command of the cli.
     """
+    @staticmethod
+    def build_options(self):
+        menu_dict = {}
+        os_dict = {}
+        base = "bowl.containers."
+        os_list = inspect.getmembers(oses.oses, predicate=inspect.ismethod)
+        for item in os_list:
+            package = base + item[0]
+            os_dict[item[0]+'_versions'] = getattr(__import__(package, fromlist=['versions']), 'versions')
+            print os_dict
+        return menu_dict
+
     @classmethod
     def main(self, args):
+        menu_dict = self.build_options(self)
         self.win = curses.initscr()
         self.win.keypad(1)
         self.build_dict = {}
@@ -35,71 +46,85 @@ class new(object):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
         # !! TODO break this out into different files
         menu_dict = {
-         'title': "Build Container",
+         'title': "Build your bowl",
          'type': "menu",
-         'subtitle': "Please select an Operating System...",
+         'subtitle': "Please select a choice...",
          'options': [
           {
-           'title': "Ubuntu",
+           'title': "Build Container",
            'type': "menu",
-           'subtitle': "Please select a version...",
+           'subtitle': "Please select an Operating System...",
            'options': [
             {
-             'title': "12.04 LTS Precise",
+             'title': "Ubuntu",
              'type': "menu",
-             'subtitle': "Please select services...",
+             'subtitle': "Please select a version...",
              'options': [
               {
-               'title': "Services",
+               'title': "12.04 LTS Precise",
                'type': "menu",
                'subtitle': "Please select services...",
                'options': [
                 {
-                 'title': "SSH Server",
-                 'type': "choice_menu",
-                 'command': "ubuntu:precise:sshd"
+                 'title': "Services",
+                 'type': "menu",
+                 'subtitle': "Please select services...",
+                 'options': [
+                  {
+                   'title': "SSH Server",
+                   'type': "choice_menu",
+                   'command': "ubuntu:precise:sshd"
+                  },
+                  {
+                   'title': "tmux",
+                   'type': "choice_menu",
+                   'command': "ubuntu:precise:tmux"
+                  },
+                 ]
                 },
                 {
-                 'title': "tmux",
-                 'type': "choice_menu",
-                 'command': "ubuntu:precise:tmux"
+                 'title': "Databases",
+                 'type': "menu",
+                 'subtitle': "Please select databases...",
+                 'options': [
+                  {
+                   'title': "redis",
+                   'type': "choice_menu",
+                   'command': "ubuntu:precise:redis"
+                  },
+                 ]
                 },
-               ]
-              },
-              {
-               'title': "Databases",
-               'type': "menu",
-               'subtitle': "Please select databases...",
-               'options': [
                 {
-                 'title': "redis",
-                 'type': "choice_menu",
-                 'command': "ubuntu:precise:redis"
+                 'title': "Developer Tools",
+                 'type': "menu",
+                 'subtitle': "Please select developers tools...",
+                 'options': [
+                  {
+                   'title': "python",
+                   'type': "choice_menu",
+                   'command': "ubuntu:precise:python"
+                  },
+                 ]
                 },
-               ]
-              },
-              {
-               'title': "Developer Tools",
-               'type': "menu",
-               'subtitle': "Please select developers tools...",
-               'options': [
                 {
-                 'title': "python",
-                 'type': "choice_menu",
-                 'command': "ubuntu:precise:python"
+                 'title': "Launch Container",
+                 'type': "launch"
                 },
                ]
-              },
-              {
-               'title': "Launch Container",
-               'type': "launch"
               },
              ]
             },
            ]
           },
+          {
+           'title': "Choose Image",
+           'type': "menu",
+           'subtitle': "Please select an Image...",
+           'options': []
+          }
          ]
         }
+
         self.process_menu(self, menu_dict)
         curses.endwin()
         print self.build_dict
