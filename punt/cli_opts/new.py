@@ -20,32 +20,69 @@ class new(object):
         curses.cbreak()
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        # !! TODO break this out into different files
         menu_dict = {
-                     'title': "Build Container",
-                     'type': "menu",
-                     'subtitle': "Please select an Operating System...",
-                     'options': [
-                                 {
-                                  'title': "Ubuntu",
-                                  'type': "menu",
-                                  'subtitle': "Please select a version...",
-                                  'options': [
-                                              {
-                                               'title': "12.04 LTS Precise",
-                                               'type': "choice_menu",
-                                               'subtitle': "Please select services...",
-                                               'options': [
-                                                           {
-                                                            'title': "SSH Server",
-                                                            'type': "command",
-                                                            'command': "ubuntu:precise:sshd"
-                                                           },
-                                                          ]
-                                              },
-                                             ]
-                                 },
-                                ]
-                    }
+         'title': "Build Container",
+         'type': "menu",
+         'subtitle': "Please select an Operating System...",
+         'options': [
+          {
+           'title': "Ubuntu",
+           'type': "menu",
+           'subtitle': "Please select a version...",
+           'options': [
+            {
+             'title': "12.04 LTS Precise",
+             'type': "menu",
+             'subtitle': "Please select services...",
+             'options': [
+              {
+               'title': "Services",
+               'type': "menu",
+               'subtitle': "Please select services...",
+               'options': [
+                {
+                 'title': "SSH Server",
+                 'type': "choice_menu",
+                 'command': "ubuntu:precise:sshd"
+                },
+                {
+                 'title': "tmux",
+                 'type': "choice_menu",
+                 'command': "ubuntu:precise:tmux"
+                },
+               ]
+              },
+              {
+               'title': "Databases",
+               'type': "menu",
+               'subtitle': "Please select databases...",
+               'options': [
+                {
+                 'title': "redis",
+                 'type': "choice_menu",
+                 'command': "ubuntu:precise:redis"
+                },
+               ]
+              },
+              {
+               'title': "Developer Tools",
+               'type': "menu",
+               'subtitle': "Please select developers tools...",
+               'options': [
+                {
+                 'title': "python",
+                 'type': "choice_menu",
+                 'command': "ubuntu:precise:python"
+                },
+               ]
+              },
+             ]
+            },
+           ]
+          },
+         ]
+        }
         self.process_menu(self, win, menu_dict)
         curses.endwin()
 
