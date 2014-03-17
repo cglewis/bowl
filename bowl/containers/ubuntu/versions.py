@@ -13,5 +13,6 @@ class versions(object):
         return {
                 'title': "12.04 LTS Precise",
                 'type': "menu",
-                'subtitle': "Please select services..."
+                'subtitle': "Please select services...",
+                'options': []
                }

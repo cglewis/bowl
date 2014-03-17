@@ -13,5 +13,6 @@ class oses(object):
         return {
                 'title': "Ubuntu",
                 'type': "menu",
-                'subtitle': "Please select a version..."
+                'subtitle': "Please select a version...",
+                'options': []
                }

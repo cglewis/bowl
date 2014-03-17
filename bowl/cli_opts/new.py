@@ -6,6 +6,7 @@ Created on 15 March 2014
 """
 
 import curses
+import importlib
 import inspect
 from bowl.containers import oses
 
@@ -20,14 +21,90 @@ class new(object):
     """
     @staticmethod
     def build_options(self):
-        menu_dict = {}
+        menu_dict = {
+         'title': "Build your bowl",
+         'type': "menu",
+         'subtitle': "Please select a choice...",
+         'options': [
+          {
+           'title': "Build Container",
+           'type': "menu",
+           'subtitle': "Please select an Operating System...",
+           'options': []
+          },
+          {
+           'title': "Choose Image",
+           'type': "menu",
+           'subtitle': "Please select an Image...",
+           'options': []
+          }
+         ]
+        }
         os_dict = {}
         base = "bowl.containers."
         os_list = inspect.getmembers(oses.oses, predicate=inspect.ismethod)
         for item in os_list:
             package = base + item[0]
-            os_dict[item[0]+'_versions'] = getattr(__import__(package, fromlist=['versions']), 'versions')
-            print os_dict
+            os_dict[item[0]+'_versions'] = getattr(__import__(package,
+                                                              fromlist=['versions']),
+                                                              'versions')
+            menu_dict['options'][0]['options'].append(getattr(oses.oses(), item[0])())
+        os_num = 0
+        for key,os_inst in os_dict.iteritems():
+            version_list = inspect.getmembers(os_inst.versions,
+                                              predicate=inspect.ismethod)
+            version_num = 0
+            for version in version_list:
+                menu_dict['options'][0]['options'][os_num]['options'].append(getattr(os_inst.versions(), version[0])())
+
+                os_name = key.split("_", 1)
+                package = base + os_name[0] + "." + version[0] + "."
+
+                database_dict = {
+                 'title': "Databases",
+                 'type': "menu",
+                 'subtitle': "Please select databases...",
+                 'options': []
+                }
+                db_package = package + "databases"
+                db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
+                database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
+                for database in database_list:
+                    database_dict['options'].append(getattr(db_inst.databases(), database[0])())
+
+                environment_dict = {
+                 'title': "Environment Tools",
+                 'type': "menu",
+                 'subtitle': "Please select environment tools...",
+                 'options': []
+                }
+                env_package = package + "environment"
+                env_inst = getattr(__import__(env_package, fromlist=['environment']), 'environment')
+                environment_list = inspect.getmembers(env_inst.environment, predicate=inspect.ismethod)
+                for environ in environment_list:
+                    environment_dict['options'].append(getattr(env_inst.environment(), environ[0])())
+
+                service_dict = {
+                 'title': "Services",
+                 'type': "menu",
+                 'subtitle': "Please select services...",
+                 'options': []
+                }
+                serv_package = package + "services"
+                serv_inst = getattr(__import__(serv_package, fromlist=['services']), 'services')
+                service_list = inspect.getmembers(serv_inst.services, predicate=inspect.ismethod)
+                for service in service_list:
+                    service_dict['options'].append(getattr(serv_inst.services(), service[0])())
+
+                launch_dict = {
+                 'title': "Launch Container",
+                 'type': "launch"
+                }
+
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append((database_dict, environment_dict, service_dict, launch_dict))
+                version_num += 1
+            os_num += 1
+        # !! TODO result still needs more testing
         return menu_dict
 
     @classmethod
