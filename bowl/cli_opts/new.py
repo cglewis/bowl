@@ -101,15 +101,19 @@ class new(object):
                  'type': "launch"
                 }
 
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append((database_dict, environment_dict, service_dict, launch_dict))
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(database_dict)
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(environment_dict)
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(service_dict)
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
                 version_num += 1
             os_num += 1
-        # !! TODO result still needs more testing
         return menu_dict
 
     @classmethod
     def main(self, args):
+        # build dictionary of available container options
         menu_dict = self.build_options(self)
+
         self.win = curses.initscr()
         self.win.keypad(1)
         self.build_dict = {}
@@ -121,86 +125,6 @@ class new(object):
         curses.cbreak()
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
-        # !! TODO break this out into different files
-        menu_dict = {
-         'title': "Build your bowl",
-         'type': "menu",
-         'subtitle': "Please select a choice...",
-         'options': [
-          {
-           'title': "Build Container",
-           'type': "menu",
-           'subtitle': "Please select an Operating System...",
-           'options': [
-            {
-             'title': "Ubuntu",
-             'type': "menu",
-             'subtitle': "Please select a version...",
-             'options': [
-              {
-               'title': "12.04 LTS Precise",
-               'type': "menu",
-               'subtitle': "Please select services...",
-               'options': [
-                {
-                 'title': "Services",
-                 'type': "menu",
-                 'subtitle': "Please select services...",
-                 'options': [
-                  {
-                   'title': "SSH Server",
-                   'type': "choice_menu",
-                   'command': "ubuntu:precise:sshd"
-                  },
-                  {
-                   'title': "tmux",
-                   'type': "choice_menu",
-                   'command': "ubuntu:precise:tmux"
-                  },
-                 ]
-                },
-                {
-                 'title': "Databases",
-                 'type': "menu",
-                 'subtitle': "Please select databases...",
-                 'options': [
-                  {
-                   'title': "redis",
-                   'type': "choice_menu",
-                   'command': "ubuntu:precise:redis"
-                  },
-                 ]
-                },
-                {
-                 'title': "Developer Tools",
-                 'type': "menu",
-                 'subtitle': "Please select developers tools...",
-                 'options': [
-                  {
-                   'title': "python",
-                   'type': "choice_menu",
-                   'command': "ubuntu:precise:python"
-                  },
-                 ]
-                },
-                {
-                 'title': "Launch Container",
-                 'type': "launch"
-                },
-               ]
-              },
-             ]
-            },
-           ]
-          },
-          {
-           'title': "Choose Image",
-           'type': "menu",
-           'subtitle': "Please select an Image...",
-           'options': []
-          }
-         ]
-        }
 
         self.process_menu(self, menu_dict)
         curses.endwin()
