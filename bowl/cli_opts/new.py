@@ -8,6 +8,7 @@ Created on 15 March 2014
 import curses
 import importlib
 import inspect
+import os
 from bowl.containers import oses
 
 # !! TODO this needs to be refactored when there are multiple versions
@@ -19,6 +20,11 @@ class new(object):
     """
     This class is responsible for the new command of the cli.
     """
+    @staticmethod
+    def dockerfiles(self, service):
+        # !! TODO
+        return []
+
     @staticmethod
     def build_options(self):
         menu_dict = {
@@ -128,6 +134,12 @@ class new(object):
 
         self.process_menu(self, menu_dict)
         curses.endwin()
+        # !! TODO use this to build the dockerfile
+        # !! TODO if no services were seleted, don't create a container
+        # !! TODO if contains an ADD line, be sure and copy additional files
+        this_dir, this_filename = os.path.split(__file__)
+        print this_dir
+        print this_filename
         print self.build_dict
 
     @staticmethod
