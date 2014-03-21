@@ -9,6 +9,7 @@ import curses
 import importlib
 import inspect
 import os
+from docker import client
 from bowl.containers import oses
 
 # !! TODO this needs to be refactored when there are multiple versions
