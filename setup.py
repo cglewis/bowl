@@ -9,7 +9,7 @@ setup(
     long_description=open('README.md').read(),
     author=u'Charlie Lewis',
     author_email='charlie.lewis42@gmail.com',
-    package_data={'': ['LICENSE'], 'bowl': ['containers/*/*/databases/dockerfiles/*/Dockerfile', 'containers/*/*/environment/dockerfiles/*/Dockerfile', 'containers/*/*/services/dockerfiles/*/Dockerfile']},
+    package_data={'': ['LICENSE', 'README.md', 'requirements.txt'], 'bowl': ['containers/*/*/databases/dockerfiles/*/Dockerfile', 'containers/*/*/environment/dockerfiles/*/Dockerfile', 'containers/*/*/services/dockerfiles/*/Dockerfile']},
     entry_points={
         'console_scripts': [
             'bowl = bowl.cli:main',
