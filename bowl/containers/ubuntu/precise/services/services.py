@@ -13,12 +13,12 @@ class services(object):
         return {
                 'title': "SSH Server",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:sshd"
+                'command': "ubuntu:precise:services:sshd"
                }
 
     def tmux(self):
         return {
                 'title': "tmux",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:tmux"
+                'command': "ubuntu:precise:services:tmux"
                }

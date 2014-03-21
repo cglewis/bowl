@@ -6,7 +6,6 @@ Created on 14 March 2014
 """
 
 import argparse
-import redis
 import socket
 import sys
 from bowl.cli_opts import connect

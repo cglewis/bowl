@@ -138,9 +138,37 @@ class new(object):
         # !! TODO if no services were seleted, don't create a container
         # !! TODO if contains an ADD line, be sure and copy additional files
         this_dir, this_filename = os.path.split(__file__)
-        print this_dir
-        print this_filename
-        print self.build_dict
+        services = self.build_dict['services']
+        dockerfile = []
+        for service in services:
+            # !! error check that the array is this size
+            service_name = service.split(':', 3)
+            os_flavor = "/".join(service_name[0:3])
+            path = os.path.join(os.path.dirname(this_dir),
+                                "containers/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
+            with open(path, 'r') as f:
+                for line in f:
+                    # remove duplicate lines
+                    if line.strip() not in dockerfile:
+                        # combine EXPOSE commands
+                        if line.startswith("EXPOSE"):
+                            if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
+                                line = ' '.join(line.strip().split(' ', 1)[1:])
+                                # !! TODO make sure this is what the command starts with
+                                matching = [s for s in dockerfile if "EXPOSE" in s]
+                                matching.append(line)
+                                dockerfile.remove(matching[0])
+                                dockerfile.append(' '.join(matching))
+                            else:
+                                dockerfile.append(line.strip())
+                        # !! TODO
+                        #    check for multiple CMD commands
+                        #    check for multiple ENTRYPOINT commands
+                        #    check for multiple USER commands
+                        #    check WORKDIR since CMD and ENTRYPOINT are modified
+                        else:
+                            dockerfile.append(line.strip())
+        print dockerfile
 
     @staticmethod
     def display_menu(self, menu, parent):
