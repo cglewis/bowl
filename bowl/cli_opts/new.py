@@ -208,30 +208,33 @@ class new(object):
             self.win.refresh()
 
             key = self.win.getch()
-            if key >= ord('1') and key <= ord(str(option_size+1)):
-                position = key - ord('0') - 1
-            elif key == 258:
-                if position < option_size:
-                    position += 1
-                else:
-                    position = 0
-            elif key == 259:
-                if position > 0:
-                    position += -1
-                else:
-                    position = option_size
-            # !! TODO error check this!!
-            elif key == 32 and menu['options'][position]['type'] == "choice_menu":
-                if choice[position] == " ":
-                    choice[position] = "x"
-                    # add to build_dict
-                    self.build_dict['services'].append(menu['options'][position]['command'])
-                else:
-                    choice[position] = " "
-                    # remove from build_dict
-                    # TODO check if exists first
-                    self.build_dict['services'].remove(menu['options'][position]['command'])
-            elif key != ord('\n'):
+            try:
+                if key >= ord('1') and key <= ord(str(option_size+1)):
+                    position = key - ord('0') - 1
+                elif key == 258:
+                    if position < option_size:
+                        position += 1
+                    else:
+                        position = 0
+                elif key == 259:
+                    if position > 0:
+                        position += -1
+                    else:
+                        position = option_size
+                # !! TODO error check this!!
+                elif key == 32 and menu['options'][position]['type'] == "choice_menu":
+                    if choice[position] == " ":
+                        choice[position] = "x"
+                        # add to build_dict
+                        self.build_dict['services'].append(menu['options'][position]['command'])
+                    else:
+                        choice[position] = " "
+                        # remove from build_dict
+                        # TODO check if exists first
+                        self.build_dict['services'].remove(menu['options'][position]['command'])
+                elif key != ord('\n'):
+                    curses.flash()
+            except:
                 curses.flash()
         return position
 
