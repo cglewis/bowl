@@ -37,7 +37,12 @@ class new(object):
                 nocache=False, rm=False, stream=False)
         os.remove('/tmp/'+uuid_dir+'/Dockerfile')
         os.rmdir('/tmp/'+uuid_dir)
-        return uuid_dir
+        return c, uuid_dir
+
+    @staticmethod
+    def run_dockerfile(self, c, image_tag):
+        container = c.create_container(image_tag)
+        c.start(container, publish_all_ports=True)
 
     @staticmethod
     def build_options(self):
@@ -183,7 +188,8 @@ class new(object):
                         else:
                             dockerfile.append(line.strip())
 
-        uuid = self.build_dockerfile(self, dockerfile)
+        c, uuid_dir = self.build_dockerfile(self, dockerfile)
+        self.run_dockerfile(self, c, 'bowl-'+uuid_dir)
 
     @staticmethod
     def display_menu(self, menu, parent):
