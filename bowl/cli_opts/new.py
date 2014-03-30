@@ -181,11 +181,24 @@ class new(object):
                                 dockerfile.append(' '.join(matching))
                             else:
                                 dockerfile.append(line.strip())
-                        # !! TODO
-                        #    check for multiple CMD commands
-                        #    check for multiple ENTRYPOINT commands
-                        #    check for multiple USER commands
-                        #    check WORKDIR since CMD and ENTRYPOINT are modified
+                        elif line.startswith("ADD"):
+                            # !! TODO
+                            # copy context directory to tmp directory for building
+                            dockerfile.append(line.strip())
+                        # check for multiple USER commands
+                        elif line.startswith("USER"):
+                            # !! TODO
+                            dockerfile.append(line.strip())
+                        # check for multiple ENTRYPOINT commands
+                        elif line.startswith("ENTRYPOINT"):
+                            # !! TODO
+                            # check WORKDIR since CMD and ENTRYPOINT are modified
+                            dockerfile.append(line.strip())
+                        # check for multiple CMD commands
+                        elif line.startswith("CMD"):
+                            # !! TODO
+                            # check WORKDIR since CMD and ENTRYPOINT are modified
+                            dockerfile.append(line.strip())
                         else:
                             dockerfile.append(line.strip())
 
