@@ -174,6 +174,7 @@ class new(object):
                             if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
                                 line = ' '.join(line.strip().split(' ', 1)[1:])
                                 # !! TODO make sure this is what the command starts with
+                                # !! TODO display a warning to the user if there is overlapping ports
                                 matching = [s for s in dockerfile if "EXPOSE" in s]
                                 matching.append(line)
                                 dockerfile.remove(matching[0])
