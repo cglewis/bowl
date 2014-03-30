@@ -6,10 +6,11 @@ Created on 15 March 2014
 """
 
 import curses
+import docker
 import importlib
 import inspect
 import os
-from docker import client
+import uuid
 from bowl.containers import oses
 
 # !! TODO this needs to be refactored when there are multiple versions
@@ -22,9 +23,21 @@ class new(object):
     This class is responsible for the new command of the cli.
     """
     @staticmethod
-    def dockerfiles(self, service):
-        # !! TODO
-        return []
+    def build_dockerfile(self, dockerfile):
+        c = docker.Client(base_url='tcp://localhost:4243', version='1.9',
+                          timeout=10)
+        uuid_dir = str(uuid.uuid4())
+
+        # try/catch
+        os.mkdir('/tmp/'+uuid_dir)
+        with open('/tmp/'+uuid_dir+'/Dockerfile', 'w') as f:
+            for line in dockerfile:
+                f.write(line+'\n')
+        c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
+                nocache=False, rm=False, stream=False)
+        os.remove('/tmp/'+uuid_dir+'/Dockerfile')
+        os.rmdir('/tmp/'+uuid_dir)
+        return uuid_dir
 
     @staticmethod
     def build_options(self):
@@ -169,7 +182,8 @@ class new(object):
                         #    check WORKDIR since CMD and ENTRYPOINT are modified
                         else:
                             dockerfile.append(line.strip())
-        print dockerfile
+
+        uuid = self.build_dockerfile(self, dockerfile)
 
     @staticmethod
     def display_menu(self, menu, parent):
