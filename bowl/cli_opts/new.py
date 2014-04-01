@@ -159,7 +159,9 @@ class new(object):
         this_dir, this_filename = os.path.split(__file__)
         services = self.build_dict['services']
         dockerfile = []
-        for service in services:
+        for service in sorted(services):
+            entrypoint = "/bin/sh -c"
+            cmd = ""
             # !! error check that the array is this size
             service_name = service.split(':', 3)
             os_flavor = "/".join(service_name[0:3])
@@ -193,15 +195,17 @@ class new(object):
                         elif line.startswith("ENTRYPOINT"):
                             # !! TODO
                             # check WORKDIR since CMD and ENTRYPOINT are modified
-                            dockerfile.append(line.strip())
+                            entrypoint = (line.strip()).split(" ", 1)[1:][0]
                         # check for multiple CMD commands
                         elif line.startswith("CMD"):
                             # !! TODO
                             # check WORKDIR since CMD and ENTRYPOINT are modified
-                            dockerfile.append(line.strip())
+                            cmd = (line.strip()).split(" ", 1)[1:][0]
                         else:
                             dockerfile.append(line.strip())
+            print entrypoint, cmd
 
+        print dockerfile
         c, uuid_dir = self.build_dockerfile(self, dockerfile)
         self.run_dockerfile(self, c, 'bowl-'+uuid_dir)
 
