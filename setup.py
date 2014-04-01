@@ -10,6 +10,7 @@ setup(
     author=u'Charlie Lewis',
     author_email='charlie.lewis42@gmail.com',
     package_data={'': ['LICENSE', 'README.md', 'requirements.txt'], 'bowl': ['containers/*/*/databases/dockerfiles/*/Dockerfile', 'containers/*/*/environment/dockerfiles/*/Dockerfile', 'containers/*/*/services/dockerfiles/*/Dockerfile']},
+    install_requires=['docker-py==0.3.0'],
     entry_points={
         'console_scripts': [
             'bowl = bowl.cli:main',
