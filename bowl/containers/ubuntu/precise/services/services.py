@@ -14,7 +14,9 @@ class services(object):
                 'title': "rsyslog",
                 'type': "choice_menu",
                 'command': "ubuntu:precise:services:rsyslog",
-                'combine_cmd': "yes"
+                'combine_cmd': "yes",
+                'tty': "no",
+                'interactive': "no"
                }
 
     def sshd(self):
@@ -22,7 +24,9 @@ class services(object):
                 'title': "SSH Server",
                 'type': "choice_menu",
                 'command': "ubuntu:precise:services:sshd",
-                'combine_cmd': "yes"
+                'combine_cmd': "yes",
+                'tty': "no",
+                'interactive': "no"
                }
 
     def tmux(self):
@@ -30,5 +34,7 @@ class services(object):
                 'title': "tmux",
                 'type': "choice_menu",
                 'command': "ubuntu:precise:services:tmux",
-                'combine_cmd': "no"
+                'combine_cmd': "no",
+                'tty': "yes",
+                'interactive': "yes"
                }

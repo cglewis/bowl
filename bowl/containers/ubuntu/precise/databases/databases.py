@@ -14,5 +14,7 @@ class databases(object):
                 'title': "redis",
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:redis",
-                'combine_cmd': "yes"
+                'combine_cmd': "yes",
+                'tty': "no",
+                'interactive': "no"
                }

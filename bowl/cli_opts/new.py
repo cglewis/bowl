@@ -163,6 +163,7 @@ class new(object):
         this_dir, this_filename = os.path.split(__file__)
         services = self.build_dict['services']
         dockerfile = []
+        num_services = len(services)
         for service in sorted(services):
             entrypoint = "/bin/sh -c"
             cmd = ""
@@ -199,18 +200,23 @@ class new(object):
                         elif line.startswith("ENTRYPOINT"):
                             # !! TODO
                             # check WORKDIR since CMD and ENTRYPOINT are modified
+                            if num_services == 1:
+                                dockerfile.append(line.strip())
                             entrypoint = (line.strip()).split(" ", 1)[1:][0]
                         # check for multiple CMD commands
                         elif line.startswith("CMD"):
                             # !! TODO
                             # check WORKDIR since CMD and ENTRYPOINT are modified
-                            if self.combine_cmd_dict["bowl.containers." +
-                                                     service_name[0] +
-                                                     "." +
-                                                     service_name[1] +
-                                                     "." +
-                                                     service_name[3]] == "yes":
+                            if num_services == 1:
                                 dockerfile.append(line.strip())
+                            else:
+                                if self.combine_cmd_dict["bowl.containers." +
+                                                         service_name[0] +
+                                                         "." +
+                                                         service_name[1] +
+                                                         "." +
+                                                         service_name[3]] == "yes":
+                                    dockerfile.append(line.strip())
                             cmd = (line.strip()).split(" ", 1)[1:][0]
                         else:
                             dockerfile.append(line.strip())

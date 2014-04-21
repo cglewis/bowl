@@ -15,5 +15,7 @@ class environment(object):
                 'title': "python",
                 'type': "choice_menu",
                 'command': "ubuntu:precise:environment:python",
-                'combine_cmd': "no"
+                'combine_cmd': "no",
+                'tty': "yes",
+                'interactive': "yes"
                }
