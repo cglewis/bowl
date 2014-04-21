@@ -41,7 +41,8 @@ class new(object):
 
     @staticmethod
     def run_dockerfile(self, c, image_tag):
-        container = c.create_container(image_tag)
+        # TODO check if tty and stdin_open (interactive) are needed
+        container = c.create_container(image_tag, tty=True, stdin_open=True)
         c.start(container, publish_all_ports=True)
 
     @staticmethod
