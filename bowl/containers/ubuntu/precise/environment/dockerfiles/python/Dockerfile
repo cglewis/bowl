@@ -1,5 +1,7 @@
 FROM ubuntu:precise
 
+MAINTAINER Charlie Lewis
+
 RUN apt-get update && apt-get install -y \
     git \
     libxml2-dev \
