@@ -13,5 +13,6 @@ class databases(object):
         return {
                 'title': "redis",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:databases:redis"
+                'command': "ubuntu:precise:databases:redis",
+                'combine_cmd': "yes"
                }

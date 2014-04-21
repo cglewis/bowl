@@ -14,5 +14,6 @@ class environment(object):
         return {
                 'title': "python",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:environment:python"
+                'command': "ubuntu:precise:environment:python",
+                'combine_cmd': "no"
                }

@@ -95,6 +95,7 @@ class new(object):
                 db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
                 database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
                 for database in database_list:
+                    self.combine_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['combine_cmd']
                     database_dict['options'].append(getattr(db_inst.databases(), database[0])())
 
                 environment_dict = {
@@ -107,6 +108,7 @@ class new(object):
                 env_inst = getattr(__import__(env_package, fromlist=['environment']), 'environment')
                 environment_list = inspect.getmembers(env_inst.environment, predicate=inspect.ismethod)
                 for environ in environment_list:
+                    self.combine_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['combine_cmd']
                     environment_dict['options'].append(getattr(env_inst.environment(), environ[0])())
 
                 service_dict = {
@@ -119,6 +121,7 @@ class new(object):
                 serv_inst = getattr(__import__(serv_package, fromlist=['services']), 'services')
                 service_list = inspect.getmembers(serv_inst.services, predicate=inspect.ismethod)
                 for service in service_list:
+                    self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
                     service_dict['options'].append(getattr(serv_inst.services(), service[0])())
 
                 launch_dict = {
@@ -137,6 +140,7 @@ class new(object):
     @classmethod
     def main(self, args):
         # build dictionary of available container options
+        self.combine_cmd_dict = {}
         menu_dict = self.build_options(self)
 
         self.win = curses.initscr()
@@ -200,6 +204,13 @@ class new(object):
                         elif line.startswith("CMD"):
                             # !! TODO
                             # check WORKDIR since CMD and ENTRYPOINT are modified
+                            if self.combine_cmd_dict["bowl.containers." +
+                                                     service_name[0] +
+                                                     "." +
+                                                     service_name[1] +
+                                                     "." +
+                                                     service_name[3]] == "yes":
+                                dockerfile.append(line.strip())
                             cmd = (line.strip()).split(" ", 1)[1:][0]
                         else:
                             dockerfile.append(line.strip())

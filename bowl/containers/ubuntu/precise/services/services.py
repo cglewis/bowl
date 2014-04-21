@@ -13,19 +13,22 @@ class services(object):
         return {
                 'title': "rsyslog",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:services:rsyslog"
+                'command': "ubuntu:precise:services:rsyslog",
+                'combine_cmd': "yes"
                }
 
     def sshd(self):
         return {
                 'title': "SSH Server",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:services:sshd"
+                'command': "ubuntu:precise:services:sshd",
+                'combine_cmd': "yes"
                }
 
     def tmux(self):
         return {
                 'title': "tmux",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:services:tmux"
+                'command': "ubuntu:precise:services:tmux",
+                'combine_cmd': "no"
                }
