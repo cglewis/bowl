@@ -276,8 +276,11 @@ class new(object):
                                   " /home/"+username+
                                   "/.ssh; chmod 700 /home/"+username+"/.ssh")
                 dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
+                # !! TODO ask if user needs sudo
+                dockerfile.append("RUN apt-get install sudo")
                 dockerfile.append('RUN echo "'+username+
                                   ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
+                # !! TODO ask if more than one user
             except:
                 print "SSH Key file not found, failed to create user"
         print "\n### GENERATED DOCKERFILE ###"
