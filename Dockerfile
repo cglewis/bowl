@@ -1,4 +1,4 @@
-FROM ubuntu:saucy
+FROM ubuntu:trusty
 MAINTAINER Charlie Lewis
 
 RUN apt-get update

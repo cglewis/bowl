@@ -10,6 +10,8 @@ import docker
 import importlib
 import inspect
 import os
+import shutil
+import sys
 import uuid
 from bowl.containers import oses
 
@@ -23,21 +25,19 @@ class new(object):
     This class is responsible for the new command of the cli.
     """
     @staticmethod
-    def build_dockerfile(self, dockerfile):
+    def build_dockerfile(self, dockerfile, uuid_dir):
         c = docker.Client(base_url='tcp://localhost:4243', version='1.9',
                           timeout=10)
-        uuid_dir = str(uuid.uuid4())
 
         # try/catch
-        os.mkdir('/tmp/'+uuid_dir)
         with open('/tmp/'+uuid_dir+'/Dockerfile', 'w') as f:
             for line in dockerfile:
                 f.write(line+'\n')
         c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
                 nocache=False, rm=False, stream=False)
-        os.remove('/tmp/'+uuid_dir+'/Dockerfile')
-        os.rmdir('/tmp/'+uuid_dir)
-        return c, uuid_dir
+        #os.remove('/tmp/'+uuid_dir+'/Dockerfile')
+        shutil.rmtree('/tmp/'+uuid_dir)
+        return c
 
     @staticmethod
     def run_dockerfile(self, c, image_tag):
@@ -138,6 +138,39 @@ class new(object):
             os_num += 1
         return menu_dict
 
+    @staticmethod
+    def query_yes_no(self, question, default="no"):
+        """Ask a yes/no question via raw_input() and return their answer.
+
+        "question" is a string that is presented to the user.
+        "default" is the presumed answer if the user just hits <Enter>.
+            It must be "no" (the default), "yes" or None (meaning
+            an answer is required of the user).
+
+        The "answer" return value is one of "yes" or "no".
+        """
+        valid = {"yes":True,   "y":True,  "ye":True,
+                 "no":False,     "n":False}
+        if default == None:
+            prompt = " [y/n] "
+        elif default == "yes":
+            prompt = " [Y/n] "
+        elif default == "no":
+            prompt = " [y/N] "
+        else:
+            raise ValueError("invalid default answer: '%s'" % default)
+
+        while True:
+            sys.stdout.write(question + prompt)
+            choice = raw_input().lower()
+            if default is not None and choice == '':
+                return valid[default]
+            elif choice in valid:
+                return valid[choice]
+            else:
+                sys.stdout.write("Please respond with 'yes' or 'no' "\
+                                 "(or 'y' or 'n').\n")
+
     @classmethod
     def main(self, args):
         # build dictionary of available container options
@@ -149,6 +182,7 @@ class new(object):
         self.build_dict = {}
         self.build_dict['services'] = []
         self.launch = False
+        self.user = False
 
         # init curses stuff
         curses.noecho()
@@ -158,8 +192,12 @@ class new(object):
 
         self.process_menu(self, menu_dict)
         curses.endwin()
+        self.user = self.query_yes_no(self, "Do you want an account on this container?")
+        if self.user:
+            username = raw_input("Enter username: ")
+            ssh_pubkey = raw_input("Enter path to ssh public key: ")
         # !! TODO use this to build the dockerfile
-        # !! TODO if no services were seleted, don't create a container
+        # !! TODO if no services were selected, don't create a container
         # !! TODO if contains an ADD line, be sure and copy additional files
         this_dir, this_filename = os.path.split(__file__)
         services = self.build_dict['services']
@@ -221,10 +259,32 @@ class new(object):
                             cmd = (line.strip()).split(" ", 1)[1:][0]
                         else:
                             dockerfile.append(line.strip())
-            print entrypoint, cmd
 
-        print dockerfile
-        c, uuid_dir = self.build_dockerfile(self, dockerfile)
+        uuid_dir = str(uuid.uuid4())
+        # !! TODO try/except
+        os.mkdir('/tmp/'+uuid_dir)
+        if self.user:
+            try:
+                # !! TODO try/except
+                with open(ssh_pubkey, 'r') as fi:
+                    with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
+                        for line in fi:
+                            fo.write(line)
+                dockerfile.append("RUN useradd "+username)
+                dockerfile.append("RUN mkdir -p /home/"+username+
+                                  "/.ssh; chown "+username+
+                                  " /home/"+username+
+                                  "/.ssh; chmod 700 /home/"+username+"/.ssh")
+                dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
+                dockerfile.append('RUN echo "'+username+
+                                  ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
+            except:
+                print "SSH Key file not found, failed to create user"
+        print "\n### GENERATED DOCKERFILE ###"
+        for line in dockerfile:
+            print line
+        print "### END GENERATED DOCKERFILE ###\n"
+        c = self.build_dockerfile(self, dockerfile, uuid_dir)
         self.run_dockerfile(self, c, 'bowl-'+uuid_dir)
 
     @staticmethod
