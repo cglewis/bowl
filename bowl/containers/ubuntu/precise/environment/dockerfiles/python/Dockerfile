@@ -7,10 +7,10 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     python \
     build-essential \
-    make \ 
+    make \
     gcc \
     python-dev \
     locales \
-    python-pip 
+    python-pip
 
 CMD python

@@ -192,103 +192,105 @@ class new(object):
 
         self.process_menu(self, menu_dict)
         curses.endwin()
-        self.user = self.query_yes_no(self, "Do you want an account on this container?")
-        if self.user:
-            username = raw_input("Enter username: ")
-            ssh_pubkey = raw_input("Enter path to ssh public key: ")
-        # !! TODO use this to build the dockerfile
-        # !! TODO if no services were selected, don't create a container
-        # !! TODO if contains an ADD line, be sure and copy additional files
-        this_dir, this_filename = os.path.split(__file__)
-        services = self.build_dict['services']
-        dockerfile = []
-        num_services = len(services)
-        for service in sorted(services):
-            entrypoint = "/bin/sh -c"
-            cmd = ""
-            # !! error check that the array is this size
-            service_name = service.split(':', 3)
-            os_flavor = "/".join(service_name[0:3])
-            path = os.path.join(os.path.dirname(this_dir),
-                                "containers/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
-            with open(path, 'r') as f:
-                for line in f:
-                    # remove duplicate lines
-                    if line.strip() not in dockerfile:
-                        # combine EXPOSE commands
-                        if line.startswith("EXPOSE"):
-                            if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
-                                line = ' '.join(line.strip().split(' ', 1)[1:])
-                                # !! TODO make sure this is what the command starts with
-                                # !! TODO display a warning to the user if there is overlapping ports
-                                matching = [s for s in dockerfile if "EXPOSE" in s]
-                                matching.append(line)
-                                dockerfile.remove(matching[0])
-                                dockerfile.append(' '.join(matching))
-                            else:
-                                dockerfile.append(line.strip())
-                        elif line.startswith("ADD"):
-                            # !! TODO
-                            # copy context directory to tmp directory for building
-                            dockerfile.append(line.strip())
-                        # check for multiple USER commands
-                        elif line.startswith("USER"):
-                            # !! TODO
-                            dockerfile.append(line.strip())
-                        # check for multiple ENTRYPOINT commands
-                        elif line.startswith("ENTRYPOINT"):
-                            # !! TODO
-                            # check WORKDIR since CMD and ENTRYPOINT are modified
-                            if num_services == 1:
-                                dockerfile.append(line.strip())
-                            entrypoint = (line.strip()).split(" ", 1)[1:][0]
-                        # check for multiple CMD commands
-                        elif line.startswith("CMD"):
-                            # !! TODO
-                            # check WORKDIR since CMD and ENTRYPOINT are modified
-                            if num_services == 1:
-                                dockerfile.append(line.strip())
-                            else:
-                                if self.combine_cmd_dict["bowl.containers." +
-                                                         service_name[0] +
-                                                         "." +
-                                                         service_name[1] +
-                                                         "." +
-                                                         service_name[3]] == "yes":
-                                    dockerfile.append(line.strip())
-                            cmd = (line.strip()).split(" ", 1)[1:][0]
-                        else:
-                            dockerfile.append(line.strip())
+        if self.launch:
+            self.user = self.query_yes_no(self, "Do you want an account on this container?")
+            if self.user:
+                username = raw_input("Enter username: ")
+                ssh_pubkey = raw_input("Enter path to ssh public key: ")
 
-        uuid_dir = str(uuid.uuid4())
-        # !! TODO try/except
-        os.mkdir('/tmp/'+uuid_dir)
-        if self.user:
-            try:
-                # !! TODO try/except
-                with open(ssh_pubkey, 'r') as fi:
-                    with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
-                        for line in fi:
-                            fo.write(line)
-                dockerfile.append("RUN useradd "+username)
-                dockerfile.append("RUN mkdir -p /home/"+username+
-                                  "/.ssh; chown "+username+
-                                  " /home/"+username+
-                                  "/.ssh; chmod 700 /home/"+username+"/.ssh")
-                dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
-                # !! TODO ask if user needs sudo
-                dockerfile.append("RUN apt-get install sudo")
-                dockerfile.append('RUN echo "'+username+
-                                  ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
-                # !! TODO ask if more than one user
-            except:
-                print "SSH Key file not found, failed to create user"
-        print "\n### GENERATED DOCKERFILE ###"
-        for line in dockerfile:
-            print line
-        print "### END GENERATED DOCKERFILE ###\n"
-        c = self.build_dockerfile(self, dockerfile, uuid_dir)
-        self.run_dockerfile(self, c, 'bowl-'+uuid_dir)
+            # !! TODO use this to build the dockerfile
+            # !! TODO if no services were selected, don't create a container
+            # !! TODO if contains an ADD line, be sure and copy additional files
+            this_dir, this_filename = os.path.split(__file__)
+            services = self.build_dict['services']
+            dockerfile = []
+            num_services = len(services)
+            for service in sorted(services):
+                entrypoint = "/bin/sh -c"
+                cmd = ""
+                # !! error check that the array is this size
+                service_name = service.split(':', 3)
+                os_flavor = "/".join(service_name[0:3])
+                path = os.path.join(os.path.dirname(this_dir),
+                                    "containers/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
+                with open(path, 'r') as f:
+                    for line in f:
+                        # remove duplicate lines
+                        if line.strip() not in dockerfile:
+                            # combine EXPOSE commands
+                            if line.startswith("EXPOSE"):
+                                if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
+                                    line = ' '.join(line.strip().split(' ', 1)[1:])
+                                    # !! TODO make sure this is what the command starts with
+                                    # !! TODO display a warning to the user if there is overlapping ports
+                                    matching = [s for s in dockerfile if "EXPOSE" in s]
+                                    matching.append(line)
+                                    dockerfile.remove(matching[0])
+                                    dockerfile.append(' '.join(matching))
+                                else:
+                                    dockerfile.append(line.strip())
+                            elif line.startswith("ADD"):
+                                # !! TODO
+                                # copy context directory to tmp directory for building
+                                dockerfile.append(line.strip())
+                            # check for multiple USER commands
+                            elif line.startswith("USER"):
+                                # !! TODO
+                                dockerfile.append(line.strip())
+                            # check for multiple ENTRYPOINT commands
+                            elif line.startswith("ENTRYPOINT"):
+                                # !! TODO
+                                # check WORKDIR since CMD and ENTRYPOINT are modified
+                                if num_services == 1:
+                                    dockerfile.append(line.strip())
+                                entrypoint = (line.strip()).split(" ", 1)[1:][0]
+                            # check for multiple CMD commands
+                            elif line.startswith("CMD"):
+                                # !! TODO
+                                # check WORKDIR since CMD and ENTRYPOINT are modified
+                                if num_services == 1:
+                                    dockerfile.append(line.strip())
+                                else:
+                                    if self.combine_cmd_dict["bowl.containers." +
+                                                             service_name[0] +
+                                                             "." +
+                                                             service_name[1] +
+                                                             "." +
+                                                             service_name[3]] == "yes":
+                                        dockerfile.append(line.strip())
+                                cmd = (line.strip()).split(" ", 1)[1:][0]
+                            else:
+                                dockerfile.append(line.strip())
+
+            uuid_dir = str(uuid.uuid4())
+            # !! TODO try/except
+            os.mkdir('/tmp/'+uuid_dir)
+            if self.user:
+                try:
+                    # !! TODO try/except
+                    with open(ssh_pubkey, 'r') as fi:
+                        with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
+                            for line in fi:
+                                fo.write(line)
+                    dockerfile.append("RUN useradd "+username)
+                    dockerfile.append("RUN mkdir -p /home/"+username+
+                                      "/.ssh; chown "+username+
+                                      " /home/"+username+
+                                      "/.ssh; chmod 700 /home/"+username+"/.ssh")
+                    dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
+                    # !! TODO ask if user needs sudo
+                    dockerfile.append("RUN apt-get install sudo")
+                    dockerfile.append('RUN echo "'+username+
+                                      ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
+                    # !! TODO ask if more than one user
+                except:
+                    print "SSH Key file not found, failed to create user"
+            print "\n### GENERATED DOCKERFILE ###"
+            for line in dockerfile:
+                print line
+            print "### END GENERATED DOCKERFILE ###\n"
+            c = self.build_dockerfile(self, dockerfile, uuid_dir)
+            self.run_dockerfile(self, c, 'bowl-'+uuid_dir)
 
     @staticmethod
     def display_menu(self, menu, parent):
