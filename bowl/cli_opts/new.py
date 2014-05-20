@@ -216,11 +216,11 @@ class new(object):
                 with open(path, 'r') as f:
                     for line in f:
                         # remove duplicate lines
-                        if line.strip() not in dockerfile:
+                        if line.rstrip('\n'	) not in dockerfile:
                             # combine EXPOSE commands
                             if line.startswith("EXPOSE"):
                                 if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
-                                    line = ' '.join(line.strip().split(' ', 1)[1:])
+                                    line = ' '.join(line.rstrip('\n').split(' ', 1)[1:])
                                     # !! TODO make sure this is what the command starts with
                                     # !! TODO display a warning to the user if there is overlapping ports
                                     matching = [s for s in dockerfile if "EXPOSE" in s]
@@ -228,28 +228,29 @@ class new(object):
                                     dockerfile.remove(matching[0])
                                     dockerfile.append(' '.join(matching))
                                 else:
-                                    dockerfile.append(line.strip())
+                                    dockerfile.append(line.rstrip('\n'))
                             elif line.startswith("ADD"):
                                 # !! TODO
                                 # copy context directory to tmp directory for building
-                                dockerfile.append(line.strip())
+                                dockerfile.append(line.rstrip('\n'))
                             # check for multiple USER commands
                             elif line.startswith("USER"):
                                 # !! TODO
-                                dockerfile.append(line.strip())
+                                dockerfile.append(line.rstrip('\n'))
                             # check for multiple ENTRYPOINT commands
                             elif line.startswith("ENTRYPOINT"):
                                 # !! TODO
                                 # check WORKDIR since CMD and ENTRYPOINT are modified
+                                # use the ENTRYPOINT that corresponds with the chosen CMD
                                 if num_services == 1:
-                                    dockerfile.append(line.strip())
-                                entrypoint = (line.strip()).split(" ", 1)[1:][0]
+                                    dockerfile.append(line.rstrip('\n'))
+                                entrypoint = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             # check for multiple CMD commands
                             elif line.startswith("CMD"):
                                 # !! TODO
                                 # check WORKDIR since CMD and ENTRYPOINT are modified
                                 if num_services == 1:
-                                    dockerfile.append(line.strip())
+                                    dockerfile.append(line.rstrip('\n'))
                                 else:
                                     if self.combine_cmd_dict["bowl.containers." +
                                                              service_name[0] +
@@ -257,10 +258,12 @@ class new(object):
                                                              service_name[1] +
                                                              "." +
                                                              service_name[3]] == "yes":
-                                        dockerfile.append(line.strip())
-                                cmd = (line.strip()).split(" ", 1)[1:][0]
+                                        # !! TODO only append if there is only one
+                                        # if more than one, use supervisord or something
+                                        dockerfile.append(line.rstrip('\n'))
+                                cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             else:
-                                dockerfile.append(line.strip())
+                                dockerfile.append(line.rstrip('\n'))
 
             uuid_dir = str(uuid.uuid4())
             # !! TODO try/except

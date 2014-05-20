@@ -15,6 +15,7 @@ class services(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:services:rsyslog",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
@@ -25,16 +26,7 @@ class services(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:services:sshd",
                 'combine_cmd': "yes",
+                'background_cmd': "/usr/sbin/sshd",
                 'tty': "no",
                 'interactive': "no"
-               }
-
-    def tmux(self):
-        return {
-                'title': "tmux",
-                'type': "choice_menu",
-                'command': "ubuntu:precise:services:tmux",
-                'combine_cmd': "no",
-                'tty': "yes",
-                'interactive': "yes"
                }

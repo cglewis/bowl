@@ -19,3 +19,13 @@ class environment(object):
                 'tty': "yes",
                 'interactive': "yes"
                }
+
+    def tmux(self):
+        return {
+                'title': "tmux",
+                'type': "choice_menu",
+                'command': "ubuntu:precise:environment:tmux",
+                'combine_cmd': "no",
+                'tty': "yes",
+                'interactive': "yes"
+               }

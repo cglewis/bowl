@@ -15,6 +15,7 @@ class databases(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:elasticsearch",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
@@ -25,6 +26,7 @@ class databases(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:influxdb",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
@@ -35,6 +37,7 @@ class databases(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:mysql",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
@@ -45,6 +48,7 @@ class databases(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:postgresql",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
@@ -55,6 +59,7 @@ class databases(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:redis",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
@@ -65,6 +70,7 @@ class databases(object):
                 'type': "choice_menu",
                 'command': "ubuntu:precise:databases:rethinkdb",
                 'combine_cmd': "yes",
+                'background_cmd': "TODO",
                 'tty': "no",
                 'interactive': "no"
                }
