@@ -4,6 +4,9 @@ This module is the disconnect command of bowl.
 Created on 15 March 2014
 @author: Charlie Lewis
 """
+import ast
+import fileinput
+import os
 
 class disconnect(object):
     """
@@ -11,5 +14,12 @@ class disconnect(object):
     """
     @classmethod
     def main(self, args):
-        # !! TODO
-        print args
+        #try:
+        directory = "~/.bowl"
+        directory = os.path.expanduser(directory)
+        for line in fileinput.input(os.path.join(directory, "hosts"), inplace=True):
+            host = ast.literal_eval(line.rstrip('\n'))
+            if args.DOCKER_HOST != host['title']:
+                print "%s" % (line),
+        #except:
+        #    pass

@@ -5,6 +5,7 @@ Created on 15 March 2014
 @author: Charlie Lewis
 """
 
+import ast
 import curses
 import docker
 import importlib
@@ -26,6 +27,7 @@ class new(object):
     """
     @staticmethod
     def build_dockerfile(self, dockerfile, uuid_dir):
+        # !! TODO use docker host(s) that were selected
         c = docker.Client(base_url='tcp://localhost:4243', version='1.9',
                           timeout=10)
 
@@ -125,6 +127,22 @@ class new(object):
                     self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
                     service_dict['options'].append(getattr(serv_inst.services(), service[0])())
 
+                host_dict = {
+                 'title': "Docker Hosts",
+                 'type': "menu",
+                 'subtitle': "Please select which hosts are available to use for containers...",
+                 'options': []
+                }
+
+                try:
+                    directory = "~/.bowl"
+                    directory = os.path.expanduser(directory)
+                    with open(os.path.join(directory, "hosts"), 'r') as f:
+                        for line in f:
+                            host_dict['options'].append(ast.literal_eval(line.rstrip('\n')))
+                except:
+                    pass
+
                 launch_dict = {
                  'title': "Launch Container",
                  'type': "launch"
@@ -133,6 +151,7 @@ class new(object):
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(database_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(environment_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(service_dict)
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
                 version_num += 1
             os_num += 1
@@ -319,7 +338,9 @@ class new(object):
                 textstyle = normal
                 if position == index:
                     textstyle = highlighted
-                if menu['options'][index]['type'] == "choice_menu":
+                if menu['options'][index]['title'] == "Docker Hosts":
+                    self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+                elif menu['options'][index]['type'] == "choice_menu":
                     self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
                 elif menu['options'][index]['type'] == "launch":
                     self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
@@ -342,27 +363,29 @@ class new(object):
                         position = 0
                 elif key == 259:
                     if position > 0:
-                        position += -1
+                        position -= 1
                     else:
                         position = option_size
                 # !! TODO error check this!!
                 elif key == 32 and menu['options'][position]['type'] == "choice_menu":
                     if choice[position] == " ":
                         choice[position] = "x"
-                        # add to build_dict
-                        self.build_dict['services'].append(menu['options'][position]['command'])
+                        if "command" in menu['options'][position]:
+                            # add to build_dict
+                            self.build_dict['services'].append(menu['options'][position]['command'])
                     else:
                         choice[position] = " "
-                        # remove from build_dict
-                        # TODO check if exists first
-                        self.build_dict['services'].remove(menu['options'][position]['command'])
+                        if "command" in menu['options'][position]:
+                            # remove from build_dict
+                            # TODO check if exists first
+                            self.build_dict['services'].remove(menu['options'][position]['command'])
                 elif key != ord('\n'):
                     curses.flash()
             except:
                 curses.flash()
         return position
 
-    @staticmethod
+    @staticmethod 
     def process_menu(self, menu, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
