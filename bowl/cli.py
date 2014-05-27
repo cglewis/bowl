@@ -6,8 +6,6 @@ Created on 14 March 2014
 """
 
 import argparse
-import socket
-import sys
 from bowl.cli_opts import connect
 from bowl.cli_opts import disconnect
 from bowl.cli_opts import hosts
