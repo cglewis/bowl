@@ -6,6 +6,7 @@ Created on 14 March 2014
 """
 
 import argparse
+from bowl.cli_opts import add
 from bowl.cli_opts import connect
 from bowl.cli_opts import disconnect
 from bowl.cli_opts import hosts
@@ -27,6 +28,19 @@ class cli(object):
         parser = argparse.ArgumentParser()
 
         subparsers = parser.add_subparsers(title='bowl commands')
+
+        # add
+        parse_add = subparsers.add_parser('add',
+                                           help='add a service')
+        parse_add.add_argument('OS',
+                                help='specify operating system for service')
+        parse_add.add_argument('VERSION',
+                                help='specify version of operating system')
+        parse_add.add_argument('TYPE',
+                                help='specify type of service (database, environment, service)')
+        parse_add.add_argument('NAME',
+                                help='specify name of service')
+        parse_add.set_defaults(func=add.add.main)
 
         # connect
         parse_connect = subparsers.add_parser('connect',
