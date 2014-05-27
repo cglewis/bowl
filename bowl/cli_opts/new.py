@@ -42,9 +42,12 @@ class new(object):
         return c
 
     @staticmethod
-    def run_dockerfile(self, c, image_tag):
+    def run_dockerfile(self, c, image_tag, name):
         # TODO check if tty and stdin_open (interactive) are needed
-        container = c.create_container(image_tag, tty=True, stdin_open=True)
+        if name != "":
+            container = c.create_container(image_tag, tty=True, stdin_open=True, name=name, hostname=name)
+        else:
+            container = c.create_container(image_tag, tty=True, stdin_open=True)
         c.start(container, publish_all_ports=True)
 
     @staticmethod
@@ -202,6 +205,8 @@ class new(object):
         self.build_dict['services'] = []
         self.launch = False
         self.user = False
+        self.name = False
+        name = ""
 
         # init curses stuff
         curses.noecho()
@@ -216,6 +221,9 @@ class new(object):
             if self.user:
                 username = raw_input("Enter username: ")
                 ssh_pubkey = raw_input("Enter path to ssh public key: ")
+            self.name = self.query_yes_no(self, "Do you want to name this container?")
+            if self.name:
+                name = raw_input("Enter container name: ")
 
             # !! TODO use this to build the dockerfile
             # !! TODO if no services were selected, don't create a container
@@ -312,7 +320,7 @@ class new(object):
                 print line
             print "### END GENERATED DOCKERFILE ###\n"
             c = self.build_dockerfile(self, dockerfile, uuid_dir)
-            self.run_dockerfile(self, c, 'bowl-'+uuid_dir)
+            self.run_dockerfile(self, c, 'bowl-'+uuid_dir, name)
 
     @staticmethod
     def display_menu(self, menu, parent):
