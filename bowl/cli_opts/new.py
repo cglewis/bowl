@@ -298,7 +298,7 @@ class new(object):
             if self.user:
                 try:
                     # !! TODO try/except
-                    with open(ssh_pubkey, 'r') as fi:
+                    with open(os.path.expanduser(ssh_pubkey), 'r') as fi:
                         with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
                             for line in fi:
                                 fo.write(line)
