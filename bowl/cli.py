@@ -17,6 +17,7 @@ from bowl.cli_opts import list
 from bowl.cli_opts import login
 from bowl.cli_opts import logs
 from bowl.cli_opts import new
+from bowl.cli_opts import remove
 from bowl.cli_opts import snapshot
 from bowl.cli_opts import version
 
@@ -88,6 +89,13 @@ class cli(object):
         parse_new = subparsers.add_parser('new',
                                            help='new container')
         parse_new.set_defaults(func=new.new.main)
+
+        # remove
+        parse_remove = subparsers.add_parser('rm',
+                                           help='remove a container')
+        parse_remove.add_argument('CONTAINER',
+                                help='specify container to remove')
+        parse_remove.set_defaults(func=remove.remove.main)
 
         # snapshot
         parse_snapshot = subparsers.add_parser('snapshot',
