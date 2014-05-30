@@ -14,6 +14,7 @@ from bowl.cli_opts import info
 from bowl.cli_opts import kill
 from bowl.cli_opts import list
 from bowl.cli_opts import login
+from bowl.cli_opts import logout
 from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
@@ -88,6 +89,11 @@ class cli(object):
         parse_login.add_argument('PASSWORD',
                                  help='password')
         parse_login.set_defaults(func=login.login.main)
+
+        # logout
+        parse_logout = subparsers.add_parser('logout',
+                                            help='logout')
+        parse_logout.set_defaults(func=logout.logout.main)
 
         # logs
         parse_logs = subparsers.add_parser('logs',
