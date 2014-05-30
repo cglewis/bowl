@@ -26,29 +26,31 @@ class new(object):
     This class is responsible for the new command of the cli.
     """
     @staticmethod
-    def build_dockerfile(self, dockerfile, uuid_dir):
-        # !! TODO use docker host(s) that were selected
-        c = docker.Client(base_url='tcp://localhost:4243', version='1.9',
-                          timeout=10)
-
+    def build_dockerfile(self, dockerfile, uuid_dir, name):
         # try/catch
         with open('/tmp/'+uuid_dir+'/Dockerfile', 'w') as f:
             for line in dockerfile:
                 f.write(line+'\n')
-        c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
-                nocache=False, rm=False, stream=False)
-        #os.remove('/tmp/'+uuid_dir+'/Dockerfile')
-        shutil.rmtree('/tmp/'+uuid_dir)
-        return c
 
-    @staticmethod
-    def run_dockerfile(self, c, image_tag, name):
-        # TODO check if tty and stdin_open (interactive) are needed
-        if name != "":
-            container = c.create_container(image_tag, tty=True, stdin_open=True, name=name, hostname=name)
-        else:
-            container = c.create_container(image_tag, tty=True, stdin_open=True)
-        c.start(container, publish_all_ports=True)
+        image_tag = 'bowl-'+uuid_dir
+
+        for host in self.hosts:
+            # !! TODO try/except - verify that hosts specified can be reached
+            c = docker.Client(base_url='tcp://'+host['title']+':4243', version='1.9',
+                              timeout=10)
+
+            c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
+                    nocache=False, rm=False, stream=False)
+
+            # TODO check if tty and stdin_open (interactive) are needed
+            if name != "":
+                container = c.create_container(image_tag, tty=True, stdin_open=True, name=name, hostname=name)
+            else:
+                container = c.create_container(image_tag, tty=True, stdin_open=True)
+            c.start(container, publish_all_ports=True)
+
+        shutil.rmtree('/tmp/'+uuid_dir)
+        return
 
     @staticmethod
     def build_options(self):
@@ -195,6 +197,7 @@ class new(object):
 
     @classmethod
     def main(self, args):
+        # !! TODO this should be in __init__
         # build dictionary of available container options
         self.combine_cmd_dict = {}
         menu_dict = self.build_options(self)
@@ -203,6 +206,7 @@ class new(object):
         self.win.keypad(1)
         self.build_dict = {}
         self.build_dict['services'] = []
+        self.hosts = []
         self.launch = False
         self.user = False
         self.name = False
@@ -319,8 +323,7 @@ class new(object):
             for line in dockerfile:
                 print line
             print "### END GENERATED DOCKERFILE ###\n"
-            c = self.build_dockerfile(self, dockerfile, uuid_dir)
-            self.run_dockerfile(self, c, 'bowl-'+uuid_dir, name)
+            self.build_dockerfile(self, dockerfile, uuid_dir, name)
 
     @staticmethod
     def display_menu(self, menu, parent):
@@ -381,12 +384,18 @@ class new(object):
                         if "command" in menu['options'][position]:
                             # add to build_dict
                             self.build_dict['services'].append(menu['options'][position]['command'])
+                        else:
+                            # add to docker hosts
+                            self.hosts.append(menu['options'][position])
                     else:
                         choice[position] = " "
                         if "command" in menu['options'][position]:
                             # remove from build_dict
                             # TODO check if exists first
                             self.build_dict['services'].remove(menu['options'][position]['command'])
+                        else:
+                            # remove from docker hosts
+                            self.hosts.remove(menu['options'][position])
                 elif key != ord('\n'):
                     curses.flash()
             except:
