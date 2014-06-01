@@ -7,12 +7,6 @@ RUN apt-get update && \
     apt-get update && \
     apt-get install -y rethinkdb
 
-# define mountable directories
-VOLUME ["/data"]
-
-# define working directory
-WORKDIR /data
-
 EXPOSE 8080 28015 29015
 
 # define default command
