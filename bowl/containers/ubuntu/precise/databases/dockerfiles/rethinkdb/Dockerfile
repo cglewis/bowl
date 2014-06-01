@@ -1,4 +1,5 @@
 FROM ubuntu:precise
+MAINTAINER Charlie Lewis
 
 # install rethinkdb
 RUN apt-get update && \
