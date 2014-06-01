@@ -16,3 +16,10 @@ class versions(object):
                 'subtitle': "Please select services...",
                 'options': []
                }
+    def trusty(self):
+        return {
+                'title': "14.04 LTS Trusty",
+                'type': "menu",
+                'subtitle': "Please select services...",
+                'options': []
+               }

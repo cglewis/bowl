@@ -173,8 +173,8 @@ class new(object):
 
         The "answer" return value is one of "yes" or "no".
         """
-        valid = {"yes":True,   "y":True,  "ye":True,
-                 "no":False,     "n":False}
+        valid = {"yes":True, "y":True, "ye":True,
+                 "no":False, "n":False}
         if default == None:
             prompt = " [y/n] "
         elif default == "yes":
@@ -338,6 +338,7 @@ class new(object):
         highlighted = curses.color_pair(1)
         normal = curses.A_NORMAL
         choice = [" "]*(option_size+1)
+        # !! TODO update choice of 'x' according to what was selected
 
         while key != ord('\n'):
             self.win.clear()
