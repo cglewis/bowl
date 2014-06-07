@@ -10,6 +10,7 @@ from bowl.cli_opts import add
 from bowl.cli_opts import connect
 from bowl.cli_opts import disconnect
 from bowl.cli_opts import hosts
+from bowl.cli_opts import image_import
 from bowl.cli_opts import info
 from bowl.cli_opts import kill
 from bowl.cli_opts import list
@@ -61,6 +62,18 @@ class cli(object):
         parse_hosts = subparsers.add_parser('hosts',
                                             help='list hosts that are registered')
         parse_hosts.set_defaults(func=hosts.hosts.main)
+
+        # import
+        parse_import = subparsers.add_parser('import',
+                                           help='import an image')
+        parse_import.add_argument('IMAGE_NAME',
+                                help='specify name of image to import')
+        parse_import.add_argument('IMAGE_PATH',
+                                help='specify path of image to import')
+        parse_import.add_argument('-d', '--description',
+                                help='description of image to import')
+        # use non-standard naming scheme to not conflict with python's import
+        parse_import.set_defaults(func=image_import.image_import.main)
 
         # info
         parse_info = subparsers.add_parser('info',

@@ -8,6 +8,22 @@ Created on 14 March 2014
 import sys
 import web
 
+from bowl.cli_opts import add
+from bowl.cli_opts import connect
+from bowl.cli_opts import disconnect
+from bowl.cli_opts import hosts
+from bowl.cli_opts import image_import
+from bowl.cli_opts import info
+from bowl.cli_opts import kill
+from bowl.cli_opts import list
+from bowl.cli_opts import login
+from bowl.cli_opts import logout
+from bowl.cli_opts import logs
+from bowl.cli_opts import new
+from bowl.cli_opts import remove
+from bowl.cli_opts import snapshot
+from bowl.cli_opts import version
+
 class main(object):
     """
     This class is responsible for initializing the urls and web server.
@@ -26,7 +42,22 @@ class main(object):
 
     def setup(self):
         urls = (
-            '/', 'root'
+            '/', 'root',
+            '/add', 'api_add',
+            '/connect', 'api_connect',
+            '/disconnect', 'api_disconnect',
+            '/hosts', 'api_hosts',
+            '/import', 'api_image_import',
+            '/info', 'api_info',
+            '/kill', 'api_kill',
+            '/list', 'api_list',
+            '/login', 'api_login',
+            '/logout', 'api_logout',
+            '/logs', 'api_logs',
+            '/new', 'api_new',
+            '/remove', 'api_remove',
+            '/snapshot', 'api_snapshot',
+            '/version', 'api_version',
         )
         return urls
 
@@ -41,6 +72,166 @@ class root:
         :return: returns the information
         """
         return ""
+
+class api_add:
+    """
+    This class is resposible for adding a service
+    """
+    def POST(self):
+        """
+        POSTs the new service being added.
+        """
+        return ""
+
+class api_connect:
+    """
+    This class is resposible for creating a connection to a docker host.
+    """
+    def POST(self):
+        """
+        POSTs the connection to the docker host.
+        """
+        return ""
+
+class api_disconnect:
+    """
+    This class is resposible for disconnecting a connection to a docker host.
+    """
+    def POST(self):
+        """
+        POSTs the disconnection to the docker host.
+        """
+        return ""
+
+class api_hosts:
+    """
+    This class is resposible for listing the connected docker hosts.
+    """
+    def GET(self):
+        """
+        GETs the connected docker hosts.
+
+        :return: returns the list of connected docker hosts.
+        """
+        return ""
+
+class api_image_import:
+    """
+    This class is resposible for importing an image.
+    """
+    def POST(self):
+        """
+        POSTs the image being imported.
+        """
+        return ""
+
+class api_info:
+    """
+    This class is resposible for giving system-wide information.
+    """
+    def GET(self):
+        """
+        GETs the system-wide information and renders it.
+
+        :return: returns the information.
+        """
+        return ""
+
+class api_kill:
+    """
+    This class is resposible for killing a container.
+    """
+    def POST(self):
+        """
+        POSTs the container to kill.
+        """
+        return ""
+
+class api_list:
+    """
+    This class is resposible for listing the running containers.
+    """
+    def GET(self):
+        """
+        GETs the list of running containers.
+
+        :return: returns the list of running containers.
+        """
+        return ""
+
+class api_login:
+    """
+    This class is resposible for logging in.
+    """
+    def POST(self):
+        """
+        POSTs the user to login.
+        """
+        return ""
+
+class api_logout:
+    """
+    This class is resposible for logging out.
+    """
+    def POST(self):
+        """
+        POSTs the user to logout.
+        """
+        return ""
+
+class api_logs:
+    """
+    This class is resposible for returning logs of a server.
+    """
+    def GET(self):
+        """
+        GETs the logs of a server.
+
+        :return: returns the logs of a server.
+        """
+        return ""
+
+class api_new:
+    """
+    This class is resposible for creating a new container.
+    """
+    def POST(self):
+        """
+        POSTs the creation of a new container.
+        """
+        return ""
+
+class api_remove:
+    """
+    This class is resposible for removing a container.
+    """
+    def POST(self):
+        """
+        POSTs the removal of a container.
+        """
+        return ""
+
+class api_snapshot:
+    """
+    This class is resposible for snapshotting a container.
+    """
+    def POST(self):
+        """
+        POSTs the snapshot of a container.
+        """
+        return ""
+
+class api_version:
+    """
+    This class is resposible for returning the version of bowl.
+    """
+    def GET(self):
+        """
+        GETs the version of bowl.
+
+        :return: returns the version of bowl.
+        """
+        return version.version.main([])
 
 if __name__ == "__main__": # pragma: no cover
     main().app.run()
