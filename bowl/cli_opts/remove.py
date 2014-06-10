@@ -15,6 +15,6 @@ class remove(object):
         # !! TODO make more robust and read from connected hosts
         #         also deal with the possibility of more than one
         #         container having the same name on different hosts
-        c = docker.Client(base_url='tcp://localhost:4243', version='1.9',
+        c = docker.Client(base_url='tcp://localhost:2375', version='1.9',
                           timeout=10)
         c.remove_container(args.CONTAINER)

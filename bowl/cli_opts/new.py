@@ -36,7 +36,7 @@ class new(object):
 
         for host in self.hosts:
             # !! TODO try/except - verify that hosts specified can be reached
-            c = docker.Client(base_url='tcp://'+host['title']+':4243', version='1.9',
+            c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
                               timeout=10)
 
             c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
