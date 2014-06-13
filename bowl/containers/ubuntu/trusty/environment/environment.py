@@ -1,5 +1,5 @@
 """
-This module is for all environment tools supported for ubuntu:precise.
+This module is for all environment tools supported for ubuntu:trusty.
 
 Created on 16 March 2014
 @author: Charlie Lewis
@@ -8,13 +8,13 @@ Created on 16 March 2014
 class environment(object):
     """
     This class is responsible for all available environment tools for
-    ubuntu:precise.
+    ubuntu:trusty.
     """
     def python(self):
         return {
                 'title': "python",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:environment:python",
+                'command': "ubuntu:trusty:environment:python",
                 'combine_cmd': "no",
                 'tty': "yes",
                 'interactive': "yes"
@@ -24,7 +24,7 @@ class environment(object):
         return {
                 'title': "tmux",
                 'type': "choice_menu",
-                'command': "ubuntu:precise:environment:tmux",
+                'command': "ubuntu:trusty:environment:tmux",
                 'combine_cmd': "no",
                 'tty': "yes",
                 'interactive': "yes"
