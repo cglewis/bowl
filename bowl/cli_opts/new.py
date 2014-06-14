@@ -218,6 +218,8 @@ class new(object):
         curses.start_color()
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
+        self.menus_dict = {}
+        self.choices_dict = {}
         self.process_menu(self, menu_dict)
         curses.endwin()
         if self.launch:
@@ -327,18 +329,24 @@ class new(object):
 
     @staticmethod
     def display_menu(self, menu, parent):
+        option_size = len(menu['options'])
+        hash_menu = hash(str(menu))
+        choice = []
+        if hash_menu in self.menus_dict:
+            choice = self.menus_dict[hash_menu]
+        else:
+            choice = [" "]*(option_size+1)
+            self.menus_dict[hash_menu] = choice
+
         if parent is None:
             back = "Exit"
         else:
             back = "Return to %s menu" % parent['title']
 
-        option_size = len(menu['options'])
         position = 0
         key = None
         highlighted = curses.color_pair(1)
         normal = curses.A_NORMAL
-        choice = [" "]*(option_size+1)
-        # !! TODO update choice of 'x' according to what was selected
 
         while key != ord('\n'):
             self.win.clear()
@@ -401,6 +409,7 @@ class new(object):
                     curses.flash()
             except:
                 curses.flash()
+            self.menus_dict[hash_menu] = choice
         return position
 
     @staticmethod 
