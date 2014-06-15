@@ -219,7 +219,6 @@ class new(object):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
         self.menus_dict = {}
-        self.choices_dict = {}
         self.process_menu(self, menu_dict)
         curses.endwin()
         if self.launch:
