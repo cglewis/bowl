@@ -28,3 +28,5 @@ class connect(object):
                         "}\n")
         except:
             print "unable to add docker host"
+            return False
+        return True

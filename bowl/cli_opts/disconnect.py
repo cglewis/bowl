@@ -17,9 +17,12 @@ class disconnect(object):
         try:
             directory = "~/.bowl"
             directory = os.path.expanduser(directory)
+            # !! TODO need to do check if specfied host was not there to begin with
             for line in fileinput.input(os.path.join(directory, "hosts"), inplace=True):
                 host = ast.literal_eval(line.rstrip('\n'))
                 if args.DOCKER_HOST != host['title']:
                     print "%s" % (line),
         except:
             print "unable to remove docker host" 
+            return False
+        return True
