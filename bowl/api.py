@@ -44,8 +44,8 @@ class main(object):
         urls = (
             '/', 'root',
             '/add', 'api_add',
-            '/connect', 'api_connect',
-            '/disconnect', 'api_disconnect',
+            '/connect/(.*)', 'api_connect',
+            '/disconnect/(.*)', 'api_disconnect',
             '/hosts', 'api_hosts',
             '/import', 'api_image_import',
             '/info', 'api_info',
@@ -87,21 +87,29 @@ class api_connect:
     """
     This class is resposible for creating a connection to a docker host.
     """
-    def POST(self):
+    def GET(self, host):
         """
-        POSTs the connection to the docker host.
+        creates a connection to a new docker host.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.DOCKER_HOST = host
+        return connect.connect.main(args)
 
 class api_disconnect:
     """
     This class is resposible for disconnecting a connection to a docker host.
     """
-    def POST(self):
+    def GET(self, host):
         """
-        POSTs the disconnection to the docker host.
+        disconnects the specified docker host.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.DOCKER_HOST = host
+        return disconnect.disconnect.main(args)
 
 class api_hosts:
     """
@@ -113,7 +121,7 @@ class api_hosts:
 
         :return: returns the list of connected docker hosts.
         """
-        return ""
+        return hosts.hosts.main([])
 
 class api_image_import:
     """

@@ -13,12 +13,16 @@ class hosts(object):
     """
     @classmethod
     def main(self, args):
+        hosts = []
         try:
             directory = "~/.bowl"
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "hosts"), 'r') as f:
                 for line in f:
                     host = ast.literal_eval(line.rstrip("\n"))
-                    print host['title']
+                    hosts.append(host['title'])
         except:
             pass
+        for host in hosts:
+            print host
+        return hosts
