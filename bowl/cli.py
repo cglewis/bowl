@@ -8,9 +8,11 @@ Created on 14 March 2014
 import argparse
 from bowl.cli_opts import add
 from bowl.cli_opts import connect
+from bowl.cli_opts import delete
 from bowl.cli_opts import disconnect
 from bowl.cli_opts import hosts
 from bowl.cli_opts import image_import
+from bowl.cli_opts import images
 from bowl.cli_opts import info
 from bowl.cli_opts import kill
 from bowl.cli_opts import list
@@ -51,6 +53,13 @@ class cli(object):
                                 help='specify docker host to connect to')
         parse_connect.set_defaults(func=connect.connect.main)
 
+        # delete
+        parse_delete = subparsers.add_parser('delete',
+                                           help='delete an image')
+        parse_delete.add_argument('IMAGE_NAME',
+                                help='specify name of image to delete')
+        parse_delete.set_defaults(func=delete.delete.main)
+
         # disconnect
         parse_disconnect = subparsers.add_parser('disconnect',
                                            help='disconnect from a docker host')
@@ -68,12 +77,19 @@ class cli(object):
                                            help='import an image')
         parse_import.add_argument('IMAGE_NAME',
                                 help='specify name of image to import')
-        parse_import.add_argument('IMAGE_PATH',
-                                help='specify path of image to import')
+        parse_import.add_argument('DOCKER_HOST',
+                                help='specify Docker host of image to import')
         parse_import.add_argument('-d', '--description',
                                 help='description of image to import')
+        parse_import.add_argument('-u', '--uuid',
+                                help='uuid of image to import')
         # use non-standard naming scheme to not conflict with python's import
         parse_import.set_defaults(func=image_import.image_import.main)
+
+        # images
+        parse_images = subparsers.add_parser('images',
+                                           help='list images')
+        parse_images.set_defaults(func=images.images.main)
 
         # info
         parse_info = subparsers.add_parser('info',

@@ -17,6 +17,7 @@ import uuid
 from bowl.containers import oses
 
 # !! TODO this needs to be refactored when there are multiple versions
+# !! TODO this needs to be reworked to also account for the overlapping names
 from bowl.containers.ubuntu.precise.databases import databases
 from bowl.containers.ubuntu.precise.environment import environment
 from bowl.containers.ubuntu.precise.services import services
