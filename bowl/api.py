@@ -10,9 +10,11 @@ import web
 
 from bowl.cli_opts import add
 from bowl.cli_opts import connect
+from bowl.cli_opts import delete
 from bowl.cli_opts import disconnect
 from bowl.cli_opts import hosts
 from bowl.cli_opts import image_import
+from bowl.cli_opts import images
 from bowl.cli_opts import info
 from bowl.cli_opts import kill
 from bowl.cli_opts import list
@@ -45,8 +47,10 @@ class main(object):
             '/', 'root',
             '/add', 'api_add',
             '/connect/(.*)', 'api_connect',
+            '/delete/(.*)', 'api_delete',
             '/disconnect/(.*)', 'api_disconnect',
             '/hosts', 'api_hosts',
+            '/images', 'api_images',
             '/import', 'api_image_import',
             '/info', 'api_info',
             '/kill', 'api_kill',
@@ -97,6 +101,20 @@ class api_connect:
         args.DOCKER_HOST = host
         return connect.connect.main(args)
 
+class api_delete:
+    """
+    This class is resposible for deleting an image.
+    """
+    def GET(self, image):
+        """
+        deletes the specified image.
+        """
+        class Object(object):
+            pass
+        args = Object()
+        args.IMAGE_NAME = image
+        return delete.delete.main(args)
+
 class api_disconnect:
     """
     This class is resposible for disconnecting a connection to a docker host.
@@ -132,6 +150,18 @@ class api_image_import:
         POSTs the image being imported.
         """
         return ""
+
+class api_images:
+    """
+    This class is resposible for listing the images.
+    """
+    def GET(self):
+        """
+        GETs the images.
+
+        :return: returns the list of images.
+        """
+        return images.images.main([])
 
 class api_info:
     """

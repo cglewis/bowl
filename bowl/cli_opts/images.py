@@ -4,6 +4,8 @@ This module is the images command of bowl.
 Created on 22 June 2014
 @author: Charlie Lewis
 """
+import ast
+import os
 
 class images(object):
     """
@@ -11,5 +13,16 @@ class images(object):
     """
     @classmethod
     def main(self, args):
-        # !! TODO
-        print args
+        images = []
+        try:
+            directory = "~/.bowl"
+            directory = os.path.expanduser(directory)
+            with open(os.path.join(directory, "images"), 'r') as f:
+                for line in f:
+                    image = ast.literal_eval(line.rstrip("\n"))
+                    images.append(image['title'])
+        except:
+            pass
+        for image in images:
+            print image
+        return images

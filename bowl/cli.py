@@ -72,6 +72,11 @@ class cli(object):
                                             help='list hosts that are registered')
         parse_hosts.set_defaults(func=hosts.hosts.main)
 
+        # images
+        parse_images = subparsers.add_parser('images',
+                                           help='list images')
+        parse_images.set_defaults(func=images.images.main)
+
         # import
         parse_import = subparsers.add_parser('import',
                                            help='import an image')
@@ -85,11 +90,6 @@ class cli(object):
                                 help='uuid of image to import')
         # use non-standard naming scheme to not conflict with python's import
         parse_import.set_defaults(func=image_import.image_import.main)
-
-        # images
-        parse_images = subparsers.add_parser('images',
-                                           help='list images')
-        parse_images.set_defaults(func=images.images.main)
 
         # info
         parse_info = subparsers.add_parser('info',

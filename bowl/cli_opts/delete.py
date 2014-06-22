@@ -4,6 +4,9 @@ This module is the delete command of bowl.
 Created on 22 June 2014
 @author: Charlie Lewis
 """
+import ast
+import fileinput
+import os
 
 class delete(object):
     """
@@ -11,5 +14,16 @@ class delete(object):
     """
     @classmethod
     def main(self, args):
-        # !! TODO
-        print args
+        try:
+            directory = "~/.bowl"
+            directory = os.path.expanduser(directory)
+            # !! TODO need to do check if specfied image was not there to begin with
+            for line in fileinput.input(os.path.join(directory, "images"), inplace=True):
+                image = ast.literal_eval(line.rstrip('\n'))
+                if args.IMAGE_NAME != image['title']:
+                    print "%s" % (line),
+        except:
+            print "unable to delete image"
+            return False
+        return True
+

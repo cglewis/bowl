@@ -23,6 +23,6 @@ class disconnect(object):
                 if args.DOCKER_HOST != host['title']:
                     print "%s" % (line),
         except:
-            print "unable to remove docker host" 
+            print "unable to remove docker host"
             return False
         return True
