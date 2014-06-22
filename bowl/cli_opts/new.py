@@ -83,6 +83,49 @@ class new(object):
                                                               fromlist=['versions']),
                                                               'versions')
             menu_dict['options'][0]['options'].append(getattr(oses.oses(), item[0])())
+
+        try:
+            directory = "~/.bowl"
+            directory = os.path.expanduser(directory)
+            with open(os.path.join(directory, "images"), 'r') as f:
+                for line in f:
+                    menu_dict['options'][1]['options'].append(ast.literal_eval(line.rstrip('\n')))
+        except:
+            pass
+
+        launch_dict = {
+          'title': "Launch Container",
+          'type': "launch"
+        }
+        launch_image_dict = {
+          'title': "Launch Image(s)",
+          'type': "launch"
+        }
+        database_dict = {
+          'title': "Databases",
+          'type': "menu",
+          'subtitle': "Please select databases...",
+          'options': []
+        }
+        environment_dict = {
+          'title': "Environment Tools",
+          'type': "menu",
+          'subtitle': "Please select environment tools...",
+          'options': []
+        }
+        service_dict = {
+          'title': "Services",
+          'type': "menu",
+          'subtitle': "Please select services...",
+          'options': []
+        }
+        host_dict = {
+          'title': "Docker Hosts",
+          'type': "menu",
+          'subtitle': "Please select which hosts are available to use for containers...",
+          'options': []
+        }
+
         os_num = 0
         for key,os_inst in os_dict.iteritems():
             version_list = inspect.getmembers(os_inst.versions,
@@ -94,12 +137,6 @@ class new(object):
                 os_name = key.split("_", 1)
                 package = base + os_name[0] + "." + version[0] + "."
 
-                database_dict = {
-                 'title': "Databases",
-                 'type': "menu",
-                 'subtitle': "Please select databases...",
-                 'options': []
-                }
                 db_package = package + "databases"
                 db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
                 database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
@@ -107,12 +144,6 @@ class new(object):
                     self.combine_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['combine_cmd']
                     database_dict['options'].append(getattr(db_inst.databases(), database[0])())
 
-                environment_dict = {
-                 'title': "Environment Tools",
-                 'type': "menu",
-                 'subtitle': "Please select environment tools...",
-                 'options': []
-                }
                 env_package = package + "environment"
                 env_inst = getattr(__import__(env_package, fromlist=['environment']), 'environment')
                 environment_list = inspect.getmembers(env_inst.environment, predicate=inspect.ismethod)
@@ -120,25 +151,12 @@ class new(object):
                     self.combine_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['combine_cmd']
                     environment_dict['options'].append(getattr(env_inst.environment(), environ[0])())
 
-                service_dict = {
-                 'title': "Services",
-                 'type': "menu",
-                 'subtitle': "Please select services...",
-                 'options': []
-                }
                 serv_package = package + "services"
                 serv_inst = getattr(__import__(serv_package, fromlist=['services']), 'services')
                 service_list = inspect.getmembers(serv_inst.services, predicate=inspect.ismethod)
                 for service in service_list:
                     self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
                     service_dict['options'].append(getattr(serv_inst.services(), service[0])())
-
-                host_dict = {
-                 'title': "Docker Hosts",
-                 'type': "menu",
-                 'subtitle': "Please select which hosts are available to use for containers...",
-                 'options': []
-                }
 
                 try:
                     directory = "~/.bowl"
@@ -149,11 +167,6 @@ class new(object):
                 except:
                     pass
 
-                launch_dict = {
-                 'title': "Launch Container",
-                 'type': "launch"
-                }
-
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(database_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(environment_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(service_dict)
@@ -161,6 +174,8 @@ class new(object):
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
                 version_num += 1
             os_num += 1
+
+        menu_dict['options'][1]['options'].append(launch_image_dict)
         return menu_dict
 
     @staticmethod
@@ -209,6 +224,7 @@ class new(object):
         self.build_dict['services'] = []
         self.hosts = []
         self.launch = False
+        self.image = False
         self.user = False
         self.name = False
         name = ""
@@ -222,7 +238,10 @@ class new(object):
         self.menus_dict = {}
         self.process_menu(self, menu_dict)
         curses.endwin()
-        if self.launch:
+        if self.image:
+            # !! TODO
+            a = ""
+        if self.launch and not self.image:
             self.user = self.query_yes_no(self, "Do you want an account on this container?")
             if self.user:
                 username = raw_input("Enter username: ")
@@ -423,4 +442,6 @@ class new(object):
             elif menu['options'][position]['type'] == "menu":
                 self.process_menu(self, menu['options'][position], menu)
             elif menu['options'][position]['type'] == "launch":
+                if position == 1:
+                    self.image = True
                 self.launch = True
