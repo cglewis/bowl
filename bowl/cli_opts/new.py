@@ -16,12 +16,6 @@ import sys
 import uuid
 from bowl.containers import oses
 
-# !! TODO this needs to be refactored when there are multiple versions
-# !! TODO this needs to be reworked to also account for the overlapping names
-from bowl.containers.ubuntu.precise.databases import databases
-from bowl.containers.ubuntu.precise.environment import environment
-from bowl.containers.ubuntu.precise.services import services
-
 class new(object):
     """
     This class is responsible for the new command of the cli.
@@ -101,30 +95,6 @@ class new(object):
           'title': "Launch Image(s)",
           'type': "launch"
         }
-        database_dict = {
-          'title': "Databases",
-          'type': "menu",
-          'subtitle': "Please select databases...",
-          'options': []
-        }
-        environment_dict = {
-          'title': "Environment Tools",
-          'type': "menu",
-          'subtitle': "Please select environment tools...",
-          'options': []
-        }
-        service_dict = {
-          'title': "Services",
-          'type': "menu",
-          'subtitle': "Please select services...",
-          'options': []
-        }
-        host_dict = {
-          'title': "Docker Hosts",
-          'type': "menu",
-          'subtitle': "Please select which hosts are available to use for containers...",
-          'options': []
-        }
 
         os_num = 0
         for key,os_inst in os_dict.iteritems():
@@ -134,30 +104,57 @@ class new(object):
             for version in version_list:
                 menu_dict['options'][0]['options'][os_num]['options'].append(getattr(os_inst.versions(), version[0])())
 
+                database_dict = {
+                  'title': "Databases",
+                  'type': "menu",
+                  'subtitle': "Please select databases...",
+                  'options': []
+                }
                 os_name = key.split("_", 1)
                 package = base + os_name[0] + "." + version[0] + "."
 
                 db_package = package + "databases"
+                importlib.import_module(db_package)
                 db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
                 database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
                 for database in database_list:
                     self.combine_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['combine_cmd']
                     database_dict['options'].append(getattr(db_inst.databases(), database[0])())
 
+                environment_dict = {
+                  'title': "Environment Tools",
+                  'type': "menu",
+                  'subtitle': "Please select environment tools...",
+                  'options': []
+                }
                 env_package = package + "environment"
+                importlib.import_module(env_package)
                 env_inst = getattr(__import__(env_package, fromlist=['environment']), 'environment')
                 environment_list = inspect.getmembers(env_inst.environment, predicate=inspect.ismethod)
                 for environ in environment_list:
                     self.combine_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['combine_cmd']
                     environment_dict['options'].append(getattr(env_inst.environment(), environ[0])())
 
+                service_dict = {
+                  'title': "Services",
+                  'type': "menu",
+                  'subtitle': "Please select services...",
+                  'options': []
+                }
                 serv_package = package + "services"
+                importlib.import_module(serv_package)
                 serv_inst = getattr(__import__(serv_package, fromlist=['services']), 'services')
                 service_list = inspect.getmembers(serv_inst.services, predicate=inspect.ismethod)
                 for service in service_list:
                     self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
                     service_dict['options'].append(getattr(serv_inst.services(), service[0])())
 
+                host_dict = {
+                  'title': "Docker Hosts",
+                  'type': "menu",
+                  'subtitle': "Please select which hosts are available to use for containers...",
+                  'options': []
+                }
                 try:
                     directory = "~/.bowl"
                     directory = os.path.expanduser(directory)
