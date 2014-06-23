@@ -34,6 +34,7 @@ class new(object):
             c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
                               timeout=10)
 
+            # !! TODO check that the build actually created an image before trying to create the container
             c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
                     nocache=False, rm=False, stream=False)
 
@@ -236,8 +237,24 @@ class new(object):
         self.process_menu(self, menu_dict)
         curses.endwin()
         if self.image:
-            # !! TODO
-            a = ""
+            for image_info in self.build_dict['services']:
+                image_tag, image_host = image_info.split(",", 1)
+                # !! TODO try/except - verify that hosts specified can be reached
+                c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.9',
+                                  timeout=10)
+
+                name = ""
+                self.name = self.query_yes_no(self, "Do you want to name this container?")
+                if self.name:
+                    name = raw_input("Enter container name: ")
+                cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
+                # TODO check if tty and stdin_open (interactive) are needed
+                if name != "":
+                    container = c.create_container(image_tag, command=cmd, tty=True, stdin_open=True, name=name, hostname=name)
+                else:
+                    container = c.create_container(image_tag, command=cmd, tty=True, stdin_open=True)
+                c.start(container, publish_all_ports=True)
+
         if self.launch and not self.image:
             self.user = self.query_yes_no(self, "Do you want an account on this container?")
             if self.user:
