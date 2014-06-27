@@ -10,11 +10,23 @@ class environment(object):
     This class is responsible for all available environment tools for
     ubuntu:trusty.
     """
+    def golang(self):
+        return {
+                'title': "golang",
+                'type': "choice_menu",
+                'command': "ubuntu:trusty:environment:golang",
+                'object': "environment",
+                'combine_cmd': "no",
+                'tty': "yes",
+                'interactive': "yes"
+               }
+
     def python(self):
         return {
                 'title': "python",
                 'type': "choice_menu",
                 'command': "ubuntu:trusty:environment:python",
+                'object': "environment",
                 'combine_cmd': "no",
                 'tty': "yes",
                 'interactive': "yes"
@@ -25,6 +37,7 @@ class environment(object):
                 'title': "tmux",
                 'type': "choice_menu",
                 'command': "ubuntu:trusty:environment:tmux",
+                'object': "environment",
                 'combine_cmd': "no",
                 'tty': "yes",
                 'interactive': "yes"

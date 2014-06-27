@@ -150,6 +150,20 @@ class new(object):
                     self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
                     service_dict['options'].append(getattr(serv_inst.services(), service[0])())
 
+                tool_dict = {
+                  'title': "Tools",
+                  'type': "menu",
+                  'subtitle': "Please select tools...",
+                  'options': []
+                }
+                tool_package = package + "tools"
+                importlib.import_module(tool_package)
+                tool_inst = getattr(__import__(tool_package, fromlist=['tools']), 'tools')
+                tool_list = inspect.getmembers(tool_inst.tools, predicate=inspect.ismethod)
+                for tool in tool_list:
+                    self.combine_cmd_dict[package+tool[0]] = getattr(tool_inst.tools(), tool[0])()['combine_cmd']
+                    tool_dict['options'].append(getattr(tool_inst.tools(), tool[0])())
+
                 host_dict = {
                   'title': "Docker Hosts",
                   'type': "menu",
@@ -168,6 +182,7 @@ class new(object):
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(database_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(environment_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(service_dict)
+                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(tool_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
                 version_num += 1
@@ -222,6 +237,7 @@ class new(object):
         self.build_dict['services'] = []
         self.hosts = []
         self.launch = False
+        self.exit = False
         self.image = False
         self.user = False
         self.name = False
@@ -269,6 +285,9 @@ class new(object):
             # !! TODO if contains an ADD line, be sure and copy additional files
             this_dir, this_filename = os.path.split(__file__)
             services = self.build_dict['services']
+            print "The following services have been selected and will be packaged up into a container: "
+            # !! TODO parse this out by os/version/type/service
+            print services
             dockerfile = []
             num_services = len(services)
             for service in sorted(services):
@@ -380,7 +399,6 @@ class new(object):
         key = None
         highlighted = curses.color_pair(1)
         normal = curses.A_NORMAL
-
         while key != ord('\n'):
             self.win.clear()
             self.win.border(0)
@@ -402,6 +420,13 @@ class new(object):
             textstyle = normal
             if position == option_size:
                 textstyle = highlighted
+            if back != "Exit":
+                if "object" in parent and parent['object'] == "os":
+                    if len(self.build_dict['services']) > 0:
+                        back = "Exit"
+                else:
+                    back = "Return to %s menu" % parent['title']
+
             self.win.addstr(option_size+6, 4, "%d - %s" % (option_size+1, back), textstyle)
             self.win.refresh()
 
@@ -443,16 +468,18 @@ class new(object):
             except:
                 curses.flash()
             self.menus_dict[hash_menu] = choice
-        return position
+        return position, back
 
     @staticmethod 
     def process_menu(self, menu, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
-        while not exit_menu and not self.launch:
-            position = self.display_menu(self, menu, parent)
+        while not exit_menu and not self.launch and not self.exit:
+            position, back = self.display_menu(self, menu, parent)
             if position == option_size:
                 exit_menu = True
+                if back == "Exit":
+                    self.exit = True
             elif menu['options'][position]['type'] == "menu":
                 self.process_menu(self, menu['options'][position], menu)
             elif menu['options'][position]['type'] == "launch":

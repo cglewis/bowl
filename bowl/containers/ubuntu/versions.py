@@ -14,6 +14,7 @@ class versions(object):
                 'title': "12.04 LTS Precise",
                 'type': "menu",
                 'subtitle': "Please select services...",
+                'object': "version",
                 'options': []
                }
     def trusty(self):
@@ -21,5 +22,6 @@ class versions(object):
                 'title': "14.04 LTS Trusty",
                 'type': "menu",
                 'subtitle': "Please select services...",
+                'object': "version",
                 'options': []
                }

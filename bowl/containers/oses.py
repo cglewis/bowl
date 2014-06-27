@@ -14,5 +14,6 @@ class oses(object):
                 'title': "Ubuntu",
                 'type': "menu",
                 'subtitle': "Please select a version...",
+                'object': "os",
                 'options': []
                }
