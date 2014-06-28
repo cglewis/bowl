@@ -241,6 +241,12 @@ class new(object):
         self.image = False
         self.user = False
         self.name = False
+        self.default = True
+        self.unique = False
+        self.cmd = False
+        self.entrypoint = False
+        self.port = False
+        self.link = False
         name = ""
 
         # init curses stuff
@@ -252,6 +258,36 @@ class new(object):
         self.menus_dict = {}
         self.process_menu(self, menu_dict)
         curses.endwin()
+
+        #
+        #
+        #
+        self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
+        print "TODO"
+        # !! TODO only ask if more than one host was selected
+        self.unique = self.query_yes_no(self, "Assume all containers use the same parameters?", default="yes")
+        print "TODO"
+        # !! TODO if no, look through each instance for each host with the below questions
+        self.cmd = self.query_yes_no(self, "Do you want to overrite the CMD of the container?")
+        print "TODO"
+        self.entrypoint = self.query_yes_no(self, "Do you want to override the ENTRYPOINT of the container?")
+        print "TODO"
+        self.volume = self.query_yes_no(self, "Do you want to attach a volume to this container?")
+        print "TODO"
+        # !! TODO go through list of volumes, but also let them specify ones outside of that
+        self.port = self.query_yes_no(self, "Do you want to specify how a port should be exposed?")
+        print "TODO"
+        # !! TODO go through list of ports, and let them choose
+        self.link = self.query_yes_no(self, "Do you want to link this container to another container?")
+        print "TODO"
+        # !! TODO let them choose from existing containers (that will exist on the particular host(s) specified)
+        #
+        #
+        #
+
+        #self.volumes
+        #self.ports
+
         if self.image:
             for image_info in self.build_dict['services']:
                 image_tag, image_host = image_info.split(",", 1)
