@@ -256,38 +256,83 @@ class new(object):
         curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
         self.menus_dict = {}
-        self.process_menu(self, menu_dict)
+        # !! TODO cleanup
+        build_dict = self.build_dict
+        build_dict = self.process_menu(self, menu_dict, build_dict)
+        self.build_dict = build_dict
         curses.endwin()
 
-        #
-        #
-        #
         self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
-        print "TODO"
-        # !! TODO only ask if more than one host was selected
-        self.unique = self.query_yes_no(self, "Assume all containers use the same parameters?", default="yes")
-        print "TODO"
-        # !! TODO if no, look through each instance for each host with the below questions
-        self.cmd = self.query_yes_no(self, "Do you want to overrite the CMD of the container?")
-        print "TODO"
-        self.entrypoint = self.query_yes_no(self, "Do you want to override the ENTRYPOINT of the container?")
-        print "TODO"
-        self.volume = self.query_yes_no(self, "Do you want to attach a volume to this container?")
-        print "TODO"
-        # !! TODO go through list of volumes, but also let them specify ones outside of that
-        self.port = self.query_yes_no(self, "Do you want to specify how a port should be exposed?")
-        print "TODO"
-        # !! TODO go through list of ports, and let them choose
-        self.link = self.query_yes_no(self, "Do you want to link this container to another container?")
-        print "TODO"
-        # !! TODO let them choose from existing containers (that will exist on the particular host(s) specified)
-        #
-        #
-        #
 
-        #self.volumes
-        #self.ports
 
+        # !! TODO fix this!!!
+        if not self.default:
+            # init curses stuff
+            curses.noecho()
+            curses.cbreak()
+            curses.start_color()
+            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+            options_dict = {
+             'title': "Runtime options",
+             'type': "menu",
+             'subtitle': "Please select runtime options you would like to change...",
+             'options': [
+              {
+               'title': "Not all of the containers should use the same parameters?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want to override the CMD of the container?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want to override the ENTRYPOINT of the container?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want to attach a volume to this container?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want to specify how a port should be exposed?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want to link this container to another container?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want to name this container?",
+               'type': "choice_menu",
+               'options': []
+              },
+              {
+               'title': "Do you want an account on this container?",
+               'type': "choice_menu",
+               'options': []
+              }
+             ]
+            }
+
+            # !! TODO cleanup
+            self.config_dict = {}
+            self.config_dict['services'] = []
+            config_dict = self.config_dict
+            config_dict = self.options_menu(self, options_dict, config_dict)
+            self.config_dict = config_dict
+            curses.endwin()
+
+            #self.volumes
+            #self.ports
+
+        # !! TODO move out questions
         if self.image:
             for image_info in self.build_dict['services']:
                 image_tag, image_host = image_info.split(",", 1)
@@ -416,7 +461,7 @@ class new(object):
             self.build_dockerfile(self, dockerfile, uuid_dir, name)
 
     @staticmethod
-    def display_menu(self, menu, parent):
+    def display_menu(self, menu, parent, build_dict):
         option_size = len(menu['options'])
         hash_menu = hash(str(menu))
         choice = []
@@ -458,7 +503,7 @@ class new(object):
                 textstyle = highlighted
             if back != "Exit":
                 if "object" in parent and parent['object'] == "os":
-                    if len(self.build_dict['services']) > 0:
+                    if len(build_dict['services']) > 0:
                         back = "Exit"
                 else:
                     back = "Return to %s menu" % parent['title']
@@ -486,8 +531,9 @@ class new(object):
                         choice[position] = "x"
                         if "command" in menu['options'][position]:
                             # add to build_dict
-                            self.build_dict['services'].append(menu['options'][position]['command'])
+                            build_dict['services'].append(menu['options'][position]['command'])
                         else:
+                            # !! TODO only do for build_dict, not config_dict
                             # add to docker hosts
                             self.hosts.append(menu['options'][position])
                     else:
@@ -495,8 +541,9 @@ class new(object):
                         if "command" in menu['options'][position]:
                             # remove from build_dict
                             # TODO check if exists first
-                            self.build_dict['services'].remove(menu['options'][position]['command'])
+                            build_dict['services'].remove(menu['options'][position]['command'])
                         else:
+                            # !! TODO only do for build_dict, not config_dict
                             # remove from docker hosts
                             self.hosts.remove(menu['options'][position])
                 elif key != ord('\n'):
@@ -504,21 +551,32 @@ class new(object):
             except:
                 curses.flash()
             self.menus_dict[hash_menu] = choice
-        return position, back
+        return position, back, build_dict
 
     @staticmethod 
-    def process_menu(self, menu, parent=None):
+    def options_menu(self, menu, config_dict, parent=None):
+        option_size = len(menu['options'])
+        exit_menu = False
+        while not exit_menu:
+            position, back, config_dict = self.display_menu(self, menu, parent, config_dict)
+            if position == option_size:
+                exit_menu = True
+        return config_dict
+
+    @staticmethod 
+    def process_menu(self, menu, build_dict, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
         while not exit_menu and not self.launch and not self.exit:
-            position, back = self.display_menu(self, menu, parent)
+            position, back, build_dict = self.display_menu(self, menu, parent, build_dict)
             if position == option_size:
                 exit_menu = True
                 if back == "Exit":
                     self.exit = True
             elif menu['options'][position]['type'] == "menu":
-                self.process_menu(self, menu['options'][position], menu)
+                build_dict = self.process_menu(self, menu['options'][position], build_dict, menu)
             elif menu['options'][position]['type'] == "launch":
                 if position == 1:
                     self.image = True
                 self.launch = True
+        return build_dict
