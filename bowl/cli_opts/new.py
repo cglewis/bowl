@@ -340,7 +340,6 @@ class new(object):
                 c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.9',
                                   timeout=10)
 
-                name = ""
                 self.name = self.query_yes_no(self, "Do you want to name this container?")
                 if self.name:
                     name = raw_input("Enter container name: ")
@@ -533,9 +532,9 @@ class new(object):
                             # add to build_dict
                             build_dict['services'].append(menu['options'][position]['command'])
                         else:
-                            # !! TODO only do for build_dict, not config_dict
                             # add to docker hosts
-                            self.hosts.append(menu['options'][position])
+                            if self.default:
+                                self.hosts.append(menu['options'][position])
                     else:
                         choice[position] = " "
                         if "command" in menu['options'][position]:
@@ -543,9 +542,9 @@ class new(object):
                             # TODO check if exists first
                             build_dict['services'].remove(menu['options'][position]['command'])
                         else:
-                            # !! TODO only do for build_dict, not config_dict
                             # remove from docker hosts
-                            self.hosts.remove(menu['options'][position])
+                            if self.default:
+                                self.hosts.remove(menu['options'][position])
                 elif key != ord('\n'):
                     curses.flash()
             except:
