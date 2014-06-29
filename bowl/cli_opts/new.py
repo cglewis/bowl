@@ -273,13 +273,19 @@ class new(object):
             curses.start_color()
             curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
+            # !! TODO only have the option for asking about different parameters if more than one host was selected
+            #         if so, loop through the questions for each container/host
+            # !! TODO loop through X number of volumes they would like to add
+            # !! TODO loop through X number of ports in the dockerfile they would like to modify
+            # !! TODO loop through X number of containers they would like to link to
+            # !! TODO loop through X number of accounts they would like to add to teh container
             options_dict = {
              'title': "Runtime options",
              'type': "menu",
-             'subtitle': "Please select runtime options you would like to change...",
+             'subtitle': "Please select the runtime options you would like to change...",
              'options': [
               {
-               'title': "Not all of the containers should use the same parameters?",
+               'title': "Should the containers use different parameters?",
                'type': "choice_menu",
                'options': []
               },
