@@ -239,14 +239,15 @@ class new(object):
         self.launch = False
         self.exit = False
         self.image = False
+        self.default = True
         self.user = False
         self.name = False
-        self.default = True
         self.unique = False
         self.cmd = False
         self.entrypoint = False
         self.port = False
         self.link = False
+        self.volume = False
         name = ""
 
         # init curses stuff
@@ -287,42 +288,74 @@ class new(object):
               {
                'title': "Should the containers use different parameters?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'unique'
+                }
+               ]
               },
               {
                'title': "Do you want to override the CMD of the container?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'cmd'
+                }
+               ]
               },
               {
                'title': "Do you want to override the ENTRYPOINT of the container?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'entrypoint'
+                }
+               ]
               },
               {
                'title': "Do you want to attach a volume to this container?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'volume'
+                }
+               ]
               },
               {
                'title': "Do you want to specify how a port should be exposed?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'port'
+                }
+               ]
               },
               {
                'title': "Do you want to link this container to another container?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'link'
+                }
+               ]
               },
               {
                'title': "Do you want to name this container?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'name'
+                }
+               ]
               },
               {
                'title': "Do you want an account on this container?",
                'type': "choice_menu",
-               'options': []
+               'options': [
+                {
+                 'config':'user'
+                }
+               ]
               }
              ]
             }
@@ -335,9 +368,6 @@ class new(object):
             self.config_dict = config_dict
             curses.endwin()
 
-            #self.volumes
-            #self.ports
-
         # !! TODO move out questions
         if self.image:
             for image_info in self.build_dict['services']:
@@ -346,7 +376,6 @@ class new(object):
                 c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.9',
                                   timeout=10)
 
-                self.name = self.query_yes_no(self, "Do you want to name this container?")
                 if self.name:
                     name = raw_input("Enter container name: ")
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
@@ -358,11 +387,9 @@ class new(object):
                 c.start(container, publish_all_ports=True)
 
         if self.launch and not self.image:
-            self.user = self.query_yes_no(self, "Do you want an account on this container?")
             if self.user:
                 username = raw_input("Enter username: ")
                 ssh_pubkey = raw_input("Enter path to ssh public key: ")
-            self.name = self.query_yes_no(self, "Do you want to name this container?")
             if self.name:
                 name = raw_input("Enter container name: ")
 
@@ -541,6 +568,25 @@ class new(object):
                             # add to docker hosts
                             if self.default:
                                 self.hosts.append(menu['options'][position])
+                            else:
+                                if "options" in menu['options'][position]:
+                                    if "config" in menu['options'][position]['options'][0]:
+                                        if "unique" == menu['options'][position]['options'][0]['config']:
+                                            self.unique = True
+                                        if "cmd" == menu['options'][position]['options'][0]['config']:
+                                            self.cmd = True
+                                        if "entrypoint" == menu['options'][position]['options'][0]['config']:
+                                            self.entrypoint = True
+                                        if "volume" == menu['options'][position]['options'][0]['config']:
+                                            self.volume = True
+                                        if "port" == menu['options'][position]['options'][0]['config']:
+                                            self.port = True
+                                        if "link" == menu['options'][position]['options'][0]['config']:
+                                            self.link = True
+                                        if "name" == menu['options'][position]['options'][0]['config']:
+                                            self.name = True
+                                        if "user" == menu['options'][position]['options'][0]['config']:
+                                            self.user = True
                     else:
                         choice[position] = " "
                         if "command" in menu['options'][position]:
@@ -551,6 +597,25 @@ class new(object):
                             # remove from docker hosts
                             if self.default:
                                 self.hosts.remove(menu['options'][position])
+                            else:
+                                if "options" in menu['options'][position]:
+                                    if "config" in menu['options'][position]['options'][0]:
+                                        if "unique" == menu['options'][position]['options'][0]['config']:
+                                            self.unique = False
+                                        if "cmd" == menu['options'][position]['options'][0]['config']:
+                                            self.cmd = False
+                                        if "entrypoint" == menu['options'][position]['options'][0]['config']:
+                                            self.entrypoint = False
+                                        if "volume" == menu['options'][position]['options'][0]['config']:
+                                            self.volume = False
+                                        if "port" == menu['options'][position]['options'][0]['config']:
+                                            self.port = False
+                                        if "link" == menu['options'][position]['options'][0]['config']:
+                                            self.link = False
+                                        if "name" == menu['options'][position]['options'][0]['config']:
+                                            self.name = False
+                                        if "user" == menu['options'][position]['options'][0]['config']:
+                                            self.user = False
                 elif key != ord('\n'):
                     curses.flash()
             except:
