@@ -286,15 +286,6 @@ class new(object):
              'subtitle': "Please select the runtime options you would like to change...",
              'options': [
               {
-               'title': "Should the containers use different parameters?",
-               'type': "choice_menu",
-               'options': [
-                {
-                 'config':'unique'
-                }
-               ]
-              },
-              {
                'title': "Do you want to override the CMD of the container?",
                'type': "choice_menu",
                'options': [
@@ -359,6 +350,18 @@ class new(object):
               }
              ]
             }
+
+            if len(self.hosts) > 1:
+                options_dict['options'].append(
+                 {
+                  'title': "Should the containers use different parameters?",
+                  'type': "choice_menu",
+                  'options': [
+                   {
+                    'config':'unique'
+                   }
+                  ]
+                 })
 
             # !! TODO cleanup
             self.config_dict = {}
