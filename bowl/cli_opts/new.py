@@ -280,6 +280,8 @@ class new(object):
             # !! TODO loop through X number of ports in the dockerfile they would like to modify
             # !! TODO loop through X number of containers they would like to link to
             # !! TODO loop through X number of accounts they would like to add to teh container
+            # !! TODO if image a user can't be added
+            #                  also introspection of ports/volumes might be hard
             options_dict = {
              'title': "Runtime options",
              'type': "menu",
@@ -371,6 +373,27 @@ class new(object):
             self.config_dict = config_dict
             curses.endwin()
 
+        if self.name:
+            # !! TODO validate
+            name = raw_input("Enter container name: ")
+        if self.link:
+            # !! TODO cycle through running containers
+            print self.link
+        if self.port:
+            # !! TODO present available exposed ports, and allow each to be assigned specifically
+            print self.port
+        if self.volume:
+            # !! TODO allow n number of runtime volumes (check if needs to be in dockerfile?)
+            print self.volume
+        if self.entrypoint:
+            # !! TODO allow entrypoint to be overridden
+            entrypoint = raw_input("Enter new runtime ENTRYPOINT: ")
+            print entrypoint
+        if self.cmd:
+            # !! TODO allow cmd to be overridden
+            cmd = raw_input("Enter new runtime CMD: ")
+            print cmd
+
         # !! TODO move out questions
         if self.image:
             for image_info in self.build_dict['services']:
@@ -379,8 +402,6 @@ class new(object):
                 c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.9',
                                   timeout=10)
 
-                if self.name:
-                    name = raw_input("Enter container name: ")
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed
                 if name != "":
@@ -393,8 +414,6 @@ class new(object):
             if self.user:
                 username = raw_input("Enter username: ")
                 ssh_pubkey = raw_input("Enter path to ssh public key: ")
-            if self.name:
-                name = raw_input("Enter container name: ")
 
             # !! TODO use this to build the dockerfile
             # !! TODO if no services were selected, don't create a container
