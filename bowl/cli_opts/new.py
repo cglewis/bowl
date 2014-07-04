@@ -377,6 +377,16 @@ class new(object):
             # !! TODO validate
             name = raw_input("Enter container name: ")
         if self.link:
+            # !! TODO only list containers for each host of which the container is going to be spun up on
+            #         can't link to a container that is not running on the same docker host
+            for host in self.hosts:
+                # !! TODO try/except - verify that hosts specified can be reached
+                c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
+                                  timeout=10)
+                containers = c.containers()
+                # !! TODO parse out name, make it a new screen to checkbox choose from
+                print containers
+
             # !! TODO cycle through running containers
             print self.link
         if self.port:
