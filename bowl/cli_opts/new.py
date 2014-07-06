@@ -32,7 +32,7 @@ class new(object):
         for host in self.hosts:
             # !! TODO try/except - verify that hosts specified can be reached
             c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
-                              timeout=10)
+                              timeout=2)
 
             # !! TODO check that the build actually created an image before trying to create the container
             c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
@@ -382,13 +382,61 @@ class new(object):
             containers = []
 
             if self.unique:
-               # !! TODO
-               junk = ""
+                for host in self.hosts:
+                    # !! TODO try/except - verify that hosts specified can be reached
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
+                                      timeout=2)
+                    containers = c.containers()
+                    if len(containers) == 0:
+                        print "There are no running containers on the host "+host['title']+" to link to."
+                        junk = raw_input("Press enter to continue...")
+                    else:
+                        # init curses stuff
+                        curses.noecho()
+                        curses.cbreak()
+                        curses.start_color()
+                        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+
+                        options_dict = {
+                         'title': "Containers to Link",
+                         'type': "menu",
+                         'subtitle': "Please select the containers you would like to link on host "+host['title']+"...",
+                         'options': [
+                         ]
+                        }
+                        for container in containers:
+                            container_name = ""
+                            names = container['Names']
+                            for n in names:
+                                container_name += n[1:] + " - "
+                            container_id = container['Id']
+                            container_name += container_id
+                            options_dict['options'].append(
+                                 {
+                                  'title': '"'+container_name+'"',
+                                  'type': "choice_menu",
+                                  'options': [
+                                   {
+                                    'link':'"'+container_id+'"'
+                                   }
+                                  ]
+                                 }
+                                )
+
+                        # !! TODO cleanup
+                        self.config_dict = {}
+                        self.config_dict['services'] = []
+                        config_dict = self.config_dict
+                        config_dict = self.options_menu(self, options_dict, config_dict)
+                        self.config_dict = config_dict
+                        curses.endwin()
+
+            # !! TODO cycle through running containers
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
-                                      timeout=10)
+                                      timeout=2)
                     containers.append(c.containers())
                     print containers
 
@@ -458,7 +506,7 @@ class new(object):
                 image_tag, image_host = image_info.split(",", 1)
                 # !! TODO try/except - verify that hosts specified can be reached
                 c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.9',
-                                  timeout=10)
+                                  timeout=2)
 
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed
