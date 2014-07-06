@@ -380,54 +380,60 @@ class new(object):
             # !! TODO only list containers for each host of which the container is going to be spun up on
             #         can't link to a container that is not running on the same docker host
             containers = []
+
             if self.unique:
+               # !! TODO
                junk = ""
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
                                       timeout=10)
-                    containers = c.containers()
-                    # !! TODO parse out name, make it a new screen to checkbox choose from
+                    containers.append(c.containers())
                     print containers
 
-            # init curses stuff
-            curses.noecho()
-            curses.cbreak()
-            curses.start_color()
-            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+                # !! TODO remove containers that are not on all hosts
 
-            options_dict = {
-             'title': "Containers to Link",
-             'type': "menu",
-             'subtitle': "Please select the containers you would like to link...",
-             'options': [
-             ]
-            }
-            for container in containers:
-                container_name = ""
-                names = container['Names']
-                for name in names:
-                    container_name += name[1:] + " - "
-                container_id = container['Id']
-                container_name += container_id
-                # !! TODO figure out what should be in options
-                options_dict['options'].append(
-                     {
-                      'title': '"'+container_name+'"',
-                      'type': "choice_menu",
-                      'options': [
-                      ]
-                     }
-                    )
+                # init curses stuff
+                curses.noecho()
+                curses.cbreak()
+                curses.start_color()
+                curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-            # !! TODO cleanup
-            self.config_dict = {}
-            self.config_dict['services'] = []
-            config_dict = self.config_dict
-            config_dict = self.options_menu(self, options_dict, config_dict)
-            self.config_dict = config_dict
-            curses.endwin()
+                options_dict = {
+                 'title': "Containers to Link",
+                 'type': "menu",
+                 'subtitle': "Please select the containers you would like to link...",
+                 'options': [
+                 ]
+                }
+                for host in containers:
+                    for container in host:
+                        container_name = ""
+                        names = container['Names']
+                        for n in names:
+                            container_name += n[1:] + " - "
+                        container_id = container['Id']
+                        container_name += container_id
+                        options_dict['options'].append(
+                             {
+                              'title': '"'+container_name+'"',
+                              'type': "choice_menu",
+                              'options': [
+                               {
+                                'link':'"'+container_id+'"'
+                               }
+                              ]
+                             }
+                            )
+
+                # !! TODO cleanup
+                self.config_dict = {}
+                self.config_dict['services'] = []
+                config_dict = self.config_dict
+                config_dict = self.options_menu(self, options_dict, config_dict)
+                self.config_dict = config_dict
+                curses.endwin()
 
             # !! TODO cycle through running containers
             print self.link
