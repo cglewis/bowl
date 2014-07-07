@@ -555,12 +555,16 @@ class new(object):
                                     dockerfile.append(' '.join(matching))
                                 else:
                                     dockerfile.append(line.rstrip('\n'))
-                            elif line.startswith("ADD"):
+                            elif line.startswith("ADD") or line.startswith("COPY"):
                                 # !! TODO
                                 # copy context directory to tmp directory for building
                                 dockerfile.append(line.rstrip('\n'))
                             # check for multiple USER commands
                             elif line.startswith("USER"):
+                                # !! TODO
+                                dockerfile.append(line.rstrip('\n'))
+                            # check for multiple WORKDIR commands
+                            elif line.startswith("WORKDIR"):
                                 # !! TODO
                                 dockerfile.append(line.rstrip('\n'))
                             # check for multiple ENTRYPOINT commands
@@ -586,6 +590,7 @@ class new(object):
                                                              service_name[3]] == "yes":
                                         # !! TODO only append if there is only one
                                         # if more than one, use supervisord or something
+                                        # if none of them are combine_cmds then use /bin/bash
                                         dockerfile.append(line.rstrip('\n'))
                                 cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             else:
@@ -614,6 +619,8 @@ class new(object):
                     # !! TODO ask if more than one user
                 except:
                     print "SSH Key file not found, failed to create user"
+            if "CMD" not in dockerfile:
+                dockerfile.append("CMD /bin/bash")
             print "\n### GENERATED DOCKERFILE ###"
             for line in dockerfile:
                 print line
