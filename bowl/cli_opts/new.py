@@ -531,7 +531,16 @@ class new(object):
             print services
             dockerfile = []
             num_services = len(services)
+            envs = {}
+            workdirs = {}
+            entrypoints = {}
+            cmds = {}
             for service in sorted(services):
+                envs[service] = []
+                workdirs[service] = []
+                entrypoints[service] = []
+                cmds[service] = []
+
                 entrypoint = "/bin/sh -c"
                 cmd = ""
                 # !! error check that the array is this size
@@ -562,11 +571,47 @@ class new(object):
                             # check for multiple USER commands
                             elif line.startswith("USER"):
                                 # !! TODO
-                                dockerfile.append(line.rstrip('\n'))
+                                if num_services == 1:
+                                    dockerfile.append(line.rstrip('\n'))
+                                else:
+                                    if self.combine_cmd_dict["bowl.containers." +
+                                                             service_name[0] +
+                                                             "." +
+                                                             service_name[1] +
+                                                             "." +
+                                                             service_name[3]] == "yes":
+                                        envs[service].append(line.rstrip('\n'))
+                                    # !! TODO
+                                    dockerfile.append(line.rstrip('\n'))
+                            elif line.startswith("ENV"):
+                                # !! TODO
+                                if num_services == 1:
+                                    dockerfile.append(line.rstrip('\n'))
+                                else:
+                                    if self.combine_cmd_dict["bowl.containers." +
+                                                             service_name[0] +
+                                                             "." +
+                                                             service_name[1] +
+                                                             "." +
+                                                             service_name[3]] == "yes":
+                                        envs[service].append(line.rstrip('\n'))
+                                    # !! TODO
+                                    dockerfile.append(line.rstrip('\n'))
                             # check for multiple WORKDIR commands
                             elif line.startswith("WORKDIR"):
                                 # !! TODO
-                                dockerfile.append(line.rstrip('\n'))
+                                if num_services == 1:
+                                    dockerfile.append(line.rstrip('\n'))
+                                else:
+                                    if self.combine_cmd_dict["bowl.containers." +
+                                                             service_name[0] +
+                                                             "." +
+                                                             service_name[1] +
+                                                             "." +
+                                                             service_name[3]] == "yes":
+                                        workdirs[service].append(line.rstrip('\n'))
+                                    # !! TODO
+                                    dockerfile.append(line.rstrip('\n'))
                             # check for multiple ENTRYPOINT commands
                             elif line.startswith("ENTRYPOINT"):
                                 # !! TODO
@@ -574,6 +619,14 @@ class new(object):
                                 # use the ENTRYPOINT that corresponds with the chosen CMD
                                 if num_services == 1:
                                     dockerfile.append(line.rstrip('\n'))
+                                else:
+                                    if self.combine_cmd_dict["bowl.containers." +
+                                                             service_name[0] +
+                                                             "." +
+                                                             service_name[1] +
+                                                             "." +
+                                                             service_name[3]] == "yes":
+                                        entrypoints[service].append(line.rstrip('\n'))
                                 entrypoint = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             # check for multiple CMD commands
                             elif line.startswith("CMD"):
@@ -591,7 +644,8 @@ class new(object):
                                         # !! TODO only append if there is only one
                                         # if more than one, use supervisord or something
                                         # if none of them are combine_cmds then use /bin/bash
-                                        dockerfile.append(line.rstrip('\n'))
+                                        cmds[service].append(line.rstrip('\n'))
+                                        #dockerfile.append(line.rstrip('\n'))
                                 cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             else:
                                 dockerfile.append(line.rstrip('\n'))
