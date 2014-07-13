@@ -242,6 +242,7 @@ class new(object):
         self.default = True
         self.user = False
         self.name = False
+        self.names = []
         self.unique = False
         self.cmd = False
         self.entrypoint = False
@@ -374,8 +375,18 @@ class new(object):
             curses.endwin()
 
         if self.name:
-            # !! TODO validate
-            name = raw_input("Enter container name: ")
+            if self.unique:
+                for host in self.hosts:
+                    # !! TODO try/except - verify that hosts specified can be reached
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
+                                      timeout=2)
+                    name = raw_input("Enter container name for container running on "+host['title']+":")
+                    self.names.append(name)
+            else:
+                # !! TODO validate
+                name = raw_input("Enter container name: ")
+                self.names.append(name)
+            print names
         if self.link:
             # !! TODO only list containers for each host of which the container is going to be spun up on
             #         can't link to a container that is not running on the same docker host
@@ -430,8 +441,6 @@ class new(object):
                         config_dict = self.options_menu(self, options_dict, config_dict)
                         self.config_dict = config_dict
                         curses.endwin()
-
-            # !! TODO cycle through running containers
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
@@ -440,57 +449,69 @@ class new(object):
                     containers.append(c.containers())
                     print containers
 
-                # !! TODO remove containers that are not on all hosts
 
-                # init curses stuff
-                curses.noecho()
-                curses.cbreak()
-                curses.start_color()
-                curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+                if len(containers) == 0:
+                    print "There are no running containers on the host to link to."
+                    junk = raw_input("Press enter to continue...")
+                else:
+                    # !! TODO remove containers that are not on all hosts
 
-                options_dict = {
-                 'title': "Containers to Link",
-                 'type': "menu",
-                 'subtitle': "Please select the containers you would like to link...",
-                 'options': [
-                 ]
-                }
-                for host in containers:
-                    for container in host:
-                        container_name = ""
-                        names = container['Names']
-                        for n in names:
-                            container_name += n[1:] + " - "
-                        container_id = container['Id']
-                        container_name += container_id
-                        options_dict['options'].append(
-                             {
-                              'title': '"'+container_name+'"',
-                              'type': "choice_menu",
-                              'options': [
-                               {
-                                'link':'"'+container_id+'"'
-                               }
-                              ]
-                             }
-                            )
+                    # init curses stuff
+                    curses.noecho()
+                    curses.cbreak()
+                    curses.start_color()
+                    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-                # !! TODO cleanup
-                self.config_dict = {}
-                self.config_dict['services'] = []
-                config_dict = self.config_dict
-                config_dict = self.options_menu(self, options_dict, config_dict)
-                self.config_dict = config_dict
-                curses.endwin()
+                    options_dict = {
+                     'title': "Containers to Link",
+                     'type': "menu",
+                     'subtitle': "Please select the containers you would like to link...",
+                     'options': [
+                     ]
+                    }
+                    for host in containers:
+                        for container in host:
+                            container_name = ""
+                            names = container['Names']
+                            for n in names:
+                                container_name += n[1:] + " - "
+                            container_id = container['Id']
+                            container_name += container_id
+                            options_dict['options'].append(
+                                 {
+                                  'title': '"'+container_name+'"',
+                                  'type': "choice_menu",
+                                  'options': [
+                                   {
+                                    'link':'"'+container_id+'"'
+                                   }
+                                  ]
+                                 }
+                                )
 
-            # !! TODO cycle through running containers
+                    # !! TODO cleanup
+                    self.config_dict = {}
+                    self.config_dict['services'] = []
+                    config_dict = self.config_dict
+                    config_dict = self.options_menu(self, options_dict, config_dict)
+                    self.config_dict = config_dict
+                    curses.endwin()
+
             print self.link
         if self.port:
             # !! TODO present available exposed ports, and allow each to be assigned specifically
             print self.port
         if self.volume:
             # !! TODO allow n number of runtime volumes (check if needs to be in dockerfile?)
+            volumes = []
+            no = True
+            while no:
+                volume = raw_input("Enter a volume (path:path): ")
+                # !! TODO validate input
+                volumes.append(volume)
+                no = self.query_yes_no(self, "Would you like to add another volume?", default="no")
             print self.volume
+            print volumes
         if self.entrypoint:
             # !! TODO allow entrypoint to be overridden
             entrypoint = raw_input("Enter new runtime ENTRYPOINT: ")
