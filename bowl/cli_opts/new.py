@@ -123,6 +123,8 @@ class new(object):
                 database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
                 for database in database_list:
                     self.combine_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['combine_cmd']
+                    if self.combine_cmd_dict[package+database[0]] == "yes":
+                        self.background_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['background_cmd']
                     database_dict['options'].append(getattr(db_inst.databases(), database[0])())
 
                 environment_dict = {
@@ -137,6 +139,8 @@ class new(object):
                 environment_list = inspect.getmembers(env_inst.environment, predicate=inspect.ismethod)
                 for environ in environment_list:
                     self.combine_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['combine_cmd']
+                    if self.combine_cmd_dict[package+environ[0]] == "yes":
+                        self.background_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['background_cmd']
                     environment_dict['options'].append(getattr(env_inst.environment(), environ[0])())
 
                 service_dict = {
@@ -151,6 +155,8 @@ class new(object):
                 service_list = inspect.getmembers(serv_inst.services, predicate=inspect.ismethod)
                 for service in service_list:
                     self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
+                    if self.combine_cmd_dict[package+service[0]] == "yes":
+                        self.background_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['background_cmd']
                     service_dict['options'].append(getattr(serv_inst.services(), service[0])())
 
                 tool_dict = {
@@ -165,6 +171,8 @@ class new(object):
                 tool_list = inspect.getmembers(tool_inst.tools, predicate=inspect.ismethod)
                 for tool in tool_list:
                     self.combine_cmd_dict[package+tool[0]] = getattr(tool_inst.tools(), tool[0])()['combine_cmd']
+                    if self.combine_cmd_dict[package+tool[0]] == "yes":
+                        self.background_cmd_dict[package+tool[0]] = getattr(tool_inst.tools(), tool[0])()['background_cmd']
                     tool_dict['options'].append(getattr(tool_inst.tools(), tool[0])())
 
                 host_dict = {
@@ -232,6 +240,7 @@ class new(object):
         # !! TODO this should be in __init__
         # build dictionary of available container options
         self.combine_cmd_dict = {}
+        self.background_cmd_dict = {}
         menu_dict = self.build_options(self)
 
         self.win = curses.initscr()
@@ -670,7 +679,13 @@ class new(object):
                                         # !! TODO only append if there is only one
                                         # if more than one, use supervisord or something
                                         # if none of them are combine_cmds then use /bin/bash
-                                        cmds[service].append(line.rstrip('\n'))
+                                        cmds[service].append(self.background_cmd_dict["bowl.containers." +
+                                                             service_name[0] +
+                                                             "." +
+                                                             service_name[1] +
+                                                             "." +
+                                                             service_name[3]])
+                                        #cmds[service].append(line.rstrip('\n'))
                                         #dockerfile.append(line.rstrip('\n'))
                                 cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             else:
@@ -679,6 +694,14 @@ class new(object):
             uuid_dir = str(uuid.uuid4())
             # !! TODO try/except
             os.mkdir('/tmp/'+uuid_dir)
+
+            # if more than one service with combine_cmd, use supervisord
+            if len(cmds) > 1:
+                print "\nFound more than one service that runs a command, installing supervisord..."
+                dockerfile.append("RUN apt-get install -y supervisor")
+                print cmds
+                # !! TODO
+
             if self.user:
                 try:
                     # !! TODO try/except
@@ -693,7 +716,7 @@ class new(object):
                                       "/.ssh; chmod 700 /home/"+username+"/.ssh")
                     dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
                     # !! TODO ask if user needs sudo
-                    dockerfile.append("RUN apt-get install sudo")
+                    dockerfile.append("RUN apt-get install -y sudo")
                     dockerfile.append('RUN echo "'+username+
                                       ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
                     # !! TODO ask if more than one user
