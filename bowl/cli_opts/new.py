@@ -21,7 +21,7 @@ class new(object):
     This class is responsible for the new command of the cli.
     """
     @staticmethod
-    def build_dockerfile(self, dockerfile, uuid_dir, name):
+    def build_dockerfile(self, dockerfile, uuid_dir):
         # try/catch
         with open('/tmp/'+uuid_dir+'/Dockerfile', 'w') as f:
             for line in dockerfile:
@@ -29,7 +29,7 @@ class new(object):
 
         image_tag = 'bowl-'+uuid_dir
 
-        for host in self.hosts:
+        for index, host in enumerate(self.hosts):
             # !! TODO try/except - verify that hosts specified can be reached
             c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
                               timeout=2)
@@ -39,8 +39,11 @@ class new(object):
                     nocache=False, rm=False, stream=False)
 
             # TODO check if tty and stdin_open (interactive) are needed
-            if name != "":
-                container = c.create_container(image_tag, tty=True, stdin_open=True, name=name, hostname=name)
+            if len(self.names) != 0:
+                if self.unique:
+                    container = c.create_container(image_tag, tty=True, stdin_open=True, name=self.names[index], hostname=self.names[index])
+                else:
+                    container = c.create_container(image_tag, tty=True, stdin_open=True, name=self.names[0], hostname=self.names[0])
             else:
                 container = c.create_container(image_tag, tty=True, stdin_open=True)
             c.start(container, publish_all_ports=True)
@@ -249,7 +252,6 @@ class new(object):
         self.port = False
         self.link = False
         self.volume = False
-        name = ""
 
         # init curses stuff
         curses.noecho()
@@ -386,7 +388,7 @@ class new(object):
                 # !! TODO validate
                 name = raw_input("Enter container name: ")
                 self.names.append(name)
-            print names
+            print self.names
         if self.link:
             # !! TODO only list containers for each host of which the container is going to be spun up on
             #         can't link to a container that is not running on the same docker host
@@ -523,7 +525,7 @@ class new(object):
 
         # !! TODO move out questions
         if self.image:
-            for image_info in self.build_dict['services']:
+            for index, image_info in enumerate(self.build_dict['services']):
                 image_tag, image_host = image_info.split(",", 1)
                 # !! TODO try/except - verify that hosts specified can be reached
                 c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.9',
@@ -531,8 +533,11 @@ class new(object):
 
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed
-                if name != "":
-                    container = c.create_container(image_tag, command=cmd, tty=True, stdin_open=True, name=name, hostname=name)
+                if len(self.names) != 0:
+                    if self.unique:
+                        container = c.create_container(image_tag, command=cmd, tty=True, stdin_open=True, name=self.names[index], hostname=self.names[index])
+                    else:
+                        container = c.create_container(image_tag, command=cmd, tty=True, stdin_open=True, name=self.names[0], hostname=self.names[0])
                 else:
                     container = c.create_container(image_tag, command=cmd, tty=True, stdin_open=True)
                 c.start(container, publish_all_ports=True)
@@ -700,7 +705,7 @@ class new(object):
             for line in dockerfile:
                 print line
             print "### END GENERATED DOCKERFILE ###\n"
-            self.build_dockerfile(self, dockerfile, uuid_dir, name)
+            self.build_dockerfile(self, dockerfile, uuid_dir)
 
     @staticmethod
     def display_menu(self, menu, parent, build_dict):
