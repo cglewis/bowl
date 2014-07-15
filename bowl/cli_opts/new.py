@@ -275,7 +275,8 @@ class new(object):
         self.build_dict = build_dict
         curses.endwin()
 
-        self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
+        if self.launch:
+            self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
 
 
         # !! TODO fix this!!!
