@@ -17,6 +17,7 @@ from bowl.cli_opts import image_import
 from bowl.cli_opts import images
 from bowl.cli_opts import info
 from bowl.cli_opts import kill
+from bowl.cli_opts import link
 from bowl.cli_opts import list
 from bowl.cli_opts import login
 from bowl.cli_opts import logout
@@ -24,6 +25,9 @@ from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
 from bowl.cli_opts import snapshot
+from bowl.cli_opts import start
+from bowl.cli_opts import stop
+from bowl.cli_opts import unlink
 from bowl.cli_opts import version
 
 class main(object):
@@ -54,6 +58,7 @@ class main(object):
             '/import', 'api_image_import',
             '/info', 'api_info',
             '/kill', 'api_kill',
+            '/link', 'api_link',
             '/list', 'api_list',
             '/login', 'api_login',
             '/logout', 'api_logout',
@@ -61,6 +66,9 @@ class main(object):
             '/new', 'api_new',
             '/remove', 'api_remove',
             '/snapshot', 'api_snapshot',
+            '/start', 'api_start',
+            '/stop', 'api_stop',
+            '/unlink', 'api_unlink',
             '/version', 'api_version',
         )
         return urls
@@ -185,6 +193,16 @@ class api_kill:
         """
         return ""
 
+class api_link:
+    """
+    This class is resposible for linking a service repository host.
+    """
+    def POST(self):
+        """
+        POSTs the service repository host.
+        """
+        return ""
+
 class api_list:
     """
     This class is resposible for listing the running containers.
@@ -256,6 +274,36 @@ class api_snapshot:
     def POST(self):
         """
         POSTs the snapshot of a container.
+        """
+        return ""
+
+class api_start:
+    """
+    This class is resposible for starting a service repository host.
+    """
+    def POST(self):
+        """
+        POSTs the starting of a service repository host.
+        """
+        return ""
+
+class api_stop:
+    """
+    This class is resposible for stopping a service repository host.
+    """
+    def POST(self):
+        """
+        POSTs the stopping of a service repository host.
+        """
+        return ""
+
+class api_unlink:
+    """
+    This class is resposible for unlinking a service repository host.
+    """
+    def POST(self):
+        """
+        POSTs the service repository host.
         """
         return ""
 

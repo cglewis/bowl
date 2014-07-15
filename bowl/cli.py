@@ -15,6 +15,7 @@ from bowl.cli_opts import image_import
 from bowl.cli_opts import images
 from bowl.cli_opts import info
 from bowl.cli_opts import kill
+from bowl.cli_opts import link
 from bowl.cli_opts import list
 from bowl.cli_opts import login
 from bowl.cli_opts import logout
@@ -22,6 +23,9 @@ from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
 from bowl.cli_opts import snapshot
+from bowl.cli_opts import start
+from bowl.cli_opts import stop
+from bowl.cli_opts import unlink
 from bowl.cli_opts import version
 
 class cli(object):
@@ -103,6 +107,13 @@ class cli(object):
                                 help='specify container to kill')
         parse_kill.set_defaults(func=kill.kill.main)
 
+        # link
+        parse_link = subparsers.add_parser('link',
+                                           help='link to a service repository host')
+        parse_link.add_argument('SERVICE_HOST',
+                                help='specify service repository host to connect to')
+        parse_link.set_defaults(func=link.link.main)
+
         # list
         parse_list = subparsers.add_parser('list',
                                            help='list containers running')
@@ -150,6 +161,23 @@ class cli(object):
         parse_snapshot.add_argument('CONTAINER',
                                 help='specify container to snapshot')
         parse_snapshot.set_defaults(func=snapshot.snapshot.main)
+
+        # start
+        parse_start = subparsers.add_parser('start',
+                                           help='start a service repository web server')
+        parse_start.set_defaults(func=start.start.main)
+
+        # stop
+        parse_stop = subparsers.add_parser('stop',
+                                           help='stop a service repository web server')
+        parse_stop.set_defaults(func=stop.stop.main)
+
+        # unlink
+        parse_unlink = subparsers.add_parser('unlink',
+                                           help='unlink a service repository host')
+        parse_unlink.add_argument('SERVICE_HOST',
+                                help='specify service repository host to disconnect from')
+        parse_unlink.set_defaults(func=unlink.unlink.main)
 
         # version
         parse_version = subparsers.add_parser('version',
