@@ -4,12 +4,53 @@ This module is the start command of bowl.
 Created on 14 July 2014
 @author: Charlie Lewis
 """
+import os
+import sys
+
+import bowl.api
 
 class start(object):
     """
     This class is responsible for the start command of the cli.
     """
     @classmethod
+    def check_pid(self, pid):
+        """
+        Check For the existence of a unix pid.
+        """
+        try:
+            os.kill(int(pid), 0)
+        except OSError:
+            return False
+        else:
+            return True
+
+    @classmethod
     def main(self, args):
-        # !! TODO
-        print args
+        running = False
+        directory = "~/.bowl"
+        directory = os.path.expanduser(directory)
+        if not os.path.exists(directory):
+            os.makedirs(directory)
+
+        if os.path.isfile(os.path.join(directory, "pid")):
+            with open(os.path.join(directory, "pid"), 'r') as f:
+                pid = f.readline()
+                running = self.check_pid(pid)
+
+        if running:
+            print "The API Server is already running."
+        else:
+            try:
+                pid = os.fork()
+                if pid > 0:
+                    with open(os.path.join(directory, "pid"), 'a') as f:
+                        f.write(str(pid))
+                    # Exit parent process
+                    sys.exit(0)
+            except OSError, e:
+                print >> sys.stderr, "fork failed: %d (%s)" % (e.errno, e.strerror)
+                sys.exit(1)
+
+            # start api server in the background
+            bowl.api.main()

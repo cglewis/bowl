@@ -24,9 +24,9 @@ from bowl.cli_opts import logout
 from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
+from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
-from bowl.cli_opts import start
-from bowl.cli_opts import stop
+from bowl.cli_opts import snapshots
 from bowl.cli_opts import unlink
 from bowl.cli_opts import update
 from bowl.cli_opts import version
@@ -66,9 +66,10 @@ class main(object):
             '/logs', 'api_logs',
             '/new', 'api_new',
             '/remove', 'api_remove',
+            '/repo/services', 'api_repo_services',
+            '/services', 'api_services',
             '/snapshot', 'api_snapshot',
-            '/start', 'api_start',
-            '/stop', 'api_stop',
+            '/snapshots', 'api_snapshots',
             '/unlink/(.*)', 'api_unlink',
             '/update', 'api_update',
             '/version', 'api_version',
@@ -276,6 +277,26 @@ class api_remove:
         """
         return ""
 
+class api_repo_services:
+    """
+    This class is resposible for listing services of this repository.
+    """
+    def POST(self):
+        """
+        POSTs the list of services of this repository.
+        """
+        return ""
+
+class api_services:
+    """
+    This class is resposible for listing services.
+    """
+    def POST(self):
+        """
+        POSTs the list of services.
+        """
+        return ""
+
 class api_snapshot:
     """
     This class is resposible for snapshotting a container.
@@ -286,23 +307,13 @@ class api_snapshot:
         """
         return ""
 
-class api_start:
+class api_snapshots:
     """
-    This class is resposible for starting a service repository host.
-    """
-    def POST(self):
-        """
-        POSTs the starting of a service repository host.
-        """
-        return ""
-
-class api_stop:
-    """
-    This class is resposible for stopping a service repository host.
+    This class is resposible for listing snapshots.
     """
     def POST(self):
         """
-        POSTs the stopping of a service repository host.
+        POSTs the list of snapshots.
         """
         return ""
 

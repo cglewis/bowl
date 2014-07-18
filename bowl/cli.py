@@ -22,7 +22,9 @@ from bowl.cli_opts import logout
 from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
+from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
+from bowl.cli_opts import snapshots
 from bowl.cli_opts import start
 from bowl.cli_opts import stop
 from bowl.cli_opts import unlink
@@ -156,6 +158,11 @@ class cli(object):
                                 help='specify container to remove')
         parse_remove.set_defaults(func=remove.remove.main)
 
+        # services
+        parse_services = subparsers.add_parser('services',
+                                           help='list services')
+        parse_services.set_defaults(func=services.services.main)
+
         # snapshot
         parse_snapshot = subparsers.add_parser('snapshot',
                                            help='snapshot running container')
@@ -163,14 +170,19 @@ class cli(object):
                                 help='specify container to snapshot')
         parse_snapshot.set_defaults(func=snapshot.snapshot.main)
 
+        # snapshots
+        parse_snapshots = subparsers.add_parser('snapshots',
+                                           help='list snapshots')
+        parse_snapshots.set_defaults(func=snapshots.snapshots.main)
+
         # start
         parse_start = subparsers.add_parser('start',
-                                           help='start a service repository web server')
+                                           help='start the api server')
         parse_start.set_defaults(func=start.start.main)
 
         # stop
         parse_stop = subparsers.add_parser('stop',
-                                           help='stop a service repository web server')
+                                           help='stop the api server')
         parse_stop.set_defaults(func=stop.stop.main)
 
         # unlink

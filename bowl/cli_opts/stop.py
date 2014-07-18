@@ -4,6 +4,7 @@ This module is the stop command of bowl.
 Created on 14 July 2014
 @author: Charlie Lewis
 """
+import os
 
 class stop(object):
     """
