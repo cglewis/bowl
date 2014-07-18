@@ -23,7 +23,7 @@ class connect(object):
         try:
             with open(os.path.join(directory, "hosts"), 'a') as f:
                 f.write("{" +
-                        " 'title': '"+args.DOCKER_HOST+"'," +
+                        "'title': '"+args.DOCKER_HOST+"'," +
                         " 'type': 'choice_menu'" +
                         "}\n")
         except:

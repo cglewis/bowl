@@ -27,7 +27,7 @@ class image_import(object):
         try:
             with open(os.path.join(directory, "images"), 'a') as f:
                 f.write("{" +
-                        " 'title': '"+args.IMAGE_NAME+"'," +
+                        "'title': '"+args.IMAGE_NAME+"'," +
                         " 'command': '"+args.IMAGE_NAME+","+args.DOCKER_HOST+"'," +
                         " 'host': '"+args.DOCKER_HOST+"'," +
                         " 'uuid': '"+args.uuid+"'," +

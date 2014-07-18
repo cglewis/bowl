@@ -26,6 +26,7 @@ from bowl.cli_opts import snapshot
 from bowl.cli_opts import start
 from bowl.cli_opts import stop
 from bowl.cli_opts import unlink
+from bowl.cli_opts import update
 from bowl.cli_opts import version
 
 class cli(object):
@@ -178,6 +179,13 @@ class cli(object):
         parse_unlink.add_argument('SERVICE_HOST',
                                 help='specify service repository host to disconnect from')
         parse_unlink.set_defaults(func=unlink.unlink.main)
+
+        # update
+        parse_update = subparsers.add_parser('update',
+                                           help='update service repository hosts')
+        parse_update.add_argument('-r' '--repository',
+                                help='specify service repository host to get updates from')
+        parse_update.set_defaults(func=update.update.main)
 
         # version
         parse_version = subparsers.add_parser('version',

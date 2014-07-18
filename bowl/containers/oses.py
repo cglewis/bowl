@@ -9,6 +9,10 @@ class oses(object):
     """
     This class is responsible for all available operating systems for bowl.
     """
+    #def main(self, default):
+        # if default, default services are wanted, use .default
+        # also add in ~/.bowl/services
+        # also add in ~/.bowl/repositories
     def ubuntu(self):
         return {
                 'title': "Ubuntu",

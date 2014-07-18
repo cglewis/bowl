@@ -28,6 +28,7 @@ from bowl.cli_opts import snapshot
 from bowl.cli_opts import start
 from bowl.cli_opts import stop
 from bowl.cli_opts import unlink
+from bowl.cli_opts import update
 from bowl.cli_opts import version
 
 class main(object):
@@ -58,7 +59,7 @@ class main(object):
             '/import', 'api_image_import',
             '/info', 'api_info',
             '/kill', 'api_kill',
-            '/link', 'api_link',
+            '/link/(.*)', 'api_link',
             '/list', 'api_list',
             '/login', 'api_login',
             '/logout', 'api_logout',
@@ -68,7 +69,8 @@ class main(object):
             '/snapshot', 'api_snapshot',
             '/start', 'api_start',
             '/stop', 'api_stop',
-            '/unlink', 'api_unlink',
+            '/unlink/(.*)', 'api_unlink',
+            '/update', 'api_update',
             '/version', 'api_version',
         )
         return urls
@@ -103,6 +105,7 @@ class api_connect:
         """
         creates a connection to a new docker host.
         """
+        # !! TODO validate host
         class Object(object):
             pass
         args = Object()
@@ -131,6 +134,7 @@ class api_disconnect:
         """
         disconnects the specified docker host.
         """
+        # !! TODO validate host
         class Object(object):
             pass
         args = Object()
@@ -197,11 +201,16 @@ class api_link:
     """
     This class is resposible for linking a service repository host.
     """
-    def POST(self):
+    def GET(self, repository):
         """
-        POSTs the service repository host.
+        creates a link to a new service repository.
         """
-        return ""
+        # !! TODO validate repository
+        class Object(object):
+            pass
+        args = Object()
+        args.SERVICE_HOST = repository
+        return link.link.main(args)
 
 class api_list:
     """
@@ -301,9 +310,24 @@ class api_unlink:
     """
     This class is resposible for unlinking a service repository host.
     """
-    def POST(self):
+    def GET(self, repository):
         """
-        POSTs the service repository host.
+        unlinks the specified service repository.
+        """
+        # !! TODO validate repository
+        class Object(object):
+            pass
+        args = Object()
+        args.SERVICE_HOST = repository
+        return unlink.unlink.main(args)
+
+class api_update:
+    """
+    This class is resposible for updating service repository hosts.
+    """
+    def GET(self):
+        """
+        GETs the updating of service repository hosts.
         """
         return ""
 

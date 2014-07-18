@@ -4,6 +4,9 @@ This module is the unlink command of bowl.
 Created on 14 July 2014
 @author: Charlie Lewis
 """
+import ast
+import fileinput
+import os
 
 class unlink(object):
     """
@@ -11,5 +14,15 @@ class unlink(object):
     """
     @classmethod
     def main(self, args):
-        # !! TODO
-        print args
+        try:
+            directory = "~/.bowl"
+            directory = os.path.expanduser(directory)
+            # !! TODO need to do check if specfied repository was not there to begin with
+            for line in fileinput.input(os.path.join(directory, "repositories"), inplace=True):
+                host = ast.literal_eval(line.rstrip('\n'))
+                if args.SERVICE_HOST != host['title']:
+                    print "%s" % (line),
+        except:
+            print "unable to remove service repository"
+            return False
+        return True
