@@ -5,7 +5,9 @@ Created on 14 March 2014
 @author: Charlie Lewis
 """
 
+import os
 import sys
+import tarfile
 import web
 
 from bowl.cli_opts import add
@@ -28,7 +30,6 @@ from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
 from bowl.cli_opts import unlink
-from bowl.cli_opts import update
 from bowl.cli_opts import version
 
 class main(object):
@@ -71,7 +72,6 @@ class main(object):
             '/snapshot', 'api_snapshot',
             '/snapshots', 'api_snapshots',
             '/unlink/(.*)', 'api_unlink',
-            '/update', 'api_update',
             '/version', 'api_version',
         )
         return urls
@@ -279,13 +279,22 @@ class api_remove:
 
 class api_repo_services:
     """
-    This class is resposible for listing services of this repository.
+    This class is resposible for sending services to the client.
     """
-    def POST(self):
+    def make_tarfile(self, output_filename, source_dir):
+        with tarfile.open(output_filename, "w:gz") as tar:
+            tar.add(source_dir, arcname=os.path.basename(source_dir))
+
+    def GET(self):
         """
-        POSTs the list of services of this repository.
+        GETs the services and packages them up and serves them up as a static
+        file.
         """
-        return ""
+        # !! TODO also need to add non-default services
+        cwd = os.path.dirname(__file__)
+        self.make_tarfile(os.path.join(cwd, "static/default.tar.gz"), os.path.join(cwd, "containers/.default"))
+        f = open(os.path.join(cwd, "static/default.tar.gz"), 'r')
+        return f.read()
 
 class api_services:
     """
@@ -331,16 +340,6 @@ class api_unlink:
         args = Object()
         args.SERVICE_HOST = repository
         return unlink.unlink.main(args)
-
-class api_update:
-    """
-    This class is resposible for updating service repository hosts.
-    """
-    def GET(self):
-        """
-        GETs the updating of service repository hosts.
-        """
-        return ""
 
 class api_version:
     """

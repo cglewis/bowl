@@ -1,0 +1,27 @@
+{
+ "rsyslog":
+ {
+  "title": "rsyslog",
+  "type": "choice_menu",
+  "command": "ubuntu:trusty:services:rsyslog",
+  "object": "service",
+  "cluster": "no",
+  "combine_cmd": "yes",
+  "background_cmd": "TODO",
+  "tty": "no",
+  "interactive": "no"
+ },
+
+ "sshd":
+ {
+  "title": "SSH Server",
+  "type": "choice_menu",
+  "command": "ubuntu:trusty:services:sshd",
+  "object": "service",
+  "cluster": "no",
+  "combine_cmd": "yes",
+  "background_cmd": "/usr/sbin/sshd",
+  "tty": "no",
+  "interactive": "no"
+ }
+}

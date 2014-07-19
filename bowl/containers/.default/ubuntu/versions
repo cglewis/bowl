@@ -1,0 +1,19 @@
+{
+ "precise":
+ {
+  "title": "12.04 LTS Precise",
+  "type": "menu",
+  "subtitle": "Please select services...",
+  "object": "version",
+  "options": []
+ },
+
+ "trusty":
+ {
+  "title": "14.04 LTS Trusty",
+  "type": "menu",
+  "subtitle": "Please select services...",
+  "object": "version",
+  "options": []
+ }
+}

@@ -1,0 +1,13 @@
+{
+ "httpie":
+ {
+  "title": "httpie",
+  "type": "choice_menu",
+  "command": "ubuntu:precise:tools:httpie",
+  "object": "tool",
+  "cluster": "no",
+  "combine_cmd": "no",
+  "tty": "yes",
+  "interactive": "no"
+ }
+}

@@ -16,7 +16,7 @@ class start(object):
     @classmethod
     def check_pid(self, pid):
         """
-        Check For the existence of a unix pid.
+        Check for the existence of a unix pid.
         """
         try:
             os.kill(int(pid), 0)
@@ -30,11 +30,12 @@ class start(object):
         running = False
         directory = "~/.bowl"
         directory = os.path.expanduser(directory)
+        pid_file = os.path.join(directory, "pid")
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        if os.path.isfile(os.path.join(directory, "pid")):
-            with open(os.path.join(directory, "pid"), 'r') as f:
+        if os.path.isfile(pid_file):
+            with open(pid_file, 'r') as f:
                 pid = f.readline()
                 running = self.check_pid(pid)
 
@@ -44,7 +45,7 @@ class start(object):
             try:
                 pid = os.fork()
                 if pid > 0:
-                    with open(os.path.join(directory, "pid"), 'a') as f:
+                    with open(pid_file, 'a') as f:
                         f.write(str(pid))
                     # Exit parent process
                     sys.exit(0)
