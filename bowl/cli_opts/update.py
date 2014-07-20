@@ -9,7 +9,9 @@ import requests
 import sys
 
 import bowl.api
-from bowl.cli_opts import start, stop
+from bowl.cli_opts import repositories
+from bowl.cli_opts import start
+from bowl.cli_opts import stop
 
 class update(object):
     """
@@ -17,31 +19,49 @@ class update(object):
     """
     @classmethod
     def main(self, args):
-        # !! TODO
-        # if local repo, spin up api server
         # run through hosts in ~/.bowl/repositories
-        path = os.path.dirname(bowl.api.__file__)
-        child_pid = os.fork()
-        if child_pid == 0:
-            # child process
-            os.chdir(path)
-            start.start.main(args)
-            sys.exit(0)
+        repos = repositories.repositories.main(args)
 
-        with open('foo.tar.gz', 'wb') as handle:
-            response = requests.get('http://localhost:8080/repo/services', stream=True)
+        for repo in repos:
+            # !! TODO other checks for local running api server
+            # if local repo, spin up api server
+            if repo == "localhost":
+                # start the api server
+                path = os.path.dirname(bowl.api.__file__)
+                child_pid = os.fork()
+                if child_pid == 0:
+                    # child process
+                    os.chdir(path)
+                    start.start.main(args)
+                    sys.exit(0)
 
-            #if not response.ok:
-                # Something went wrong
+                with open('services.tar.gz', 'wb') as handle:
+                    response = requests.get('http://localhost:8080/repo/services', stream=True)
 
-            for block in response.iter_content(1024):
-                if not block:
-                    break
+                    # !! TODO
+                    #if not response.ok:
+                        # Something went wrong
 
-                handle.write(block)
+                    for block in response.iter_content(1024):
+                        if not block:
+                            break
 
-        pid, status = os.waitpid(child_pid, 0)
+                        handle.write(block)
 
-        stop.stop.main(args)
-        # !! TODO
-        print args
+                pid, status = os.waitpid(child_pid, 0)
+
+                # stop the api server
+                stop.stop.main(args)
+            else:
+                with open('services.tar.gz', 'wb') as handle:
+                    response = requests.get('http://'+repo+':8080/repo/services', stream=True)
+
+                    # !! TODO
+                    #if not response.ok:
+                        # Something went wrong
+
+                    for block in response.iter_content(1024):
+                        if not block:
+                            break
+
+                        handle.write(block)
