@@ -22,6 +22,7 @@ from bowl.cli_opts import logout
 from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
+from bowl.cli_opts import repositories
 from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
@@ -157,6 +158,11 @@ class cli(object):
         parse_remove.add_argument('CONTAINER',
                                 help='specify container to remove')
         parse_remove.set_defaults(func=remove.remove.main)
+
+        # repositories
+        parse_repositories = subparsers.add_parser('repositories',
+                                            help='list repositories that are registered')
+        parse_repositories.set_defaults(func=repositories.repositories.main)
 
         # services
         parse_services = subparsers.add_parser('services',

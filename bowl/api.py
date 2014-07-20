@@ -26,6 +26,7 @@ from bowl.cli_opts import logout
 from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
+from bowl.cli_opts import repositories
 from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
@@ -67,6 +68,7 @@ class main(object):
             '/logs', 'api_logs',
             '/new', 'api_new',
             '/remove', 'api_remove',
+            '/repositories', 'api_repositories',
             '/repo/services', 'api_repo_services',
             '/services', 'api_services',
             '/snapshot', 'api_snapshot',
@@ -276,6 +278,18 @@ class api_remove:
         POSTs the removal of a container.
         """
         return ""
+
+class api_repositories:
+    """
+    This class is resposible for listing the connected repositories.
+    """
+    def GET(self):
+        """
+        GETs the connected repositories.
+
+        :return: returns the list of connected repositories.
+        """
+        return repositories.repositories.main([])
 
 class api_repo_services:
     """
