@@ -12,7 +12,7 @@
   "interactive": "no"
  },
 
- "influxdb"
+ "influxdb":
  {
   "title": "influxdb",
   "type": "choice_menu",

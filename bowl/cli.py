@@ -167,6 +167,12 @@ class cli(object):
         # services
         parse_services = subparsers.add_parser('services',
                                            help='list services')
+        parse_services.add_argument('-q', '--quiet',
+                                 action='store_true',
+                                 help='print only the name, will ignore -j if also supplied')
+        parse_services.add_argument('-j', '--json',
+                                 action='store_true',
+                                 help='print complete JSON object for each service')
         parse_services.set_defaults(func=services.services.main)
 
         # snapshot
