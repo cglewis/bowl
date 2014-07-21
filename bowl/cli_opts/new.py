@@ -14,7 +14,11 @@ import os
 import shutil
 import sys
 import uuid
+from bowl.cli_opts import services
 from bowl.containers import oses
+
+class Object(object):
+    pass
 
 class new(object):
     """
@@ -72,15 +76,38 @@ class new(object):
           }
          ]
         }
+
         os_dict = {}
         base = "bowl.containers."
         os_list = inspect.getmembers(oses.oses, predicate=inspect.ismethod)
+
+        args = Object()
+        args.quiet = False
+        args.json = True
+        all_dict = services.services.main(args)
+        os_num = 0
+        for os_key in all_dict['oses']:
+            menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
+            version_num = 0
+            for version_key in all_dict['versions']:
+                menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['versions'][version_key])
+
+                database_dict = {
+                  'title': "Databases",
+                  'type': "menu",
+                  'subtitle': "Please select databases...",
+                  'options': []
+                }
+
+                version_num += 1
+            os_num += 1
+
+        # !! TODO refactor and remove
         for item in os_list:
             package = base + item[0]
             os_dict[item[0]+'_versions'] = getattr(__import__(package,
                                                               fromlist=['versions']),
                                                               'versions')
-            menu_dict['options'][0]['options'].append(getattr(oses.oses(), item[0])())
 
         try:
             directory = "~/.bowl"
@@ -106,7 +133,7 @@ class new(object):
                                               predicate=inspect.ismethod)
             version_num = 0
             for version in version_list:
-                menu_dict['options'][0]['options'][os_num]['options'].append(getattr(os_inst.versions(), version[0])())
+                #menu_dict['options'][0]['options'][os_num]['options'].append(getattr(os_inst.versions(), version[0])())
 
                 database_dict = {
                   'title': "Databases",
@@ -121,7 +148,19 @@ class new(object):
                 importlib.import_module(db_package)
                 db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
                 database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
+                print "database_list"
+                print database_list
+                print
                 for database in database_list:
+                    print "combine_cmd"
+                    print getattr(db_inst.databases(), database[0])()['combine_cmd']
+                    print
+                    print "background_cmd"
+                    print getattr(db_inst.databases(), database[0])()['background_cmd']
+                    print
+                    print "database_dict"
+                    print getattr(db_inst.databases(), database[0])()
+                    print
                     self.combine_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['combine_cmd']
                     if self.combine_cmd_dict[package+database[0]] == "yes":
                         self.background_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['background_cmd']

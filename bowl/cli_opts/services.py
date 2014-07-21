@@ -32,11 +32,13 @@ class services(object):
                 with open(os.path.join(default_dir, "oses"), 'r') as f:
                     oses = f.read()
                 os_dict = json.loads(oses)
+                services_dict['oses'] = os_dict
                 for os_key in os_dict:
                     # read versions for each os
                     with open(os.path.join(default_dir, os_key, "versions"), 'r') as f:
                         versions = f.read()
                     version_dict = json.loads(versions)
+                    services_dict['versions'] = version_dict
                     for version_key in version_dict:
                         # read databases for each version
                         with open(os.path.join(default_dir, os_key, version_key, "databases/databases"), 'r') as f:
@@ -96,14 +98,16 @@ class services(object):
 
         if args.quiet:
             for key in services_dict:
-                print key
-                for service in services_dict[key]:
-                    print "\t",service
+                if key != 'oses' and key != 'versions':
+                    print key
+                    for service in services_dict[key]:
+                        print "\t",service
         elif args.json:
             print services_dict
         else:
             for key in services_dict:
-                for service in services_dict[key]:
-                    print service
+                if key != 'oses' and key != 'versions':
+                    for service in services_dict[key]:
+                        print service
 
         return services_dict

@@ -56,52 +56,61 @@ class cli(object):
 
         # connect
         parse_connect = subparsers.add_parser('connect',
-                                           help='connect to a docker host')
+                                              help='connect to a docker host')
         parse_connect.add_argument('DOCKER_HOST',
-                                help='specify docker host to connect to')
+                                   help='specify docker host to connect to')
         parse_connect.set_defaults(func=connect.connect.main)
 
         # delete
         parse_delete = subparsers.add_parser('delete',
-                                           help='delete an image')
+                                             help='delete an image')
         parse_delete.add_argument('IMAGE_NAME',
-                                help='specify name of image to delete')
+                                  help='specify name of image to delete')
         parse_delete.set_defaults(func=delete.delete.main)
 
         # disconnect
         parse_disconnect = subparsers.add_parser('disconnect',
-                                           help='disconnect from a docker host')
+                                                 help='disconnect from a docker host')
         parse_disconnect.add_argument('DOCKER_HOST',
-                                help='specify docker host to disconnect from')
+                                      help='specify docker host to disconnect from')
         parse_disconnect.set_defaults(func=disconnect.disconnect.main)
 
         # hosts
         parse_hosts = subparsers.add_parser('hosts',
                                             help='list hosts that are registered')
+        parse_hosts.add_argument('-z',
+                                 action='store_true',
+                                 help='do not print any output')
         parse_hosts.set_defaults(func=hosts.hosts.main)
 
         # images
         parse_images = subparsers.add_parser('images',
-                                           help='list images')
+                                             help='list images')
+        parse_images.add_argument('-z',
+                                  action='store_true',
+                                  help='do not print any output')
         parse_images.set_defaults(func=images.images.main)
 
         # import
         parse_import = subparsers.add_parser('import',
-                                           help='import an image')
+                                             help='import an image')
         parse_import.add_argument('IMAGE_NAME',
-                                help='specify name of image to import')
+                                  help='specify name of image to import')
         parse_import.add_argument('DOCKER_HOST',
-                                help='specify Docker host of image to import')
+                                  help='specify Docker host of image to import')
         parse_import.add_argument('-d', '--description',
-                                help='description of image to import')
+                                  help='description of image to import')
         parse_import.add_argument('-u', '--uuid',
-                                help='uuid of image to import')
+                                  help='uuid of image to import')
         # use non-standard naming scheme to not conflict with python's import
         parse_import.set_defaults(func=image_import.image_import.main)
 
         # info
         parse_info = subparsers.add_parser('info',
                                            help='display system-wide information')
+        parse_info.add_argument('-z',
+                                action='store_true',
+                                help='do not print any output')
         parse_info.set_defaults(func=info.info.main)
 
         # kill
@@ -121,6 +130,9 @@ class cli(object):
         # list
         parse_list = subparsers.add_parser('list',
                                            help='list containers running')
+        parse_list.add_argument('-z',
+                                action='store_true',
+                                help='do not print any output')
         parse_list.set_defaults(func=list.list.main)
 
         # login
@@ -136,7 +148,7 @@ class cli(object):
 
         # logout
         parse_logout = subparsers.add_parser('logout',
-                                            help='logout')
+                                             help='logout')
         parse_logout.set_defaults(func=logout.logout.main)
 
         # logs
@@ -149,71 +161,83 @@ class cli(object):
 
         # new
         parse_new = subparsers.add_parser('new',
-                                           help='new container')
+                                          help='new container')
         parse_new.set_defaults(func=new.new.main)
 
         # remove
         parse_remove = subparsers.add_parser('rm',
-                                           help='remove a container')
+                                             help='remove a container')
         parse_remove.add_argument('CONTAINER',
-                                help='specify container to remove')
+                                  help='specify container to remove')
         parse_remove.set_defaults(func=remove.remove.main)
 
         # repositories
         parse_repositories = subparsers.add_parser('repositories',
-                                            help='list repositories that are registered')
+                                                   help='list repositories that are registered')
         parse_repositories.set_defaults(func=repositories.repositories.main)
 
         # services
         parse_services = subparsers.add_parser('services',
-                                           help='list services')
-        parse_services.add_argument('-q', '--quiet',
-                                 action='store_true',
-                                 help='print only the name, will ignore -j if also supplied')
+                                               help='list services')
         parse_services.add_argument('-j', '--json',
-                                 action='store_true',
-                                 help='print complete JSON object for each service')
+                                    action='store_true',
+                                    help='print complete JSON object for each service')
+        parse_services.add_argument('-q', '--quiet',
+                                    action='store_true',
+                                    help='print only the name, will ignore -j if also supplied')
+        parse_services.add_argument('-z',
+                                    action='store_true',
+                                    help='do not print any output')
         parse_services.set_defaults(func=services.services.main)
 
         # snapshot
         parse_snapshot = subparsers.add_parser('snapshot',
-                                           help='snapshot running container')
+                                               help='snapshot running container')
         parse_snapshot.add_argument('CONTAINER',
-                                help='specify container to snapshot')
+                                    help='specify container to snapshot')
         parse_snapshot.set_defaults(func=snapshot.snapshot.main)
 
         # snapshots
         parse_snapshots = subparsers.add_parser('snapshots',
-                                           help='list snapshots')
+                                                help='list snapshots')
         parse_snapshots.set_defaults(func=snapshots.snapshots.main)
 
         # start
         parse_start = subparsers.add_parser('start',
-                                           help='start the api server')
+                                            help='start the api server')
+        parse_start.add_argument('-z',
+                                 action='store_true',
+                                 help='do not print any output')
         parse_start.set_defaults(func=start.start.main)
 
         # stop
         parse_stop = subparsers.add_parser('stop',
                                            help='stop the api server')
+        parse_stop.add_argument('-z',
+                                action='store_true',
+                                help='do not print any output')
         parse_stop.set_defaults(func=stop.stop.main)
 
         # unlink
         parse_unlink = subparsers.add_parser('unlink',
-                                           help='unlink a service repository host')
+                                             help='unlink a service repository host')
         parse_unlink.add_argument('SERVICE_HOST',
-                                help='specify service repository host to disconnect from')
+                                  help='specify service repository host to disconnect from')
         parse_unlink.set_defaults(func=unlink.unlink.main)
 
         # update
         parse_update = subparsers.add_parser('update',
-                                           help='update service repository hosts')
+                                             help='update service repository hosts')
         parse_update.add_argument('-r' '--repository',
-                                help='specify service repository host to get updates from')
+                                  help='specify service repository host to get updates from')
+        parse_update.add_argument('-z',
+                                  action='store_true',
+                                  help='do not print any output')
         parse_update.set_defaults(func=update.update.main)
 
         # version
         parse_version = subparsers.add_parser('version',
-                                           help='show version')
+                                              help='show version')
         parse_version.set_defaults(func=version.version.main)
 
         args = parser.parse_args()
