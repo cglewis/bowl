@@ -40,9 +40,12 @@ class stop(object):
         if running:
             try:
                 os.kill(int(pid), 9)
-                print "The API Server has stopped."
+                if not args.z:
+                    print "The API Server has stopped."
                 os.remove(pid_file)
             except OSError, e:
-                print >> sys.stderr, "stopping failed: %d (%s)" % (e.errno, e.strerror)
+                if not args.z:
+                    print >> sys.stderr, "stopping failed: %d (%s)" % (e.errno, e.strerror)
         else:
-            print "The API Server is not running."
+            if not args.z:
+                print "The API Server is not running."

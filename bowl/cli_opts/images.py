@@ -23,6 +23,7 @@ class images(object):
                     images.append(image['title'])
         except:
             pass
-        for image in images:
-            print image
+        if not args.z:
+            for image in images:
+                print image
         return images

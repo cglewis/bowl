@@ -154,7 +154,11 @@ class api_hosts:
 
         :return: returns the list of connected docker hosts.
         """
-        return hosts.hosts.main([])
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return hosts.hosts.main(args)
 
 class api_image_import:
     """
@@ -176,7 +180,11 @@ class api_images:
 
         :return: returns the list of images.
         """
-        return images.images.main([])
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return images.images.main(args)
 
 class api_info:
     """
@@ -314,11 +322,17 @@ class api_services:
     """
     This class is resposible for listing services.
     """
-    def POST(self):
+    def GET(self):
         """
-        POSTs the list of services.
+        GETs the list of services.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        args.json = True
+        args.quiet = False
+        return services.services.main(args)
 
 class api_snapshot:
     """

@@ -25,7 +25,8 @@ class services(object):
         # if services exist, use that, otherwise try to use .default
         if os.path.exists(services_dir):
             # !! TODO
-            print "services"
+            if not args.z:
+                print "services"
         elif os.path.exists(default_dir):
             try:
                 # read oses
@@ -92,22 +93,25 @@ class services(object):
                             for tool in tools:
                                 services_dict['tools'].append(tools[tool]['command'])
             except:
-                print "failed"
+                if not args.z:
+                    print "failed"
         else:
-            print "no services found!"
+            if not args.z:
+                print "no services found!"
 
-        if args.quiet:
-            for key in services_dict:
-                if key != 'oses' and key != 'versions':
-                    print key
-                    for service in services_dict[key]:
-                        print "\t",service
-        elif args.json:
-            print services_dict
-        else:
-            for key in services_dict:
-                if key != 'oses' and key != 'versions':
-                    for service in services_dict[key]:
-                        print service
+        if not args.z:
+            if args.quiet:
+                for key in services_dict:
+                    if key != 'oses' and key != 'versions':
+                        print key
+                        for service in services_dict[key]:
+                            print "\t",service
+            elif args.json:
+                print services_dict
+            else:
+                for key in services_dict:
+                    if key != 'oses' and key != 'versions':
+                        for service in services_dict[key]:
+                            print service
 
         return services_dict

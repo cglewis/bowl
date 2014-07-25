@@ -23,6 +23,7 @@ class hosts(object):
                     hosts.append(host['title'])
         except:
             pass
-        for host in hosts:
-            print host
+        if not args.z:
+            for host in hosts:
+                print host
         return hosts

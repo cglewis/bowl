@@ -40,7 +40,8 @@ class start(object):
                 running = self.check_pid(pid)
 
         if running:
-            print "The API Server is already running."
+            if not args.z:
+                print "The API Server is already running."
         else:
             try:
                 pid = os.fork()
@@ -50,7 +51,8 @@ class start(object):
                     # Exit parent process
                     sys.exit(0)
             except OSError, e:
-                print >> sys.stderr, "fork failed: %d (%s)" % (e.errno, e.strerror)
+                if not args.z:
+                    print >> sys.stderr, "fork failed: %d (%s)" % (e.errno, e.strerror)
                 sys.exit(1)
 
             # start api server in the background
