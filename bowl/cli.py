@@ -174,6 +174,9 @@ class cli(object):
         # repositories
         parse_repositories = subparsers.add_parser('repositories',
                                                    help='list repositories that are registered')
+        parse_repositories.add_argument('-z',
+                                    action='store_true',
+                                    help='do not print any output')
         parse_repositories.set_defaults(func=repositories.repositories.main)
 
         # services
@@ -231,7 +234,7 @@ class cli(object):
         parse_update.add_argument('-r' '--repository',
                                   help='specify service repository host to get updates from')
         parse_update.add_argument('-z',
-                                  action='store_true',
+                                  action='store_false',
                                   help='do not print any output')
         parse_update.set_defaults(func=update.update.main)
 

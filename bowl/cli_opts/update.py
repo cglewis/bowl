@@ -22,7 +22,6 @@ class update(object):
         # run through hosts in ~/.bowl/repositories
         repos = repositories.repositories.main(args)
 
-        args.z = True
         for repo in repos:
             # !! TODO other checks for local running api server
             # if local repo, spin up api server

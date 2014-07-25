@@ -23,6 +23,7 @@ class repositories(object):
                     repositories.append(repository['title'])
         except:
             pass
-        for repository in repositories:
-            print repository
+        if not args.z:
+            for repository in repositories:
+                print repository
         return repositories

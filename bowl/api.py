@@ -5,6 +5,7 @@ Created on 14 March 2014
 @author: Charlie Lewis
 """
 
+import datetime
 import os
 import sys
 import tarfile
@@ -32,6 +33,8 @@ from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
 from bowl.cli_opts import unlink
 from bowl.cli_opts import version
+
+START_TIME = datetime.datetime.now()
 
 class main(object):
     """
@@ -74,6 +77,7 @@ class main(object):
             '/snapshot', 'api_snapshot',
             '/snapshots', 'api_snapshots',
             '/unlink/(.*)', 'api_unlink',
+            '/uptime', 'api_uptime',
             '/version', 'api_version',
         )
         return urls
@@ -297,7 +301,11 @@ class api_repositories:
 
         :return: returns the list of connected repositories.
         """
-        return repositories.repositories.main([])
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return repositories.repositories.main(args)
 
 class api_repo_services:
     """
@@ -368,6 +376,20 @@ class api_unlink:
         args = Object()
         args.SERVICE_HOST = repository
         return unlink.unlink.main(args)
+
+class api_uptime:
+    """
+    This class is resposible for returning the uptime of the API server.
+    """
+    def GET(self):
+        """
+        GETs the uptime of the API server.
+
+        :return: returns the uptime of the API server.
+        """
+        uptime_seconds = (datetime.datetime.now()-START_TIME).total_seconds()
+        uptime_string = str(datetime.timedelta(seconds = uptime_seconds))
+        return uptime_string
 
 class api_version:
     """
