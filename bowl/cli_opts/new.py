@@ -15,7 +15,6 @@ import shutil
 import sys
 import uuid
 from bowl.cli_opts import services
-from bowl.containers import oses
 
 class Object(object):
     pass
@@ -86,39 +85,6 @@ class new(object):
          ]
         }
 
-        os_dict = {}
-        base = "bowl.containers."
-        os_list = inspect.getmembers(oses.oses, predicate=inspect.ismethod)
-
-        args = Object()
-        args.quiet = False
-        args.json = True
-        args.z = True
-        all_dict = services.services.main(args)
-        os_num = 0
-        for os_key in all_dict['oses']:
-            menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
-            version_num = 0
-            for version_key in all_dict['versions']:
-                menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['versions'][version_key])
-
-                database_dict = {
-                  'title': "Databases",
-                  'type': "menu",
-                  'subtitle': "Please select databases...",
-                  'options': []
-                }
-
-                version_num += 1
-            os_num += 1
-
-        # !! TODO refactor and remove
-        for item in os_list:
-            package = base + item[0]
-            os_dict[item[0]+'_versions'] = getattr(__import__(package,
-                                                              fromlist=['versions']),
-                                                              'versions')
-
         # !! TODO use json.loads/dumps instead of literal_eval
         try:
             directory = "~/.bowl"
@@ -138,14 +104,17 @@ class new(object):
           'type': "launch"
         }
 
-        # !! TODO get rid of inspect.getmembers
+        args = Object()
+        args.quiet = False
+        args.json = True
+        args.z = True
+        all_dict = services.services.main(args)
         os_num = 0
-        for key,os_inst in os_dict.iteritems():
-            version_list = inspect.getmembers(os_inst.versions,
-                                              predicate=inspect.ismethod)
+        for os_key in all_dict['oses']:
+            menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
             version_num = 0
-            for version in version_list:
-                #menu_dict['options'][0]['options'][os_num]['options'].append(getattr(os_inst.versions(), version[0])())
+            for version_key in all_dict['versions']:
+                menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['versions'][version_key])
 
                 database_dict = {
                   'title': "Databases",
@@ -153,31 +122,12 @@ class new(object):
                   'subtitle': "Please select databases...",
                   'options': []
                 }
-                os_name = key.split("_", 1)
-                package = base + os_name[0] + "." + version[0] + "."
-
-                db_package = package + "databases"
-                importlib.import_module(db_package)
-                db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
-                database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
-                # !! TODO
-                print "database_list"
-                print database_list
-                print
-                for database in database_list:
-                    print "combine_cmd"
-                    print getattr(db_inst.databases(), database[0])()['combine_cmd']
-                    print
-                    print "background_cmd"
-                    print getattr(db_inst.databases(), database[0])()['background_cmd']
-                    print
-                    print "database_dict"
-                    print getattr(db_inst.databases(), database[0])()
-                    print
-                    self.combine_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['combine_cmd']
-                    if self.combine_cmd_dict[package+database[0]] == "yes":
-                        self.background_cmd_dict[package+database[0]] = getattr(db_inst.databases(), database[0])()['background_cmd']
-                    database_dict['options'].append(getattr(db_inst.databases(), database[0])())
+                for database_key in all_dict['databases'][0]:
+                    database_dict['options'].append(all_dict['databases'][0][database_key])
+                    key = os_key+"."+version_key+".databases."+database_key
+                    self.combine_cmd_dict[key] = all_dict['databases'][0][database_key]['combine_cmd']
+                    if self.combine_cmd_dict[key] == "yes":
+                        self.background_cmd_dict[key] = all_dict['databases'][0][database_key]['background_cmd']
 
                 environment_dict = {
                   'title': "Environment Tools",
@@ -185,15 +135,12 @@ class new(object):
                   'subtitle': "Please select environment tools...",
                   'options': []
                 }
-                env_package = package + "environment"
-                importlib.import_module(env_package)
-                env_inst = getattr(__import__(env_package, fromlist=['environment']), 'environment')
-                environment_list = inspect.getmembers(env_inst.environment, predicate=inspect.ismethod)
-                for environ in environment_list:
-                    self.combine_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['combine_cmd']
-                    if self.combine_cmd_dict[package+environ[0]] == "yes":
-                        self.background_cmd_dict[package+environ[0]] = getattr(env_inst.environment(), environ[0])()['background_cmd']
-                    environment_dict['options'].append(getattr(env_inst.environment(), environ[0])())
+                for environment_key in all_dict['environment'][0]:
+                    environment_dict['options'].append(all_dict['environment'][0][environment_key])
+                    key = os_key+"."+version_key+".environment."+environment_key
+                    self.combine_cmd_dict[key] = all_dict['environment'][0][environment_key]['combine_cmd']
+                    if self.combine_cmd_dict[key] == "yes":
+                        self.background_cmd_dict[key] = all_dict['environment'][0][environment_key]['background_cmd']
 
                 service_dict = {
                   'title': "Services",
@@ -201,15 +148,12 @@ class new(object):
                   'subtitle': "Please select services...",
                   'options': []
                 }
-                serv_package = package + "services"
-                importlib.import_module(serv_package)
-                serv_inst = getattr(__import__(serv_package, fromlist=['services']), 'services')
-                service_list = inspect.getmembers(serv_inst.services, predicate=inspect.ismethod)
-                for service in service_list:
-                    self.combine_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['combine_cmd']
-                    if self.combine_cmd_dict[package+service[0]] == "yes":
-                        self.background_cmd_dict[package+service[0]] = getattr(serv_inst.services(), service[0])()['background_cmd']
-                    service_dict['options'].append(getattr(serv_inst.services(), service[0])())
+                for service_key in all_dict['services'][0]:
+                    service_dict['options'].append(all_dict['services'][0][service_key])
+                    key = os_key+"."+version_key+".services."+service_key
+                    self.combine_cmd_dict[key] = all_dict['services'][0][service_key]['combine_cmd']
+                    if self.combine_cmd_dict[key] == "yes":
+                        self.background_cmd_dict[key] = all_dict['services'][0][service_key]['background_cmd']
 
                 tool_dict = {
                   'title': "Tools",
@@ -217,15 +161,12 @@ class new(object):
                   'subtitle': "Please select tools...",
                   'options': []
                 }
-                tool_package = package + "tools"
-                importlib.import_module(tool_package)
-                tool_inst = getattr(__import__(tool_package, fromlist=['tools']), 'tools')
-                tool_list = inspect.getmembers(tool_inst.tools, predicate=inspect.ismethod)
-                for tool in tool_list:
-                    self.combine_cmd_dict[package+tool[0]] = getattr(tool_inst.tools(), tool[0])()['combine_cmd']
-                    if self.combine_cmd_dict[package+tool[0]] == "yes":
-                        self.background_cmd_dict[package+tool[0]] = getattr(tool_inst.tools(), tool[0])()['background_cmd']
-                    tool_dict['options'].append(getattr(tool_inst.tools(), tool[0])())
+                for tool_key in all_dict['tools'][0]:
+                    tool_dict['options'].append(all_dict['tools'][0][tool_key])
+                    key = os_key+"."+version_key+".tools."+tool_key
+                    self.combine_cmd_dict[key] = all_dict['tools'][0][tool_key]['combine_cmd']
+                    if self.combine_cmd_dict[key] == "yes":
+                        self.background_cmd_dict[key] = all_dict['tools'][0][tool_key]['background_cmd']
 
                 host_dict = {
                   'title': "Docker Hosts",
@@ -248,6 +189,7 @@ class new(object):
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(tool_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
                 menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
+
                 version_num += 1
             os_num += 1
 
@@ -633,9 +575,11 @@ class new(object):
                 cmd = ""
                 # !! error check that the array is this size
                 service_name = service.split(':', 3)
+                key = ".".join(service_name)
                 os_flavor = "/".join(service_name[0:3])
+                # !! TODO don't hard code .default, use services api
                 path = os.path.join(os.path.dirname(this_dir),
-                                    "containers/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
+                                    "containers/.default/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
                 with open(path, 'r') as f:
                     for line in f:
                         # remove duplicate lines
@@ -662,12 +606,7 @@ class new(object):
                                 if num_services == 1:
                                     dockerfile.append(line.rstrip('\n'))
                                 else:
-                                    if self.combine_cmd_dict["bowl.containers." +
-                                                             service_name[0] +
-                                                             "." +
-                                                             service_name[1] +
-                                                             "." +
-                                                             service_name[3]] == "yes":
+                                    if self.combine_cmd_dict[key] == "yes":
                                         envs[service].append(line.rstrip('\n'))
                                     # !! TODO
                                     dockerfile.append(line.rstrip('\n'))
@@ -676,12 +615,7 @@ class new(object):
                                 if num_services == 1:
                                     dockerfile.append(line.rstrip('\n'))
                                 else:
-                                    if self.combine_cmd_dict["bowl.containers." +
-                                                             service_name[0] +
-                                                             "." +
-                                                             service_name[1] +
-                                                             "." +
-                                                             service_name[3]] == "yes":
+                                    if self.combine_cmd_dict[key] == "yes":
                                         envs[service].append(line.rstrip('\n'))
                                     # !! TODO
                                     dockerfile.append(line.rstrip('\n'))
@@ -691,12 +625,7 @@ class new(object):
                                 if num_services == 1:
                                     dockerfile.append(line.rstrip('\n'))
                                 else:
-                                    if self.combine_cmd_dict["bowl.containers." +
-                                                             service_name[0] +
-                                                             "." +
-                                                             service_name[1] +
-                                                             "." +
-                                                             service_name[3]] == "yes":
+                                    if self.combine_cmd_dict[key] == "yes":
                                         workdirs[service].append(line.rstrip('\n'))
                                     # !! TODO
                                     dockerfile.append(line.rstrip('\n'))
@@ -708,12 +637,7 @@ class new(object):
                                 if num_services == 1:
                                     dockerfile.append(line.rstrip('\n'))
                                 else:
-                                    if self.combine_cmd_dict["bowl.containers." +
-                                                             service_name[0] +
-                                                             "." +
-                                                             service_name[1] +
-                                                             "." +
-                                                             service_name[3]] == "yes":
+                                    if self.combine_cmd_dict[key] == "yes":
                                         entrypoints[service].append(line.rstrip('\n'))
                                 entrypoint = (line.rstrip('\n')).split(" ", 1)[1:][0]
                             # check for multiple CMD commands
@@ -723,21 +647,11 @@ class new(object):
                                 if num_services == 1:
                                     dockerfile.append(line.rstrip('\n'))
                                 else:
-                                    if self.combine_cmd_dict["bowl.containers." +
-                                                             service_name[0] +
-                                                             "." +
-                                                             service_name[1] +
-                                                             "." +
-                                                             service_name[3]] == "yes":
+                                    if self.combine_cmd_dict[key] == "yes":
                                         # !! TODO only append if there is only one
                                         # if more than one, use supervisord or something
                                         # if none of them are combine_cmds then use /bin/bash
-                                        cmds[service].append(self.background_cmd_dict["bowl.containers." +
-                                                             service_name[0] +
-                                                             "." +
-                                                             service_name[1] +
-                                                             "." +
-                                                             service_name[3]])
+                                        cmds[service].append(self.background_cmd_dict[key])
                                         #cmds[service].append(line.rstrip('\n'))
                                         #dockerfile.append(line.rstrip('\n'))
                                 cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
