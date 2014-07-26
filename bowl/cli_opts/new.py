@@ -52,6 +52,15 @@ class new(object):
                 container = c.create_container(image_tag, tty=True, stdin_open=True)
             c.start(container, publish_all_ports=True)
 
+            try:
+                directory = "~/.bowl"
+                directory = os.path.expanduser(directory)
+                with open(os.path.join(directory, "containers"), 'w') as f:
+                    # !! TODO make this a more robust json blob
+                    f.write(image_tag+"\n")
+            except:
+                pass
+
         shutil.rmtree('/tmp/'+uuid_dir)
         return
 
@@ -84,6 +93,7 @@ class new(object):
         args = Object()
         args.quiet = False
         args.json = True
+        args.z = True
         all_dict = services.services.main(args)
         os_num = 0
         for os_key in all_dict['oses']:
@@ -109,6 +119,7 @@ class new(object):
                                                               fromlist=['versions']),
                                                               'versions')
 
+        # !! TODO use json.loads/dumps instead of literal_eval
         try:
             directory = "~/.bowl"
             directory = os.path.expanduser(directory)
@@ -127,6 +138,7 @@ class new(object):
           'type': "launch"
         }
 
+        # !! TODO get rid of inspect.getmembers
         os_num = 0
         for key,os_inst in os_dict.iteritems():
             version_list = inspect.getmembers(os_inst.versions,
@@ -148,6 +160,7 @@ class new(object):
                 importlib.import_module(db_package)
                 db_inst = getattr(__import__(db_package, fromlist=['databases']), 'databases')
                 database_list = inspect.getmembers(db_inst.databases, predicate=inspect.ismethod)
+                # !! TODO
                 print "database_list"
                 print database_list
                 print
