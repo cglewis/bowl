@@ -4,6 +4,7 @@ This module is the link command of bowl.
 Created on 14 July 2014
 @author: Charlie Lewis
 """
+import ast
 import os
 
 class link(object):
@@ -18,13 +19,25 @@ class link(object):
             os.makedirs(directory)
         # !! TODO
         #    test connection
+        exists = False
         try:
-            with open(os.path.join(directory, "repositories"), 'a') as f:
-                f.write("{" +
-                        "'title': '"+args.SERVICE_HOST+"'," +
-                        " 'type': 'choice_menu'" +
-                        "}\n")
+            if os.path.exists(os.path.join(directory, "repositories")):
+                with open(os.path.join(directory, "repositories"), 'r') as f:
+                    for line in f:
+                        repo = ast.literal_eval(line.strip())
+                        if repo['title'] == args.SERVICE_HOST:
+                            exists = True
+            if not exists:
+                with open(os.path.join(directory, "repositories"), 'a') as f:
+                    f.write("{" +
+                            "'title': '"+args.SERVICE_HOST+"'," +
+                            " 'type': 'choice_menu'" +
+                            "}\n")
+            else:
+                if not args.z:
+                    print "repository has already been linked"
         except:
-            print "unable to add service host"
+            if not args.z:
+                print "unable to link service host"
             return False
         return True

@@ -52,6 +52,12 @@ class cli(object):
                                 help='specify type of service (database, environment, service)')
         parse_add.add_argument('NAME',
                                 help='specify name of service')
+        parse_add.add_argument('JSON',
+                                help='JSON object or path to JSON object that contains associated metadata')
+        parse_add.add_argument('PATH',
+                                help='path that contains the Dockerfile')
+        parse_add.add_argument('--repository', '-r',
+                                help='specify repository to add service to, use localhost by default')
         parse_add.set_defaults(func=add.add.main)
 
         # connect
@@ -125,6 +131,9 @@ class cli(object):
                                            help='link to a service repository host')
         parse_link.add_argument('SERVICE_HOST',
                                 help='specify service repository host to connect to')
+        parse_link.add_argument('-z',
+                                action='store_true',
+                                help='do not print any output')
         parse_link.set_defaults(func=link.link.main)
 
         # list
