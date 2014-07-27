@@ -26,7 +26,7 @@ setup(
     author=u'Charlie Lewis',
     author_email='charlie.lewis42@gmail.com',
     package_data=files(),
-    install_requires=['docker-py==0.3.0'],
+    install_requires=['docker-py==0.3.1', 'requests==2.2.1'],
     entry_points={
         'console_scripts': [
             'bowl = bowl.cli:main',

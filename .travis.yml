@@ -1,0 +1,22 @@
+language: python
+python:
+  - "2.6"
+  - "2.7"
+  - "3.2"
+  - "3.3"
+install:
+  - pip install pytest --use-mirrors
+  - pip install pytest-cov --use-mirrors
+  - pip install python-coveralls --use-mirrors
+  - pip install -r requirements.txt
+before_script:
+  - py.test --cov=bowl
+script: py.test -v --cov bowl --cov-report term-missing
+after_success:
+  - coveralls
+branches:
+  except:
+  - gh-pages
+notifications:
+  email:
+    - charlie.lewis42@gmail.com
