@@ -20,12 +20,22 @@ class connect(object):
         # !! TODO
         #    test connection
         #    allow different port
+        exists = False
         try:
-            with open(os.path.join(directory, "hosts"), 'a') as f:
-                f.write("{" +
-                        "'title': '"+args.DOCKER_HOST+"'," +
-                        " 'type': 'choice_menu'" +
-                        "}\n")
+            if os.path.exists(os.path.join(directory, "hosts")):
+                with open(os.path.join(directory, "hosts"), 'r') as f:
+                    for line in f:
+                        repo = ast.literal_eval(line.strip())
+                        if repo['title'] == args.DOCKER_HOST:
+                            exists = True
+            if not exists:
+                with open(os.path.join(directory, "hosts"), 'a') as f:
+                    f.write("{" +
+                            "'title': '"+args.DOCKER_HOST+"'," +
+                            " 'type': 'choice_menu'" +
+                            "}\n")
+            else:
+                print "host has already been connected"
         except:
             print "unable to add docker host"
             return False
