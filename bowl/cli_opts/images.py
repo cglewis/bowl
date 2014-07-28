@@ -15,7 +15,7 @@ class images(object):
     def main(self, args):
         images = []
         try:
-            directory = "~/.bowl"
+            directory = args.metadata_path
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "images"), 'r') as f:
                 for line in f:

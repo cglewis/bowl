@@ -15,7 +15,7 @@ class hosts(object):
     def main(self, args):
         hosts = []
         try:
-            directory = "~/.bowl"
+            directory = args.metadata_path
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "hosts"), 'r') as f:
                 for line in f:

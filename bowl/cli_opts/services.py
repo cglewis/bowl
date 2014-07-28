@@ -13,7 +13,7 @@ class services(object):
     """
     @classmethod
     def main(self, args):
-        services_dir = "~/.bowl/services"
+        services_dir = os.path.join(args.metadata_path, "services")
         services_dir = os.path.expanduser(services_dir)
         default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "containers/.default"))
         services_dict = {}

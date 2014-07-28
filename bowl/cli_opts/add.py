@@ -25,9 +25,10 @@ class add(object):
         else:
             link_args = Object()
             link_args.z = True
+            link_args.metadata_path = args.metadata_path
             link_args.SERVICE_HOST = "localhost"
             if link.link.main(link_args):
-                directory = "~/.bowl/services"
+                directory = os.path.join(args.metadata_path, "services")
                 directory = os.path.expanduser(directory)
                 if not os.path.exists(directory):
                     os.makedirs(directory)

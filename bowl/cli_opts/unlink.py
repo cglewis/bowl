@@ -15,7 +15,7 @@ class unlink(object):
     @classmethod
     def main(self, args):
         try:
-            directory = "~/.bowl"
+            directory = args.metadata_path
             directory = os.path.expanduser(directory)
             # !! TODO need to do check if specfied repository was not there to begin with
             for line in fileinput.input(os.path.join(directory, "repositories"), inplace=True):

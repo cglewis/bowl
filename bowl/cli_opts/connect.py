@@ -13,7 +13,7 @@ class connect(object):
     """
     @classmethod
     def main(self, args):
-        directory = "~/.bowl"
+        directory = args.metadata_path
         directory = os.path.expanduser(directory)
         if not os.path.exists(directory):
             os.makedirs(directory)

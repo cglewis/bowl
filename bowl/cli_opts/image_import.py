@@ -13,9 +13,8 @@ class image_import(object):
     """
     @classmethod
     def main(self, args):
-        directory = "~/.bowl"
+        directory = args.metadata_path
         directory = os.path.expanduser(directory)
-        print args
         if not os.path.exists(directory):
             os.makedirs(directory)
         if args.uuid is None:

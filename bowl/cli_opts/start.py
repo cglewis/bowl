@@ -28,7 +28,7 @@ class start(object):
     @classmethod
     def main(self, args):
         running = False
-        directory = "~/.bowl"
+        directory = args.metadata_path
         directory = os.path.expanduser(directory)
         pid_file = os.path.join(directory, "pid")
         if not os.path.exists(directory):

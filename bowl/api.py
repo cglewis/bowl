@@ -117,6 +117,8 @@ class api_connect:
             pass
         args = Object()
         args.DOCKER_HOST = host
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return connect.connect.main(args)
 
 class api_delete:
@@ -131,6 +133,8 @@ class api_delete:
             pass
         args = Object()
         args.IMAGE_NAME = image
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return delete.delete.main(args)
 
 class api_disconnect:
@@ -146,6 +150,8 @@ class api_disconnect:
             pass
         args = Object()
         args.DOCKER_HOST = host
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return disconnect.disconnect.main(args)
 
 class api_hosts:
@@ -162,6 +168,8 @@ class api_hosts:
             pass
         args = Object()
         args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return hosts.hosts.main(args)
 
 class api_image_import:
@@ -188,6 +196,8 @@ class api_images:
             pass
         args = Object()
         args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return images.images.main(args)
 
 class api_info:
@@ -225,6 +235,8 @@ class api_link:
             pass
         args = Object()
         args.SERVICE_HOST = repository
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return link.link.main(args)
 
 class api_list:
@@ -305,6 +317,8 @@ class api_repositories:
             pass
         args = Object()
         args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return repositories.repositories.main(args)
 
 class api_repo_services:
@@ -340,6 +354,8 @@ class api_services:
         args.z = True
         args.json = True
         args.quiet = False
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return services.services.main(args)
 
 class api_snapshot:
@@ -375,6 +391,8 @@ class api_unlink:
             pass
         args = Object()
         args.SERVICE_HOST = repository
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return unlink.unlink.main(args)
 
 class api_uptime:

@@ -24,7 +24,7 @@ class new(object):
     This class is responsible for the new command of the cli.
     """
     @staticmethod
-    def build_dockerfile(self, dockerfile, uuid_dir):
+    def build_dockerfile(self, dockerfile, uuid_dir, main_arg):
         # try/catch
         with open('/tmp/'+uuid_dir+'/Dockerfile', 'w') as f:
             for line in dockerfile:
@@ -52,7 +52,7 @@ class new(object):
             c.start(container, publish_all_ports=True)
 
             try:
-                directory = "~/.bowl"
+                directory = main_arg.metadata_path
                 directory = os.path.expanduser(directory)
                 with open(os.path.join(directory, "containers"), 'w') as f:
                     # !! TODO make this a more robust json blob
@@ -64,7 +64,7 @@ class new(object):
         return
 
     @staticmethod
-    def build_options(self):
+    def build_options(self, main_arg):
         menu_dict = {
          'title': "Build your bowl",
          'type': "menu",
@@ -87,7 +87,7 @@ class new(object):
 
         # !! TODO use json.loads/dumps instead of literal_eval
         try:
-            directory = "~/.bowl"
+            directory = main_arg.metadata_path
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "images"), 'r') as f:
                 for line in f:
@@ -108,92 +108,108 @@ class new(object):
         args.quiet = False
         args.json = True
         args.z = True
+        args.metadata_path = main_arg.metadata_path
         all_dict = services.services.main(args)
         os_num = 0
-        for os_key in all_dict['oses']:
-            menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
-            version_num = 0
-            for version_key in all_dict['versions']:
-                menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['versions'][version_key])
+        try:
+            for os_key in all_dict['oses']:
+                menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
+                version_num = 0
+                for version_key in all_dict['versions']:
+                    menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['versions'][version_key])
 
-                database_dict = {
-                  'title': "Databases",
-                  'type': "menu",
-                  'subtitle': "Please select databases...",
-                  'options': []
-                }
-                for database_key in all_dict['databases'][0]:
-                    database_dict['options'].append(all_dict['databases'][0][database_key])
-                    key = os_key+"."+version_key+".databases."+database_key
-                    self.combine_cmd_dict[key] = all_dict['databases'][0][database_key]['combine_cmd']
-                    if self.combine_cmd_dict[key] == "yes":
-                        self.background_cmd_dict[key] = all_dict['databases'][0][database_key]['background_cmd']
+                    database_dict = {
+                      'title': "Databases",
+                      'type': "menu",
+                      'subtitle': "Please select databases...",
+                      'options': []
+                    }
+                    for database_key in all_dict['databases'][0]:
+                        database_dict['options'].append(all_dict['databases'][0][database_key])
+                        key = os_key+"."+version_key+".databases."+database_key
+                        try:
+                            self.combine_cmd_dict[key] = all_dict['databases'][0][database_key]['combine_cmd']
+                            if self.combine_cmd_dict[key] == "yes":
+                                self.background_cmd_dict[key] = all_dict['databases'][0][database_key]['background_cmd']
+                        except:
+                            print "key error"
 
-                environment_dict = {
-                  'title': "Environment Tools",
-                  'type': "menu",
-                  'subtitle': "Please select environment tools...",
-                  'options': []
-                }
-                for environment_key in all_dict['environment'][0]:
-                    environment_dict['options'].append(all_dict['environment'][0][environment_key])
-                    key = os_key+"."+version_key+".environment."+environment_key
-                    self.combine_cmd_dict[key] = all_dict['environment'][0][environment_key]['combine_cmd']
-                    if self.combine_cmd_dict[key] == "yes":
-                        self.background_cmd_dict[key] = all_dict['environment'][0][environment_key]['background_cmd']
+                    environment_dict = {
+                      'title': "Environment Tools",
+                      'type': "menu",
+                      'subtitle': "Please select environment tools...",
+                      'options': []
+                    }
+                    for environment_key in all_dict['environment'][0]:
+                        environment_dict['options'].append(all_dict['environment'][0][environment_key])
+                        key = os_key+"."+version_key+".environment."+environment_key
+                        try:
+                            self.combine_cmd_dict[key] = all_dict['environment'][0][environment_key]['combine_cmd']
+                            if self.combine_cmd_dict[key] == "yes":
+                                self.background_cmd_dict[key] = all_dict['environment'][0][environment_key]['background_cmd']
+                        except:
+                            print "key error"
 
-                service_dict = {
-                  'title': "Services",
-                  'type': "menu",
-                  'subtitle': "Please select services...",
-                  'options': []
-                }
-                for service_key in all_dict['services'][0]:
-                    service_dict['options'].append(all_dict['services'][0][service_key])
-                    key = os_key+"."+version_key+".services."+service_key
-                    self.combine_cmd_dict[key] = all_dict['services'][0][service_key]['combine_cmd']
-                    if self.combine_cmd_dict[key] == "yes":
-                        self.background_cmd_dict[key] = all_dict['services'][0][service_key]['background_cmd']
+                    service_dict = {
+                      'title': "Services",
+                      'type': "menu",
+                      'subtitle': "Please select services...",
+                      'options': []
+                    }
+                    for service_key in all_dict['services'][0]:
+                        service_dict['options'].append(all_dict['services'][0][service_key])
+                        key = os_key+"."+version_key+".services."+service_key
+                        try:
+                            self.combine_cmd_dict[key] = all_dict['services'][0][service_key]['combine_cmd']
+                            if self.combine_cmd_dict[key] == "yes":
+                                self.background_cmd_dict[key] = all_dict['services'][0][service_key]['background_cmd']
+                        except:
+                            print "key error"
 
-                tool_dict = {
-                  'title': "Tools",
-                  'type': "menu",
-                  'subtitle': "Please select tools...",
-                  'options': []
-                }
-                for tool_key in all_dict['tools'][0]:
-                    tool_dict['options'].append(all_dict['tools'][0][tool_key])
-                    key = os_key+"."+version_key+".tools."+tool_key
-                    self.combine_cmd_dict[key] = all_dict['tools'][0][tool_key]['combine_cmd']
-                    if self.combine_cmd_dict[key] == "yes":
-                        self.background_cmd_dict[key] = all_dict['tools'][0][tool_key]['background_cmd']
+                    tool_dict = {
+                      'title': "Tools",
+                      'type': "menu",
+                      'subtitle': "Please select tools...",
+                      'options': []
+                    }
+                    for tool_key in all_dict['tools'][0]:
+                        tool_dict['options'].append(all_dict['tools'][0][tool_key])
+                        key = os_key+"."+version_key+".tools."+tool_key
+                        try:
+                            self.combine_cmd_dict[key] = all_dict['tools'][0][tool_key]['combine_cmd']
+                            if self.combine_cmd_dict[key] == "yes":
+                                self.background_cmd_dict[key] = all_dict['tools'][0][tool_key]['background_cmd']
+                        except:
+                            print "key error"
 
-                host_dict = {
-                  'title': "Docker Hosts",
-                  'type': "menu",
-                  'subtitle': "Please select which hosts are available to use for containers...",
-                  'options': []
-                }
-                try:
-                    directory = "~/.bowl"
-                    directory = os.path.expanduser(directory)
-                    with open(os.path.join(directory, "hosts"), 'r') as f:
-                        for line in f:
-                            host_dict['options'].append(ast.literal_eval(line.rstrip('\n')))
-                except:
-                    pass
+                    host_dict = {
+                      'title': "Docker Hosts",
+                      'type': "menu",
+                      'subtitle': "Please select which hosts are available to use for containers...",
+                      'options': []
+                    }
+                    try:
+                        directory = main_arg.metadata_path
+                        directory = os.path.expanduser(directory)
+                        with open(os.path.join(directory, "hosts"), 'r') as f:
+                            for line in f:
+                                host_dict['options'].append(ast.literal_eval(line.rstrip('\n')))
+                    except:
+                        pass
 
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(database_dict)
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(environment_dict)
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(service_dict)
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(tool_dict)
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
-                menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
+                    menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(database_dict)
+                    menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(environment_dict)
+                    menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(service_dict)
+                    menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(tool_dict)
+                    menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
+                    menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
 
-                version_num += 1
-            os_num += 1
+                    version_num += 1
+                os_num += 1
 
-        menu_dict['options'][1]['options'].append(launch_image_dict)
+            menu_dict['options'][1]['options'].append(launch_image_dict)
+        except:
+            print "failure"
         return menu_dict
 
     @staticmethod
@@ -229,13 +245,14 @@ class new(object):
                 sys.stdout.write("Please respond with 'yes' or 'no' "\
                                  "(or 'y' or 'n').\n")
 
+    # !! TODO break this into more functions
     @classmethod
     def main(self, args):
         # !! TODO this should be in __init__
         # build dictionary of available container options
         self.combine_cmd_dict = {}
         self.background_cmd_dict = {}
-        menu_dict = self.build_options(self)
+        menu_dict = self.build_options(self, args)
 
         self.win = curses.initscr()
         self.win.keypad(1)
@@ -695,7 +712,7 @@ class new(object):
             for line in dockerfile:
                 print line
             print "### END GENERATED DOCKERFILE ###\n"
-            self.build_dockerfile(self, dockerfile, uuid_dir)
+            self.build_dockerfile(self, dockerfile, uuid_dir, args)
 
     @staticmethod
     def display_menu(self, menu, parent, build_dict):

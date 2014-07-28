@@ -15,7 +15,7 @@ class repositories(object):
     def main(self, args):
         repositories = []
         try:
-            directory = "~/.bowl"
+            directory = args.metadata_path
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "repositories"), 'r') as f:
                 for line in f:
