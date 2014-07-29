@@ -13,6 +13,7 @@ import inspect
 import os
 import shutil
 import sys
+import time
 import uuid
 from bowl.cli_opts import services
 
@@ -41,6 +42,7 @@ class new(object):
             c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
                     nocache=False, rm=False, stream=False)
 
+            time.sleep(5)
             # TODO check if tty and stdin_open (interactive) are needed
             if len(self.names) != 0:
                 if self.unique:
@@ -48,15 +50,21 @@ class new(object):
                 else:
                     container = c.create_container(image_tag, tty=True, stdin_open=True, name=self.names[0], hostname=self.names[0])
             else:
-                container = c.create_container(image_tag, tty=True, stdin_open=True)
+                container = c.create_container(image_tag, tty=True, stdin_open=True, name=image_tag, hostname=image_tag)
             c.start(container, publish_all_ports=True)
 
             try:
                 directory = main_arg.metadata_path
                 directory = os.path.expanduser(directory)
-                with open(os.path.join(directory, "containers"), 'w') as f:
+                with open(os.path.join(directory, "containers"), 'a') as f:
                     # !! TODO make this a more robust json blob
-                    f.write(image_tag+"\n")
+                    if len(self.names) != 0:
+                        if self.unique:
+                            f.write(image_tag+","+self.names[index]+"\n")
+                        else:
+                            f.write(image_tag+","+self.names[0]+"\n")
+                    else:
+                        f.write(image_tag+","+image_tag+"\n")
             except:
                 pass
 

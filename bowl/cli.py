@@ -164,6 +164,9 @@ class cli(object):
         # list
         parse_list = subparsers.add_parser('list',
                                            help='list containers running')
+        parse_list.add_argument('--metadata_path', '-m',
+                                default="~/.bowl",
+                                help='metadata path, default ~/.bowl')
         parse_list.add_argument('-z',
                                 action='store_true',
                                 help='do not print any output')
