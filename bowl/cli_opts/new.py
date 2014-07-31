@@ -58,6 +58,7 @@ class new(object):
                 directory = os.path.expanduser(directory)
                 with open(os.path.join(directory, "containers"), 'a') as f:
                     # !! TODO make this a more robust json blob
+                    # !! TODO add host['title'] to f.write - note this will break 'list'
                     if len(self.names) != 0:
                         if self.unique:
                             f.write(image_tag+","+self.names[index]+"\n")

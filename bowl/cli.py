@@ -37,6 +37,8 @@ class cli(object):
     This class is responsible for all commandline operations.
     """
     def parse_args(self):
+        default_metadata_path = "~/.bowl"
+
         parser = argparse.ArgumentParser()
 
         subparsers = parser.add_subparsers(title='bowl commands')
@@ -57,8 +59,8 @@ class cli(object):
         parse_add.add_argument('PATH',
                                 help='path that contains the Dockerfile')
         parse_add.add_argument('--metadata_path', '-m',
-                               default="~/.bowl",
-                               help='metadata path, default ~/.bowl')
+                               default=default_metadata_path,
+                               help='metadata path, default '+default_metadata_path)
         # !! TODO use default, and restructure if/else in add
         parse_add.add_argument('--repository', '-r',
                                 help='specify repository to add service to, use localhost by default')
@@ -70,8 +72,8 @@ class cli(object):
         parse_connect.add_argument('DOCKER_HOST',
                                    help='specify docker host to connect to')
         parse_connect.add_argument('--metadata_path', '-m',
-                                   default="~/.bowl",
-                                   help='metadata path, default ~/.bowl')
+                                   default=default_metadata_path,
+                                   help='metadata path, default '+default_metadata_path)
         parse_connect.set_defaults(func=connect.connect.main)
 
         # delete
@@ -80,8 +82,8 @@ class cli(object):
         parse_delete.add_argument('IMAGE_NAME',
                                   help='specify name of image to delete')
         parse_delete.add_argument('--metadata_path', '-m',
-                                  default="~/.bowl",
-                                  help='metadata path, default ~/.bowl')
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
         parse_delete.set_defaults(func=delete.delete.main)
 
         # disconnect
@@ -90,16 +92,16 @@ class cli(object):
         parse_disconnect.add_argument('DOCKER_HOST',
                                       help='specify docker host to disconnect from')
         parse_disconnect.add_argument('--metadata_path', '-m',
-                                      default="~/.bowl",
-                                      help='metadata path, default ~/.bowl')
+                                      default=default_metadata_path,
+                                      help='metadata path, default '+default_metadata_path)
         parse_disconnect.set_defaults(func=disconnect.disconnect.main)
 
         # hosts
         parse_hosts = subparsers.add_parser('hosts',
                                             help='list hosts that are registered')
         parse_hosts.add_argument('--metadata_path', '-m',
-                                 default="~/.bowl",
-                                 help='metadata path, default ~/.bowl')
+                                 default=default_metadata_path,
+                                 help='metadata path, default '+default_metadata_path)
         parse_hosts.add_argument('-z',
                                  action='store_true',
                                  help='do not print any output')
@@ -109,8 +111,8 @@ class cli(object):
         parse_images = subparsers.add_parser('images',
                                              help='list images')
         parse_images.add_argument('--metadata_path', '-m',
-                                  default="~/.bowl",
-                                  help='metadata path, default ~/.bowl')
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
         parse_images.add_argument('-z',
                                   action='store_true',
                                   help='do not print any output')
@@ -126,8 +128,8 @@ class cli(object):
         parse_import.add_argument('-d', '--description',
                                   help='description of image to import')
         parse_import.add_argument('--metadata_path', '-m',
-                                  default="~/.bowl",
-                                  help='metadata path, default ~/.bowl')
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
         parse_import.add_argument('-u', '--uuid',
                                   help='uuid of image to import')
         # use non-standard naming scheme to not conflict with python's import
@@ -154,8 +156,8 @@ class cli(object):
         parse_link.add_argument('SERVICE_HOST',
                                 help='specify service repository host to connect to')
         parse_link.add_argument('--metadata_path', '-m',
-                                default="~/.bowl",
-                                help='metadata path, default ~/.bowl')
+                                default=default_metadata_path,
+                                help='metadata path, default '+default_metadata_path)
         parse_link.add_argument('-z',
                                 action='store_true',
                                 help='do not print any output')
@@ -165,8 +167,8 @@ class cli(object):
         parse_list = subparsers.add_parser('list',
                                            help='list containers running')
         parse_list.add_argument('--metadata_path', '-m',
-                                default="~/.bowl",
-                                help='metadata path, default ~/.bowl')
+                                default=default_metadata_path,
+                                help='metadata path, default '+default_metadata_path)
         parse_list.add_argument('-z',
                                 action='store_true',
                                 help='do not print any output')
@@ -200,8 +202,8 @@ class cli(object):
         parse_new = subparsers.add_parser('new',
                                           help='new container')
         parse_new.add_argument('--metadata_path', '-m',
-                               default="~/.bowl",
-                               help='metadata path, default ~/.bowl')
+                               default=default_metadata_path,
+                               help='metadata path, default '+default_metadata_path)
         parse_new.set_defaults(func=new.new.main)
 
         # remove
@@ -226,8 +228,8 @@ class cli(object):
                                     action='store_true',
                                     help='print complete JSON object for each service')
         parse_services.add_argument('--metadata_path', '-m',
-                                    default="~/.bowl",
-                                    help='metadata path, default ~/.bowl')
+                                    default=default_metadata_path,
+                                    help='metadata path, default '+default_metadata_path)
         parse_services.add_argument('-q', '--quiet',
                                     action='store_true',
                                     help='print only the name, will ignore -j if also supplied')
@@ -241,6 +243,9 @@ class cli(object):
                                                help='snapshot running container')
         parse_snapshot.add_argument('CONTAINER',
                                     help='specify container to snapshot')
+        parse_snapshot.add_argument('--metadata_path', '-m',
+                                 default=default_metadata_path,
+                                 help='metadata path, default '+default_metadata_path)
         parse_snapshot.set_defaults(func=snapshot.snapshot.main)
 
         # snapshots
@@ -252,8 +257,8 @@ class cli(object):
         parse_start = subparsers.add_parser('start',
                                             help='start the api server')
         parse_start.add_argument('--metadata_path', '-m',
-                                 default="~/.bowl",
-                                 help='metadata path, default ~/.bowl')
+                                 default=default_metadata_path,
+                                 help='metadata path, default '+default_metadata_path)
         parse_start.add_argument('-z',
                                  action='store_true',
                                  help='do not print any output')
@@ -263,8 +268,8 @@ class cli(object):
         parse_stop = subparsers.add_parser('stop',
                                            help='stop the api server')
         parse_stop.add_argument('--metadata_path', '-m',
-                                default="~/.bowl",
-                                help='metadata path, default ~/.bowl')
+                                default=default_metadata_path,
+                                help='metadata path, default '+default_metadata_path)
         parse_stop.add_argument('-z',
                                 action='store_true',
                                 help='do not print any output')
@@ -276,16 +281,16 @@ class cli(object):
         parse_unlink.add_argument('SERVICE_HOST',
                                   help='specify service repository host to disconnect from')
         parse_unlink.add_argument('--metadata_path', '-m',
-                                  default="~/.bowl",
-                                  help='metadata path, default ~/.bowl')
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
         parse_unlink.set_defaults(func=unlink.unlink.main)
 
         # update
         parse_update = subparsers.add_parser('update',
                                              help='update service repository hosts')
         parse_update.add_argument('--metadata_path', '-m',
-                                  default="~/.bowl",
-                                  help='metadata path, default ~/.bowl')
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
         parse_update.add_argument('-r' '--repository',
                                   help='specify service repository host to get updates from')
         parse_update.add_argument('-z',

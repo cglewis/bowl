@@ -24,6 +24,7 @@ class list(object):
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "containers"), 'r') as f:
                 for line in f:
+                    # !! TODO parse host the container is on
                     containers.append(line.split(',')[1].strip())
         except:
             pass
