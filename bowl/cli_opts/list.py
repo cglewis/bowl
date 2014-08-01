@@ -4,6 +4,7 @@ This module is the list command of bowl.
 Created on 14 March 2014
 @author: Charlie Lewis
 """
+import ast
 import docker
 import os
 
@@ -25,7 +26,8 @@ class list(object):
             with open(os.path.join(directory, "containers"), 'r') as f:
                 for line in f:
                     # !! TODO parse host the container is on
-                    containers.append(line.split(',')[1].strip())
+                    container = ast.literal_eval(line.rstrip("\n"))
+                    containers.append(container['container_id']+","+container['host'])
         except:
             pass
         host_args = Object()
@@ -50,7 +52,8 @@ class list(object):
 
         running_containers = []
         for item in containers:
-            if item in compare_containers:
+            container_id = item.split(',')[0]
+            if container_id in compare_containers:
                 running_containers.append(item)
 
         if not args.z:

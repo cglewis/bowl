@@ -58,14 +58,25 @@ class new(object):
                 directory = os.path.expanduser(directory)
                 with open(os.path.join(directory, "containers"), 'a') as f:
                     # !! TODO make this a more robust json blob
-                    # !! TODO add host['title'] to f.write - note this will break 'list'
                     if len(self.names) != 0:
                         if self.unique:
-                            f.write(image_tag+","+self.names[index]+"\n")
+                            f.write("{" +
+                                    "'image_id': '"+image_tag+"'," +
+                                    " 'container_id': '"+self.names[index]+"'," +
+                                    " 'host': '"+host['title']+"'" +
+                                    "}\n")
                         else:
-                            f.write(image_tag+","+self.names[0]+"\n")
+                            f.write("{" +
+                                    "'image_id': '"+image_tag+"'," +
+                                    " 'container_id': '"+self.names[0]+"'," +
+                                    " 'host': '"+host['title']+"'" +
+                                    "}\n")
                     else:
-                        f.write(image_tag+","+image_tag+"\n")
+                        f.write("{" +
+                                "'image_id': '"+image_tag+"'," +
+                                " 'container_id': '"+image_tag+"'," +
+                                " 'host': '"+host['title']+"'" +
+                                "}\n")
             except:
                 pass
 

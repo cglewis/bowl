@@ -246,6 +246,9 @@ class cli(object):
         parse_snapshot.add_argument('--metadata_path', '-m',
                                  default=default_metadata_path,
                                  help='metadata path, default '+default_metadata_path)
+        parse_snapshot.add_argument('-z',
+                                    action='store_true',
+                                    help='do not print any output')
         parse_snapshot.set_defaults(func=snapshot.snapshot.main)
 
         # snapshots
