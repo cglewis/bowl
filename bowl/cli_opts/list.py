@@ -25,7 +25,6 @@ class list(object):
             directory = os.path.expanduser(directory)
             with open(os.path.join(directory, "containers"), 'r') as f:
                 for line in f:
-                    # !! TODO parse host the container is on
                     container = ast.literal_eval(line.rstrip("\n"))
                     containers.append(container['container_id']+","+container['host'])
         except:
