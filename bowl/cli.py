@@ -254,6 +254,12 @@ class cli(object):
         # snapshots
         parse_snapshots = subparsers.add_parser('snapshots',
                                                 help='list snapshots')
+        parse_snapshots.add_argument('--metadata_path', '-m',
+                                 default=default_metadata_path,
+                                 help='metadata path, default '+default_metadata_path)
+        parse_snapshots.add_argument('-z',
+                                    action='store_true',
+                                    help='do not print any output')
         parse_snapshots.set_defaults(func=snapshots.snapshots.main)
 
         # start
