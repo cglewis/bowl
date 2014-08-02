@@ -63,7 +63,7 @@ class main(object):
             '/images', 'api_images',
             '/import', 'api_image_import',
             '/info', 'api_info',
-            '/kill', 'api_kill',
+            '/kill/(.*)', 'api_kill',
             '/link/(.*)', 'api_link',
             '/list', 'api_list',
             '/login', 'api_login',
@@ -74,7 +74,7 @@ class main(object):
             '/repositories', 'api_repositories',
             '/repo/services', 'api_repo_services',
             '/services', 'api_services',
-            '/snapshot', 'api_snapshot',
+            '/snapshot/(.*)', 'api_snapshot',
             '/snapshots', 'api_snapshots',
             '/unlink/(.*)', 'api_unlink',
             '/uptime', 'api_uptime',
@@ -210,17 +210,29 @@ class api_info:
 
         :return: returns the information.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        return info.info.main(args)
 
 class api_kill:
     """
     This class is resposible for killing a container.
     """
-    def POST(self):
+    def GET(self, container):
         """
-        POSTs the container to kill.
+        the container to kill.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.CONTAINER = container
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        return kill.kill.main(args)
 
 class api_link:
     """
@@ -249,7 +261,13 @@ class api_list:
 
         :return: returns the list of running containers.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        return list.list.main(args)
 
 class api_login:
     """
@@ -362,21 +380,34 @@ class api_snapshot:
     """
     This class is resposible for snapshotting a container.
     """
-    def POST(self):
+    def GET(self, container):
         """
-        POSTs the snapshot of a container.
+        GET creates a snapshot of a container.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.CONTAINER = container
+        args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        return snapshot.snapshot.main(args)
 
 class api_snapshots:
     """
     This class is resposible for listing snapshots.
     """
-    def POST(self):
+    def GET(self):
         """
-        POSTs the list of snapshots.
+        GETs the list of snapshots.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        return snapshots.snapshots.main(args)
 
 class api_unlink:
     """
