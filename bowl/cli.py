@@ -204,6 +204,9 @@ class cli(object):
         parse_new.add_argument('--metadata_path', '-m',
                                default=default_metadata_path,
                                help='metadata path, default '+default_metadata_path)
+        parse_new.add_argument('--no_curses', '-n',
+                                    action='store_true',
+                                    help='do not uses curses')
         parse_new.set_defaults(func=new.new.main)
 
         # remove

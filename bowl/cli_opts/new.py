@@ -15,6 +15,7 @@ import shutil
 import sys
 import time
 import uuid
+
 from bowl.cli_opts import services
 
 class Object(object):
@@ -35,8 +36,8 @@ class new(object):
 
         for index, host in enumerate(self.hosts):
             # !! TODO try/except - verify that hosts specified can be reached
-            c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.9',
-                              timeout=2)
+            c = docker.Client(base_url='tcp://'+host['title']+':2375',
+                              version='1.9', timeout=2)
 
             # !! TODO check that the build actually created an image before trying to create the container
             c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
@@ -46,11 +47,23 @@ class new(object):
             # TODO check if tty and stdin_open (interactive) are needed
             if len(self.names) != 0:
                 if self.unique:
-                    container = c.create_container(image_tag, tty=True, stdin_open=True, name=self.names[index], hostname=self.names[index])
+                    container = c.create_container(image_tag,
+                                                   tty=True,
+                                                   stdin_open=True,
+                                                   name=self.names[index],
+                                                   hostname=self.names[index])
                 else:
-                    container = c.create_container(image_tag, tty=True, stdin_open=True, name=self.names[0], hostname=self.names[0])
+                    container = c.create_container(image_tag,
+                                                   tty=True,
+                                                   stdin_open=True,
+                                                   name=self.names[0],
+                                                   hostname=self.names[0])
             else:
-                container = c.create_container(image_tag, tty=True, stdin_open=True, name=image_tag, hostname=image_tag)
+                container = c.create_container(image_tag,
+                                               tty=True,
+                                               stdin_open=True,
+                                               name=image_tag,
+                                               hostname=image_tag)
             c.start(container, publish_all_ports=True)
 
             try:
@@ -293,18 +306,21 @@ class new(object):
         self.link = False
         self.volume = False
 
-        # init curses stuff
-        curses.noecho()
-        curses.cbreak()
-        curses.start_color()
-        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+        if not args.no_curses:
+            # init curses stuff
+            curses.noecho()
+            curses.cbreak()
+            curses.start_color()
+            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
         self.menus_dict = {}
         # !! TODO cleanup
         build_dict = self.build_dict
         build_dict = self.process_menu(self, menu_dict, build_dict)
         self.build_dict = build_dict
-        curses.endwin()
+
+        if not args.no_curses:
+            curses.endwin()
 
         if self.launch:
             self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
@@ -312,11 +328,12 @@ class new(object):
 
         # !! TODO fix this!!!
         if not self.default:
-            # init curses stuff
-            curses.noecho()
-            curses.cbreak()
-            curses.start_color()
-            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+            if not args.no_curses:
+                # init curses stuff
+                curses.noecho()
+                curses.cbreak()
+                curses.start_color()
+                curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
             # !! TODO only have the option for asking about different parameters if more than one host was selected
             #         if so, loop through the questions for each container/host
@@ -415,7 +432,9 @@ class new(object):
             config_dict = self.config_dict
             config_dict = self.options_menu(self, options_dict, config_dict)
             self.config_dict = config_dict
-            curses.endwin()
+
+            if not args.no_curses:
+                curses.endwin()
 
         if self.name:
             if self.unique:
@@ -499,11 +518,12 @@ class new(object):
                 else:
                     # !! TODO remove containers that are not on all hosts
 
-                    # init curses stuff
-                    curses.noecho()
-                    curses.cbreak()
-                    curses.start_color()
-                    curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+                    if not args.no_curses:
+                        # init curses stuff
+                        curses.noecho()
+                        curses.cbreak()
+                        curses.start_color()
+                        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
                     options_dict = {
                      'title': "Containers to Link",
@@ -538,7 +558,9 @@ class new(object):
                     config_dict = self.config_dict
                     config_dict = self.options_menu(self, options_dict, config_dict)
                     self.config_dict = config_dict
-                    curses.endwin()
+
+                    if not args.no_curses:
+                        curses.endwin()
 
             print self.link
         if self.port:
@@ -752,8 +774,11 @@ class new(object):
 
         position = 0
         key = None
-        highlighted = curses.color_pair(1)
-        normal = curses.A_NORMAL
+
+        if not args.no_curses:
+            highlighted = curses.color_pair(1)
+            normal = curses.A_NORMAL
+
         while key != ord('\n'):
             self.win.clear()
             self.win.border(0)
