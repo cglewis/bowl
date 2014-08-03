@@ -287,8 +287,10 @@ class new(object):
         self.background_cmd_dict = {}
         menu_dict = self.build_options(self, args)
 
-        self.win = curses.initscr()
-        self.win.keypad(1)
+        if not args.no_curses:
+            self.win = curses.initscr()
+            self.win.keypad(1)
+
         self.build_dict = {}
         self.build_dict['services'] = []
         self.hosts = []
@@ -316,7 +318,7 @@ class new(object):
         self.menus_dict = {}
         # !! TODO cleanup
         build_dict = self.build_dict
-        build_dict = self.process_menu(self, menu_dict, build_dict)
+        build_dict = self.process_menu(self, args, menu_dict, build_dict)
         self.build_dict = build_dict
 
         if not args.no_curses:
@@ -430,7 +432,7 @@ class new(object):
             self.config_dict = {}
             self.config_dict['services'] = []
             config_dict = self.config_dict
-            config_dict = self.options_menu(self, options_dict, config_dict)
+            config_dict = self.options_menu(self, args, options_dict, config_dict)
             self.config_dict = config_dict
 
             if not args.no_curses:
@@ -464,11 +466,12 @@ class new(object):
                         print "There are no running containers on the host "+host['title']+" to link to."
                         junk = raw_input("Press enter to continue...")
                     else:
-                        # init curses stuff
-                        curses.noecho()
-                        curses.cbreak()
-                        curses.start_color()
-                        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+                        if not args.no_curses:
+                            # init curses stuff
+                            curses.noecho()
+                            curses.cbreak()
+                            curses.start_color()
+                            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
                         options_dict = {
                          'title': "Containers to Link",
@@ -500,9 +503,10 @@ class new(object):
                         self.config_dict = {}
                         self.config_dict['services'] = []
                         config_dict = self.config_dict
-                        config_dict = self.options_menu(self, options_dict, config_dict)
+                        config_dict = self.options_menu(self, args, options_dict, config_dict)
                         self.config_dict = config_dict
-                        curses.endwin()
+                        if not args.no_curses:
+                            curses.endwin()
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
@@ -556,7 +560,7 @@ class new(object):
                     self.config_dict = {}
                     self.config_dict['services'] = []
                     config_dict = self.config_dict
-                    config_dict = self.options_menu(self, options_dict, config_dict)
+                    config_dict = self.options_menu(self, args, options_dict, config_dict)
                     self.config_dict = config_dict
 
                     if not args.no_curses:
@@ -757,7 +761,7 @@ class new(object):
             self.build_dockerfile(self, dockerfile, uuid_dir, args)
 
     @staticmethod
-    def display_menu(self, menu, parent, build_dict):
+    def display_menu(self, args, menu, parent, build_dict):
         option_size = len(menu['options'])
         hash_menu = hash(str(menu))
         choice = []
@@ -778,25 +782,32 @@ class new(object):
         if not args.no_curses:
             highlighted = curses.color_pair(1)
             normal = curses.A_NORMAL
+        else:
+            highlighted = ""
+            normal = ""
 
         while key != ord('\n'):
-            self.win.clear()
-            self.win.border(0)
-            self.win.addstr(2,2, menu['title'], curses.A_STANDOUT)
-            self.win.addstr(4,2, menu['subtitle'], curses.A_BOLD)
+            if not args.no_curses:
+                self.win.clear()
+                self.win.border(0)
+                self.win.addstr(2,2, menu['title'], curses.A_STANDOUT)
+                self.win.addstr(4,2, menu['subtitle'], curses.A_BOLD)
 
             for index in range(option_size):
                 textstyle = normal
                 if position == index:
                     textstyle = highlighted
-                if menu['options'][index]['title'] == "Docker Hosts":
-                    self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
-                elif menu['options'][index]['type'] == "choice_menu":
-                    self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
-                elif menu['options'][index]['type'] == "launch":
-                    self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
-                else:
-                    self.win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+
+                if not args.no_curses:
+                    if menu['options'][index]['title'] == "Docker Hosts":
+                        self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+                    elif menu['options'][index]['type'] == "choice_menu":
+                        self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
+                    elif menu['options'][index]['type'] == "launch":
+                        self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+                    else:
+                        self.win.addstr(index+5, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
+
             textstyle = normal
             if position == option_size:
                 textstyle = highlighted
@@ -807,10 +818,13 @@ class new(object):
                 else:
                     back = "Return to %s menu" % parent['title']
 
-            self.win.addstr(option_size+6, 4, "%d - %s" % (option_size+1, back), textstyle)
-            self.win.refresh()
+            if not args.no_curses:
+                self.win.addstr(option_size+6, 4, "%d - %s" % (option_size+1, back), textstyle)
+                self.win.refresh()
 
-            key = self.win.getch()
+            if not args.no_curses:
+                key = self.win.getch()
+
             try:
                 if key >= ord('1') and key <= ord(str(option_size+1)):
                     position = key - ord('0') - 1
@@ -884,34 +898,36 @@ class new(object):
                                         if "user" == menu['options'][position]['options'][0]['config']:
                                             self.user = False
                 elif key != ord('\n'):
-                    curses.flash()
+                    if not args.no_curses:
+                        curses.flash()
             except:
-                curses.flash()
+                if not args.no_curses:
+                    curses.flash()
             self.menus_dict[hash_menu] = choice
         return position, back, build_dict
 
     @staticmethod 
-    def options_menu(self, menu, config_dict, parent=None):
+    def options_menu(self, agrs, menu, config_dict, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
         while not exit_menu:
-            position, back, config_dict = self.display_menu(self, menu, parent, config_dict)
+            position, back, config_dict = self.display_menu(self, args, menu, parent, config_dict)
             if position == option_size:
                 exit_menu = True
         return config_dict
 
     @staticmethod 
-    def process_menu(self, menu, build_dict, parent=None):
+    def process_menu(self, args, menu, build_dict, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
         while not exit_menu and not self.launch and not self.exit:
-            position, back, build_dict = self.display_menu(self, menu, parent, build_dict)
+            position, back, build_dict = self.display_menu(self, args, menu, parent, build_dict)
             if position == option_size:
                 exit_menu = True
                 if back == "Exit":
                     self.exit = True
             elif menu['options'][position]['type'] == "menu":
-                build_dict = self.process_menu(self, menu['options'][position], build_dict, menu)
+                build_dict = self.process_menu(self, args, menu['options'][position], build_dict, menu)
             elif menu['options'][position]['type'] == "launch":
                 if position == 1:
                     self.image = True
