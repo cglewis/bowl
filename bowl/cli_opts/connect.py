@@ -5,6 +5,7 @@ Created on 15 March 2014
 @author: Charlie Lewis
 """
 
+import ast
 import os
 
 class connect(object):

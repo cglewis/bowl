@@ -315,13 +315,12 @@ class new(object):
             curses.start_color()
             curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
 
-        self.menus_dict = {}
-        # !! TODO cleanup
-        build_dict = self.build_dict
-        build_dict = self.process_menu(self, args, menu_dict, build_dict)
-        self.build_dict = build_dict
+            self.menus_dict = {}
+            # !! TODO cleanup
+            build_dict = self.build_dict
+            build_dict = self.process_menu(self, args, menu_dict, build_dict)
+            self.build_dict = build_dict
 
-        if not args.no_curses:
             curses.endwin()
 
         if self.launch:
@@ -428,14 +427,14 @@ class new(object):
                   ]
                  })
 
-            # !! TODO cleanup
-            self.config_dict = {}
-            self.config_dict['services'] = []
-            config_dict = self.config_dict
-            config_dict = self.options_menu(self, args, options_dict, config_dict)
-            self.config_dict = config_dict
-
             if not args.no_curses:
+                # !! TODO cleanup
+                self.config_dict = {}
+                self.config_dict['services'] = []
+                config_dict = self.config_dict
+                config_dict = self.options_menu(self, args, options_dict, config_dict)
+                self.config_dict = config_dict
+
                 curses.endwin()
 
         if self.name:
@@ -499,13 +498,13 @@ class new(object):
                                  }
                                 )
 
-                        # !! TODO cleanup
-                        self.config_dict = {}
-                        self.config_dict['services'] = []
-                        config_dict = self.config_dict
-                        config_dict = self.options_menu(self, args, options_dict, config_dict)
-                        self.config_dict = config_dict
                         if not args.no_curses:
+                            # !! TODO cleanup
+                            self.config_dict = {}
+                            self.config_dict['services'] = []
+                            config_dict = self.config_dict
+                            config_dict = self.options_menu(self, args, options_dict, config_dict)
+                            self.config_dict = config_dict
                             curses.endwin()
             else:
                 for host in self.hosts:
@@ -556,14 +555,14 @@ class new(object):
                                  }
                                 )
 
-                    # !! TODO cleanup
-                    self.config_dict = {}
-                    self.config_dict['services'] = []
-                    config_dict = self.config_dict
-                    config_dict = self.options_menu(self, args, options_dict, config_dict)
-                    self.config_dict = config_dict
-
                     if not args.no_curses:
+                        # !! TODO cleanup
+                        self.config_dict = {}
+                        self.config_dict['services'] = []
+                        config_dict = self.config_dict
+                        config_dict = self.options_menu(self, args, options_dict, config_dict)
+                        self.config_dict = config_dict
+
                         curses.endwin()
 
             print self.link
@@ -907,7 +906,7 @@ class new(object):
         return position, back, build_dict
 
     @staticmethod 
-    def options_menu(self, agrs, menu, config_dict, parent=None):
+    def options_menu(self, args, menu, config_dict, parent=None):
         option_size = len(menu['options'])
         exit_menu = False
         while not exit_menu:

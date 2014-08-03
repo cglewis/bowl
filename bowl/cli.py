@@ -205,8 +205,23 @@ class cli(object):
                                default=default_metadata_path,
                                help='metadata path, default '+default_metadata_path)
         parse_new.add_argument('--no_curses', '-n',
-                                    action='store_true',
-                                    help='do not uses curses')
+                               action='store_true',
+                               help='do not uses curses')
+        parse_new.add_argument('--image', '-i',
+                               help='specify an image, only used with no_curses')
+        parse_new.add_argument('--service', '-s',
+                               action='append',
+                               help='add a service to the container, can be used more than one, only used with no_curses')
+        # !! TODO
+        # CMD
+        # ENTRYPOINT
+        # volumes
+        # port exposed
+        # links to containers
+        # names of containers
+        # different parameters for each container if multiple hosts
+        # hosts
+
         parse_new.set_defaults(func=new.new.main)
 
         # remove
