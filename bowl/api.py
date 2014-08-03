@@ -382,7 +382,7 @@ class api_snapshot:
     """
     def GET(self, container):
         """
-        GET creates a snapshot of a container.
+        creates a snapshot of a container.
         """
         class Object(object):
             pass

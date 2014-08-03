@@ -15,6 +15,9 @@ class kill(object):
         # !! TODO make more robust and read from connected hosts
         #         also deal with the possibility of more than one
         #         container having the same name on different hosts
-        c = docker.Client(base_url='tcp://localhost:2375', version='1.9',
-                          timeout=10)
-        c.kill(args.CONTAINER)
+        try:
+            c = docker.Client(base_url='tcp://localhost:2375', version='1.9',
+                              timeout=10)
+            c.kill(args.CONTAINER)
+        except:
+            print "unable to kill ",args.CONTAINER
