@@ -7,6 +7,7 @@ Created on 27 July 2014
 import pytest
 import sys
 
+from docker import client
 from bowl import cli
 
 class TestClass:
@@ -20,3 +21,6 @@ class TestClass:
             cli.main()
         sys.argv = ["", "new", "-n"]
         cli.main()
+        sys.argv = ["", "new", "-n", "--host", "localhost", "-s", "os:version:type:service", "-l"]
+        with pytest.raises(client.APIError):
+            cli.main()
