@@ -18,3 +18,5 @@ class TestClass:
         sys.argv = ["", "-h"]
         with pytest.raises(SystemExit):
             cli.main()
+        sys.argv = ["", "new", "-n"]
+        cli.main()

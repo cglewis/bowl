@@ -322,8 +322,45 @@ class new(object):
             self.build_dict = build_dict
 
             curses.endwin()
+        else:
+            if args.command:
+                self.cmd = True
+                self.default = False
+            if args.entrypoint:
+                self.entrypoint = True
+                self.default = False
+            if args.volume:
+                self.volume = True
+                self.default = False
+            if args.port:
+                self.port = True
+                self.default = False
+            if args.link:
+                self.link = True
+                self.default = False
+            if args.name:
+                self.name = True
+                self.default = False
+            if args.unique:
+                self.unique = True
+                self.default = False
+            if args.user:
+                self.user = True
+                self.default = False
+            if args.image:
+                self.image = True
+                self.launch = True
+            if args.service:
+                self.build_dict['services'] = args.service
+                self.launch = True
+            if args.host:
+                for host in args.host:
+                    h = {}
+                    h['type'] = 'choice_menu'
+                    h['title'] = host
+                    self.hosts.append(h)
 
-        if self.launch:
+        if self.launch and not args.no_curses:
             self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
 
 

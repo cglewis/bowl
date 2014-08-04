@@ -206,22 +206,39 @@ class cli(object):
                                help='metadata path, default '+default_metadata_path)
         parse_new.add_argument('--no_curses', '-n',
                                action='store_true',
-                               help='do not uses curses')
-        parse_new.add_argument('--image', '-i',
-                               help='specify an image, only used with no_curses')
+                               help='do not use curses')
         parse_new.add_argument('--service', '-s',
                                action='append',
-                               help='add a service to the container, can be used more than one, only used with no_curses')
-        # !! TODO
-        # CMD
-        # ENTRYPOINT
-        # volumes
-        # port exposed
-        # links to containers
-        # names of containers
-        # different parameters for each container if multiple hosts
-        # hosts
-
+                               help='add a service to the container, can be used more than once, only used with no_curses')
+        parse_new.add_argument('--image', '-i',
+                               help='specify an image, only used with no_curses')
+        parse_new.add_argument('--host',
+                               action='append',
+                               help='add a host to run the container one, can be used more than once, only used with no_curses')
+        parse_new.add_argument('--command', '-c',
+                               action='store_true',
+                               help='override command at runtime of container, only used with no_curses')
+        parse_new.add_argument('--entrypoint', '-e',
+                               action='store_true',
+                               help='override entrypoint at runtime of container, only used with no_curses')
+        parse_new.add_argument('--volume', '-v',
+                               action='store_true',
+                               help='add volumes at runtime of container, only used with no_curses')
+        parse_new.add_argument('--port', '-p',
+                               action='store_true',
+                               help='set ports at runtime of container, only used with no_curses')
+        parse_new.add_argument('--link', '-l',
+                               action='store_true',
+                               help='add links to containers at runtime of container, only used with no_curses')
+        parse_new.add_argument('--name',
+                               action='store_true',
+                               help='set ports at runtime of container, only used with no_curses')
+        parse_new.add_argument('--unique', '-u',
+                               action='store_true',
+                               help='set different runtime parameters for each container, only used with no_curses')
+        parse_new.add_argument('--user',
+                               action='store_true',
+                               help='add a user at runtime of container, only used with no_curses')
         parse_new.set_defaults(func=new.new.main)
 
         # remove
