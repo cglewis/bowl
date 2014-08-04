@@ -67,8 +67,6 @@ docker run ubuntu /bin/echo hello world
 
 pwd
 pip install --ignore-installed --install-option="--prefix=/tmp" pytest
-du -h /tmp/
 pip install --ignore-installed --install-option="--prefix=/tmp" pytest-cov
-pip install --ignore-installed --install-option="--prefix=/tmp" -r requirements.txt
-du -h /tmp/
+/tmp/lib/python2.7/site-packages/_pytest
 py.test -v --cov bowl --cov-report term-missing
