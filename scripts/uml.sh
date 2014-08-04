@@ -59,8 +59,14 @@ echo 'nameserver 8.8.8.8' > /run/resolvconf/resolv.conf
 mount --bind /run/resolvconf/resolv.conf /etc/resolv.conf
 
 # Start docker daemon
-docker -d &
+docker -H tcp://0.0.0.0:2375 -d &
 sleep 5
 
 # Use docker
 docker run ubuntu /bin/echo hello world
+
+pwd
+pip install pytest
+pip install pytest-cov
+pip install python-coveralls
+pip install -r requirements.txt
