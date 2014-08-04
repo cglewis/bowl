@@ -1,0 +1,7 @@
+*.pyc
+*.tar.gz
+.coverage
+build
+dist
+bowl.egg-info
+tests/test
