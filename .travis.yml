@@ -2,6 +2,10 @@ language: python
 python:
   - "2.7"
 install:
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install python-coveralls
+  - pip install -r requirements.txt
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
   - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
   - sudo apt-get update
@@ -13,6 +17,8 @@ install:
   - chmod +x linux
 script:
   - ./linux quiet mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/scripts/uml.sh WORKDIR=$(pwd) HOME=$HOME
+  - docker ps
+  - py.test -v --cov bowl --cov-report term-missing
 after_success:
   - coveralls
 branches:
