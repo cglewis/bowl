@@ -69,7 +69,6 @@ pwd
 pip install --ignore-installed --install-option="--prefix=/tmp" pytest
 du -h /tmp/
 pip install --ignore-installed --install-option="--prefix=/tmp" pytest-cov
-pip install --ignore-installed --install-option="--prefix=/tmp" python-coveralls
 pip install --ignore-installed --install-option="--prefix=/tmp" -r requirements.txt
 du -h /tmp/
 py.test -v --cov bowl --cov-report term-missing
