@@ -65,4 +65,9 @@ sleep 5
 # Use docker
 docker run ubuntu /bin/echo hello world
 
+pwd
+pip install pytest
+pip install pytest-cov
+pip install python-coveralls
+pip install -r requirements.txt
 py.test -v --cov bowl --cov-report term-missing
