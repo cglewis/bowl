@@ -1,8 +1,11 @@
+language: python
+python:
+  - "2.7"
 install:
-#  - sudo pip install pytest
-#  - sudo pip install pytest-cov
-#  - sudo pip install python-coveralls
-#  - sudo pip install -r requirements.txt
+  - pip install pytest
+  - pip install pytest-cov
+  - pip install python-coveralls
+  - pip install -r requirements.txt
   - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
   - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
   - sudo apt-get update
@@ -13,11 +16,10 @@ install:
   - curl -sLo linux https://github.com/jpetazzo/sekexe/raw/master/uml
   - chmod +x linux
 script:
-  - ./linux quiet mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/uml.sh WORKDIR=$(pwd) HOME=$HOME
-#  - sudo python setup.py install
-#  - py.test -v --cov bowl --cov-report term-missing
+  - ./linux quiet mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/scripts/uml.sh WORKDIR=$(pwd) HOME=$HOME
+  - py.test -v --cov bowl --cov-report term-missing
 after_success:
-#  - coveralls
+  - coveralls
 branches:
   except:
   - gh-pages
