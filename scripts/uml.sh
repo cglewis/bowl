@@ -64,8 +64,3 @@ sleep 5
 
 # Use docker
 docker run ubuntu /bin/echo hello world
-
-pwd
-pip install --ignore-installed --install-option="--prefix=/tmp" pytest
-pip install --ignore-installed --install-option="--prefix=/tmp" pytest-cov
-/tmp/bin/py.test -v --cov bowl --cov-report term-missing
