@@ -64,3 +64,5 @@ sleep 5
 
 # Use docker
 docker run ubuntu /bin/echo hello world
+
+py.test -v --cov bowl --cov-report term-missing
