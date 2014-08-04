@@ -6,17 +6,10 @@ install:
   - pip install pytest-cov
   - pip install python-coveralls
   - pip install -r requirements.txt
-  - sudo sh -c "wget -qO- https://get.docker.io/gpg | apt-key add -"
-  - sudo sh -c "echo deb http://get.docker.io/ubuntu docker main > /etc/apt/sources.list.d/docker.list"
-  - sudo apt-get update
-  - sudo mkdir -p /var/lib/docker
-  - echo exit 101 | sudo tee /usr/sbin/policy-rc.d
-  - sudo chmod +x /usr/sbin/policy-rc.d
-  - sudo apt-get install -y slirp lxc lxc-docker aufs-tools cgroup-lite
-  - curl -sLo linux https://github.com/jpetazzo/sekexe/raw/master/uml
-  - chmod +x linux
+  - mount
+  - curl https://raw.githubusercontent.com/matthewfl/travis-docker/master/strap | source /dev/stdin
 script:
-  - ./linux quiet mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/scripts/uml.sh WORKDIR=$(pwd) HOME=$HOME
+  - docker ps
   - py.test -v --cov bowl --cov-report term-missing
 after_success:
   - coveralls
