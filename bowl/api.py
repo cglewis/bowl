@@ -4,7 +4,7 @@ This module is the web server for running the REST API of bowl.
 Created on 14 March 2014
 @author: Charlie Lewis
 """
-
+import ast
 import datetime
 import os
 import sys
@@ -305,11 +305,82 @@ class api_new:
     """
     This class is resposible for creating a new container.
     """
+    def __init__(self):
+        self.data = ""
+        self.fullpath = ""
+        try:
+            self.data = web.data()
+            self.fullpath = web.ctx['fullpath']
+        except:
+            print "failure"
+
     def POST(self):
         """
         POSTs the creation of a new container.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.no_curses = True
+        # !! TODO fix me
+        args.metadata_path = "~/.bowl"
+        try:
+            self.data = ast.literal_eval(self.data)
+            if "host" in self.data:
+                args.host = []
+                args.host.append(self.data['host'])
+            else:
+                return "must specify a host to run the container on"
+
+            if "service" in self.data:
+                args.service = []
+                args.service.append(self.data['service'])
+            else:
+                args.service = False
+            if "image" in self.data:
+                args.image = self.data['image']
+            else:
+                args.image = False
+            if not args.image and not args.service:
+                return "must specify a service or image to run"
+
+            if "command" in self.data:
+                args.command = self.data['command']
+            else:
+                args.command = False
+            if "entrypoint" in self.data:
+                args.entrypoint = self.data['entrypoint']
+            else:
+                args.entrypoint = False
+            if "volume" in self.data:
+                args.volume = self.data['volume']
+            else:
+                args.volume = False
+            if "port" in self.data:
+                args.port = self.data['port']
+            else:
+                args.port = False
+            if "link" in self.data:
+                args.link = self.data['link']
+            else:
+                args.link = False
+            if "name" in self.data:
+                args.name = self.data['name']
+            else:
+                args.name = False
+            if "unique" in self.data:
+                args.unique = self.data['unique']
+            else:
+                args.unique = False
+            if "user" in self.data:
+                args.user = self.data['user']
+            else:
+                args.user = False
+
+            return new.new.main(args)
+        except:
+            return "failure"
+        return
 
 class api_remove:
     """
