@@ -246,6 +246,9 @@ class cli(object):
                                              help='remove a container')
         parse_remove.add_argument('CONTAINER',
                                   help='specify container to remove')
+        parse_remove.add_argument('--metadata_path', '-m',
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
         parse_remove.set_defaults(func=remove.remove.main)
 
         # repositories
