@@ -17,6 +17,7 @@ class remove(object):
         # !! TODO make more robust and read from connected hosts
         #         also deal with the possibility of more than one
         #         container having the same name on different hosts
+        #         also make it easier to specify the container id
         try:
             directory = args.metadata_path
             directory = os.path.expanduser(directory)

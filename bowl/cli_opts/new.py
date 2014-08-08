@@ -75,19 +75,22 @@ class new(object):
                         if self.unique:
                             f.write("{" +
                                     "'image_id': '"+image_tag+"'," +
-                                    " 'container_id': '"+self.names[index]+"'," +
+                                    " 'container_name': '"+self.names[index]+"'," +
+                                    " 'container_id': '"+container['Id']+"'," +
                                     " 'host': '"+host['title']+"'" +
                                     "}\n")
                         else:
                             f.write("{" +
                                     "'image_id': '"+image_tag+"'," +
-                                    " 'container_id': '"+self.names[0]+"'," +
+                                    " 'container_name': '"+self.names[0]+"'," +
+                                    " 'container_id': '"+container['Id']+"'," +
                                     " 'host': '"+host['title']+"'" +
                                     "}\n")
                     else:
                         f.write("{" +
                                 "'image_id': '"+image_tag+"'," +
-                                " 'container_id': '"+image_tag+"'," +
+                                " 'container_name': '"+image_tag+"'," +
+                                " 'container_id': '"+container['Id']+"'," +
                                 " 'host': '"+host['title']+"'" +
                                 "}\n")
             except:
