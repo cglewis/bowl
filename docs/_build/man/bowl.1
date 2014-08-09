@@ -1,0 +1,884 @@
+.\" Man page generated from reStructuredText.
+.
+.TH "BOWL" "1" "August 09, 2014" "0.2.0" "bowl"
+.SH NAME
+bowl \- Bowl Documentation
+.
+.nr rst2man-indent-level 0
+.
+.de1 rstReportMargin
+\\$1 \\n[an-margin]
+level \\n[rst2man-indent-level]
+level margin: \\n[rst2man-indent\\n[rst2man-indent-level]]
+-
+\\n[rst2man-indent0]
+\\n[rst2man-indent1]
+\\n[rst2man-indent2]
+..
+.de1 INDENT
+.\" .rstReportMargin pre:
+. RS \\$1
+. nr rst2man-indent\\n[rst2man-indent-level] \\n[an-margin]
+. nr rst2man-indent-level +1
+.\" .rstReportMargin post:
+..
+.de UNINDENT
+. RE
+.\" indent \\n[an-margin]
+.\" old: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.nr rst2man-indent-level -1
+.\" new: \\n[rst2man-indent\\n[rst2man-indent-level]]
+.in \\n[rst2man-indent\\n[rst2man-indent-level]]u
+..
+.sp
+Contents:
+.SH BOWL PACKAGE
+.SS Subpackages
+.SS bowl.cli_opts package
+.SS Submodules
+.SS bowl.cli_opts.add module
+.sp
+This module is the add command of bowl.
+.sp
+Created on 26 May 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.add.Object
+Bases: \fBobject\fP
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.add.add
+Bases: \fBobject\fP
+.sp
+This class is responsible for the add command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.connect module
+.sp
+This module is the connect command of bowl.
+.sp
+Created on 15 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.connect.connect
+Bases: \fBobject\fP
+.sp
+This class is responsible for the connect command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.delete module
+.sp
+This module is the delete command of bowl.
+.sp
+Created on 22 June 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.delete.delete
+Bases: \fBobject\fP
+.sp
+This class is responsible for the delete command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.disconnect module
+.sp
+This module is the disconnect command of bowl.
+.sp
+Created on 15 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.disconnect.disconnect
+Bases: \fBobject\fP
+.sp
+This class is responsible for the disconnect command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.hosts module
+.sp
+This module is the hosts command of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.hosts.hosts
+Bases: \fBobject\fP
+.sp
+This class is responsible for the hosts command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.image_import module
+.sp
+This module is the import command of bowl.
+.sp
+Created on 6 June 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.image_import.image_import
+Bases: \fBobject\fP
+.sp
+This class is responsible for the import command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.images module
+.sp
+This module is the images command of bowl.
+.sp
+Created on 22 June 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.images.images
+Bases: \fBobject\fP
+.sp
+This class is responsible for the images command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.info module
+.sp
+This module is the info command of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.info.info
+Bases: \fBobject\fP
+.sp
+This class is responsible for the info command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.kill module
+.sp
+This module is the kill command of bowl.
+.sp
+Created on 15 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.kill.kill
+Bases: \fBobject\fP
+.sp
+This class is responsible for the kill command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.link module
+.sp
+This module is the link command of bowl.
+.sp
+Created on 14 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.link.link
+Bases: \fBobject\fP
+.sp
+This class is responsible for the link command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.list module
+.sp
+This module is the list command of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.list.Object
+Bases: \fBobject\fP
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.list.list
+Bases: \fBobject\fP
+.sp
+This class is responsible for the list command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.login module
+.sp
+This module is the login command of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.login.login
+Bases: \fBobject\fP
+.sp
+This class is responsible for the login command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.logout module
+.sp
+This module is the logout command of bowl.
+.sp
+Created on 29 May 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.logout.logout
+Bases: \fBobject\fP
+.sp
+This class is responsible for the logout command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.logs module
+.sp
+This module is the logs command of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.logs.logs
+Bases: \fBobject\fP
+.sp
+This class is responsible for the logs command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.new module
+.sp
+This module is the new command of bowl.
+.sp
+Created on 15 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.new.Object
+Bases: \fBobject\fP
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.new.new
+Bases: \fBobject\fP
+.sp
+This class is responsible for the new command of the cli.
+.INDENT 7.0
+.TP
+.B static build_dockerfile(dockerfile, uuid_dir, main_arg)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static build_options(main_arg)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static display_menu(args, menu, parent, build_dict)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static options_menu(args, menu, config_dict, parent=None)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static process_menu(args, menu, build_dict, parent=None)
+.UNINDENT
+.INDENT 7.0
+.TP
+.B static query_yes_no(question, default=\(aqno\(aq)
+Ask a yes/no question via raw_input() and return their answer.
+.sp
+"question" is a string that is presented to the user.
+"default" is the presumed answer if the user just hits <Enter>.
+.INDENT 7.0
+.INDENT 3.5
+It must be "no" (the default), "yes" or None (meaning
+an answer is required of the user).
+.UNINDENT
+.UNINDENT
+.sp
+The "answer" return value is one of "yes" or "no".
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.remove module
+.sp
+This module is the rm command of bowl.
+.sp
+Created on 26 May 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.remove.remove
+Bases: \fBobject\fP
+.sp
+This class is responsible for the rm command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.repositories module
+.sp
+This module is the repositories command of bowl.
+.sp
+Created on 19 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.repositories.repositories
+Bases: \fBobject\fP
+.sp
+This class is responsible for the repositories command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.services module
+.sp
+This module is the services command of bowl.
+.sp
+Created on 17 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.services.services
+Bases: \fBobject\fP
+.sp
+This class is responsible for the services command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.snapshot module
+.sp
+This module is the snapshot command of bowl.
+.sp
+Created on 15 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.snapshot.Object
+Bases: \fBobject\fP
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.snapshot.snapshot
+Bases: \fBobject\fP
+.sp
+This class is responsible for the snapshot command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.snapshots module
+.sp
+This module is the snapshots command of bowl.
+.sp
+Created on 17 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.snapshots.snapshots
+Bases: \fBobject\fP
+.sp
+This class is responsible for the snapshots command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.start module
+.sp
+This module is the start command of bowl.
+.sp
+Created on 14 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.start.start
+Bases: \fBobject\fP
+.sp
+This class is responsible for the start command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod check_pid(pid)
+Check for the existence of a unix pid.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.stop module
+.sp
+This module is the stop command of bowl.
+.sp
+Created on 14 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.stop.stop
+Bases: \fBobject\fP
+.sp
+This class is responsible for the stop command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod check_pid(pid)
+Check for the existence of a unix pid.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.unlink module
+.sp
+This module is the unlink command of bowl.
+.sp
+Created on 14 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.unlink.unlink
+Bases: \fBobject\fP
+.sp
+This class is responsible for the unlink command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.update module
+.sp
+This module is the update command of bowl.
+.sp
+Created on 17 July 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.update.update
+Bases: \fBobject\fP
+.sp
+This class is responsible for the update command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.version module
+.sp
+This module is the version command of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.version.version
+Bases: \fBobject\fP
+.sp
+This class is responsible for the version command of the cli.
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS Module contents
+.SS Submodules
+.SS bowl.api module
+.sp
+This module is the web server for running the REST API of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.api.api_add
+This class is resposible for adding a service
+.INDENT 7.0
+.TP
+.B POST()
+POSTs the new service being added.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_connect
+This class is resposible for creating a connection to a docker host.
+.INDENT 7.0
+.TP
+.B GET(host)
+creates a connection to a new docker host.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_delete
+This class is resposible for deleting an image.
+.INDENT 7.0
+.TP
+.B GET(image)
+deletes the specified image.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_disconnect
+This class is resposible for disconnecting a connection to a docker host.
+.INDENT 7.0
+.TP
+.B GET(host)
+disconnects the specified docker host.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_hosts
+This class is resposible for listing the connected docker hosts.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the connected docker hosts.
+.INDENT 7.0
+.TP
+.B Returns
+returns the list of connected docker hosts.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_image_import
+This class is resposible for importing an image.
+.INDENT 7.0
+.TP
+.B POST()
+POSTs the image being imported.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_images
+This class is resposible for listing the images.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the images.
+.INDENT 7.0
+.TP
+.B Returns
+returns the list of images.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_info
+This class is resposible for giving system\-wide information.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the system\-wide information and renders it.
+.INDENT 7.0
+.TP
+.B Returns
+returns the information.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_kill
+This class is resposible for killing a container.
+.INDENT 7.0
+.TP
+.B GET(container)
+the container to kill.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_link
+This class is resposible for linking a service repository host.
+.INDENT 7.0
+.TP
+.B GET(repository)
+creates a link to a new service repository.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_list
+This class is resposible for listing the running containers.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the list of running containers.
+.INDENT 7.0
+.TP
+.B Returns
+returns the list of running containers.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_login
+This class is resposible for logging in.
+.INDENT 7.0
+.TP
+.B POST()
+POSTs the user to login.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_logout
+This class is resposible for logging out.
+.INDENT 7.0
+.TP
+.B POST()
+POSTs the user to logout.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_logs
+This class is resposible for returning logs of a server.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the logs of a server.
+.INDENT 7.0
+.TP
+.B Returns
+returns the logs of a server.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_new
+This class is resposible for creating a new container.
+.INDENT 7.0
+.TP
+.B POST()
+POSTs the creation of a new container.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_remove
+This class is resposible for removing a container.
+.INDENT 7.0
+.TP
+.B POST()
+POSTs the removal of a container.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_repo_services
+This class is resposible for sending services to the client.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the services and packages them up and serves them up as a static
+file.
+.UNINDENT
+.INDENT 7.0
+.TP
+.B make_tarfile(output_filename, source_dir)
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_repositories
+This class is resposible for listing the connected repositories.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the connected repositories.
+.INDENT 7.0
+.TP
+.B Returns
+returns the list of connected repositories.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_services
+This class is resposible for listing services.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the list of services.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_snapshot
+This class is resposible for snapshotting a container.
+.INDENT 7.0
+.TP
+.B GET(container)
+creates a snapshot of a container.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_snapshots
+This class is resposible for listing snapshots.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the list of snapshots.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_unlink
+This class is resposible for unlinking a service repository host.
+.INDENT 7.0
+.TP
+.B GET(repository)
+unlinks the specified service repository.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_uptime
+This class is resposible for returning the uptime of the API server.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the uptime of the API server.
+.INDENT 7.0
+.TP
+.B Returns
+returns the uptime of the API server.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_version
+This class is resposible for returning the version of bowl.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the version of bowl.
+.INDENT 7.0
+.TP
+.B Returns
+returns the version of bowl.
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.main(port=8080, host=\(aq0.0.0.0\(aq)
+Bases: \fBobject\fP
+.sp
+This class is responsible for initializing the urls and web server.
+.INDENT 7.0
+.TP
+.B setup()
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.root
+This class is resposible for giving information about the rest server.
+.INDENT 7.0
+.TP
+.B GET()
+GETs the information about the rest server and renders it.
+.INDENT 7.0
+.TP
+.B Returns
+returns the information
+.UNINDENT
+.UNINDENT
+.UNINDENT
+.SS bowl.cli module
+.sp
+This module is the commandline interface of bowl.
+.sp
+Created on 14 March 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli.cli
+Bases: \fBobject\fP
+.sp
+This class is responsible for all commandline operations.
+.INDENT 7.0
+.TP
+.B parse_args()
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B bowl.cli.main()
+.UNINDENT
+.SS Module contents
+.INDENT 0.0
+.IP \(bu 2
+\fIgenindex\fP
+.IP \(bu 2
+\fImodindex\fP
+.IP \(bu 2
+\fIsearch\fP
+.UNINDENT
+.SH AUTHOR
+Charlie Lewis
+.SH COPYRIGHT
+2014 Charlie Lewis, All Rights Reserved.
+.\" Generated by docutils manpage writer.
+.

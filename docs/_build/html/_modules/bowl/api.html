@@ -1,0 +1,619 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bowl.api &mdash; bowl 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="bowl 0.2.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bowl.api</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is the web server for running the REST API of bowl.</span>
+
+<span class="sd">Created on 14 March 2014</span>
+<span class="sd">@author: Charlie Lewis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">tarfile</span>
+<span class="kn">import</span> <span class="nn">web</span>
+
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">connect</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">delete</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">disconnect</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">hosts</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">image_import</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">images</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">info</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">kill</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">link</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="nb">list</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">login</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">logout</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">logs</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">new</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">remove</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">repositories</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">services</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshot</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshots</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">unlink</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">version</span>
+
+<span class="n">START_TIME</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../bowl.html#bowl.api.main">[docs]</a><span class="k">class</span> <span class="nc">main</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is responsible for initializing the urls and web server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c"># need __new__ for tests, but fails to call __init__ when actually running</span>
+    <span class="k">def</span> <span class="nf">__new__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">sys</span><span class="p">,</span> <span class="s">&#39;_called_from_test&#39;</span><span class="p">):</span>
+            <span class="k">print</span> <span class="s">&quot;don&#39;t call __init__&quot;</span>
+        <span class="k">else</span><span class="p">:</span> <span class="c"># pragma: no cover</span>
+            <span class="k">return</span> <span class="nb">object</span><span class="o">.</span><span class="n">__new__</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kw</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">port</span><span class="o">=</span><span class="mi">8080</span><span class="p">,</span> <span class="n">host</span><span class="o">=</span><span class="s">&quot;0.0.0.0&quot;</span><span class="p">):</span> <span class="c"># pragma: no cover</span>
+        <span class="n">urls</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">setup</span><span class="p">()</span>
+        <span class="n">app</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">application</span><span class="p">(</span><span class="n">urls</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+        <span class="n">web</span><span class="o">.</span><span class="n">httpserver</span><span class="o">.</span><span class="n">runsimple</span><span class="p">(</span><span class="n">app</span><span class="o">.</span><span class="n">wsgifunc</span><span class="p">(),</span> <span class="p">(</span><span class="n">host</span><span class="p">,</span> <span class="n">port</span><span class="p">))</span>
+
+<div class="viewcode-block" id="main.setup"><a class="viewcode-back" href="../../bowl.html#bowl.api.main.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">urls</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="s">&#39;root&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/add&#39;</span><span class="p">,</span> <span class="s">&#39;api_add&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/connect/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_connect&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/delete/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_delete&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/disconnect/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_disconnect&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/hosts&#39;</span><span class="p">,</span> <span class="s">&#39;api_hosts&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/images&#39;</span><span class="p">,</span> <span class="s">&#39;api_images&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/import&#39;</span><span class="p">,</span> <span class="s">&#39;api_image_import&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/info&#39;</span><span class="p">,</span> <span class="s">&#39;api_info&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/kill/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_kill&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/link/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_link&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/list&#39;</span><span class="p">,</span> <span class="s">&#39;api_list&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/login&#39;</span><span class="p">,</span> <span class="s">&#39;api_login&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/logout&#39;</span><span class="p">,</span> <span class="s">&#39;api_logout&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/logs&#39;</span><span class="p">,</span> <span class="s">&#39;api_logs&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/new&#39;</span><span class="p">,</span> <span class="s">&#39;api_new&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/remove&#39;</span><span class="p">,</span> <span class="s">&#39;api_remove&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/repositories&#39;</span><span class="p">,</span> <span class="s">&#39;api_repositories&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/repo/services&#39;</span><span class="p">,</span> <span class="s">&#39;api_repo_services&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/services&#39;</span><span class="p">,</span> <span class="s">&#39;api_services&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/snapshot/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_snapshot&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/snapshots&#39;</span><span class="p">,</span> <span class="s">&#39;api_snapshots&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/unlink/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_unlink&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/uptime&#39;</span><span class="p">,</span> <span class="s">&#39;api_uptime&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/version&#39;</span><span class="p">,</span> <span class="s">&#39;api_version&#39;</span><span class="p">,</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">urls</span>
+</div></div>
+<div class="viewcode-block" id="root"><a class="viewcode-back" href="../../bowl.html#bowl.api.root">[docs]</a><span class="k">class</span> <span class="nc">root</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for giving information about the rest server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="root.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.root.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the information about the rest server and renders it.</span>
+
+<span class="sd">        :return: returns the information</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_add"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_add">[docs]</a><span class="k">class</span> <span class="nc">api_add</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for adding a service</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_add.POST"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_add.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        POSTs the new service being added.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_connect"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_connect">[docs]</a><span class="k">class</span> <span class="nc">api_connect</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for creating a connection to a docker host.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_connect.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_connect.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a connection to a new docker host.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO validate host</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">DOCKER_HOST</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">connect</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_delete"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_delete">[docs]</a><span class="k">class</span> <span class="nc">api_delete</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for deleting an image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_delete.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_delete.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">image</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        deletes the specified image.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">IMAGE_NAME</span> <span class="o">=</span> <span class="n">image</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">delete</span><span class="o">.</span><span class="n">delete</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_disconnect"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_disconnect">[docs]</a><span class="k">class</span> <span class="nc">api_disconnect</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for disconnecting a connection to a docker host.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_disconnect.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_disconnect.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">host</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        disconnects the specified docker host.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO validate host</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">DOCKER_HOST</span> <span class="o">=</span> <span class="n">host</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">disconnect</span><span class="o">.</span><span class="n">disconnect</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_hosts"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_hosts">[docs]</a><span class="k">class</span> <span class="nc">api_hosts</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for listing the connected docker hosts.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_hosts.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_hosts.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the connected docker hosts.</span>
+
+<span class="sd">        :return: returns the list of connected docker hosts.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">hosts</span><span class="o">.</span><span class="n">hosts</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_image_import"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_image_import">[docs]</a><span class="k">class</span> <span class="nc">api_image_import</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for importing an image.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_image_import.POST"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_image_import.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        POSTs the image being imported.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_images"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_images">[docs]</a><span class="k">class</span> <span class="nc">api_images</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for listing the images.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_images.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_images.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the images.</span>
+
+<span class="sd">        :return: returns the list of images.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">images</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_info"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_info">[docs]</a><span class="k">class</span> <span class="nc">api_info</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for giving system-wide information.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_info.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_info.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the system-wide information and renders it.</span>
+
+<span class="sd">        :return: returns the information.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">info</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_kill"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_kill">[docs]</a><span class="k">class</span> <span class="nc">api_kill</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for killing a container.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_kill.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_kill.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        the container to kill.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span> <span class="o">=</span> <span class="n">container</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">kill</span><span class="o">.</span><span class="n">kill</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_link"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_link">[docs]</a><span class="k">class</span> <span class="nc">api_link</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for linking a service repository host.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_link.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_link.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repository</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a link to a new service repository.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO validate repository</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">SERVICE_HOST</span> <span class="o">=</span> <span class="n">repository</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">link</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_list"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_list">[docs]</a><span class="k">class</span> <span class="nc">api_list</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for listing the running containers.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_list.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_list.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the list of running containers.</span>
+
+<span class="sd">        :return: returns the list of running containers.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="nb">list</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_login"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_login">[docs]</a><span class="k">class</span> <span class="nc">api_login</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for logging in.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_login.POST"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_login.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        POSTs the user to login.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_logout"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logout">[docs]</a><span class="k">class</span> <span class="nc">api_logout</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for logging out.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_logout.POST"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logout.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        POSTs the user to logout.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_logs"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logs">[docs]</a><span class="k">class</span> <span class="nc">api_logs</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for returning logs of a server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_logs.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logs.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the logs of a server.</span>
+
+<span class="sd">        :return: returns the logs of a server.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_new"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_new">[docs]</a><span class="k">class</span> <span class="nc">api_new</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for creating a new container.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">fullpath</span> <span class="o">=</span> <span class="s">&quot;&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">data</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">fullpath</span> <span class="o">=</span> <span class="n">web</span><span class="o">.</span><span class="n">ctx</span><span class="p">[</span><span class="s">&#39;fullpath&#39;</span><span class="p">]</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;failure&quot;</span>
+
+<div class="viewcode-block" id="api_new.POST"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_new.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        POSTs the creation of a new container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">no_curses</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO fix me</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">data</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s">&quot;host&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">host</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">host</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s">&quot;must specify a host to run the container on&quot;</span>
+
+            <span class="k">if</span> <span class="s">&quot;service&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="p">[]</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">service</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;service&#39;</span><span class="p">])</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">service</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;image&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;image&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">image</span> <span class="ow">and</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">service</span><span class="p">:</span>
+                <span class="k">return</span> <span class="s">&quot;must specify a service or image to run&quot;</span>
+
+            <span class="k">if</span> <span class="s">&quot;command&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;command&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">command</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;entrypoint&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">entrypoint</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;entrypoint&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">entrypoint</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;volume&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;volume&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">volume</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;port&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;port&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">port</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;link&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">link</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;link&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">link</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;name&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;unique&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">unique</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;unique&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">unique</span> <span class="o">=</span> <span class="bp">False</span>
+            <span class="k">if</span> <span class="s">&quot;user&quot;</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">data</span><span class="p">[</span><span class="s">&#39;user&#39;</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">args</span><span class="o">.</span><span class="n">user</span> <span class="o">=</span> <span class="bp">False</span>
+
+            <span class="k">return</span> <span class="n">new</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&quot;failure&quot;</span>
+        <span class="k">return</span>
+</div></div>
+<div class="viewcode-block" id="api_remove"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_remove">[docs]</a><span class="k">class</span> <span class="nc">api_remove</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for removing a container.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_remove.POST"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_remove.POST">[docs]</a>    <span class="k">def</span> <span class="nf">POST</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        POSTs the removal of a container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
+<div class="viewcode-block" id="api_repositories"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_repositories">[docs]</a><span class="k">class</span> <span class="nc">api_repositories</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for listing the connected repositories.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_repositories.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_repositories.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the connected repositories.</span>
+
+<span class="sd">        :return: returns the list of connected repositories.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">repositories</span><span class="o">.</span><span class="n">repositories</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_repo_services"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_repo_services">[docs]</a><span class="k">class</span> <span class="nc">api_repo_services</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for sending services to the client.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_repo_services.make_tarfile"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_repo_services.make_tarfile">[docs]</a>    <span class="k">def</span> <span class="nf">make_tarfile</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">output_filename</span><span class="p">,</span> <span class="n">source_dir</span><span class="p">):</span>
+        <span class="k">with</span> <span class="n">tarfile</span><span class="o">.</span><span class="n">open</span><span class="p">(</span><span class="n">output_filename</span><span class="p">,</span> <span class="s">&quot;w:gz&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">tar</span><span class="p">:</span>
+            <span class="n">tar</span><span class="o">.</span><span class="n">add</span><span class="p">(</span><span class="n">source_dir</span><span class="p">,</span> <span class="n">arcname</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">source_dir</span><span class="p">))</span>
+</div>
+<div class="viewcode-block" id="api_repo_services.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_repo_services.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the services and packages them up and serves them up as a static</span>
+<span class="sd">        file.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO also need to add non-default services</span>
+        <span class="n">cwd</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">make_tarfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">&quot;static/default.tar.gz&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">&quot;containers/.default&quot;</span><span class="p">))</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">&quot;static/default.tar.gz&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</div></div>
+<div class="viewcode-block" id="api_services"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_services">[docs]</a><span class="k">class</span> <span class="nc">api_services</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for listing services.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_services.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_services.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the list of services.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">json</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">quiet</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">services</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_snapshot"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_snapshot">[docs]</a><span class="k">class</span> <span class="nc">api_snapshot</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for snapshotting a container.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_snapshot.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_snapshot.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        creates a snapshot of a container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span> <span class="o">=</span> <span class="n">container</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">snapshot</span><span class="o">.</span><span class="n">snapshot</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_snapshots"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_snapshots">[docs]</a><span class="k">class</span> <span class="nc">api_snapshots</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for listing snapshots.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_snapshots.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_snapshots.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the list of snapshots.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">snapshots</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_unlink"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_unlink">[docs]</a><span class="k">class</span> <span class="nc">api_unlink</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for unlinking a service repository host.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_unlink.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_unlink.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">repository</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        unlinks the specified service repository.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO validate repository</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">SERVICE_HOST</span> <span class="o">=</span> <span class="n">repository</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">unlink</span><span class="o">.</span><span class="n">unlink</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_uptime"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_uptime">[docs]</a><span class="k">class</span> <span class="nc">api_uptime</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for returning the uptime of the API server.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_uptime.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_uptime.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the uptime of the API server.</span>
+
+<span class="sd">        :return: returns the uptime of the API server.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">uptime_seconds</span> <span class="o">=</span> <span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">-</span><span class="n">START_TIME</span><span class="p">)</span><span class="o">.</span><span class="n">total_seconds</span><span class="p">()</span>
+        <span class="n">uptime_string</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">datetime</span><span class="o">.</span><span class="n">timedelta</span><span class="p">(</span><span class="n">seconds</span> <span class="o">=</span> <span class="n">uptime_seconds</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">uptime_string</span>
+</div></div>
+<div class="viewcode-block" id="api_version"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_version">[docs]</a><span class="k">class</span> <span class="nc">api_version</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for returning the version of bowl.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_version.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_version.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        GETs the version of bowl.</span>
+
+<span class="sd">        :return: returns the version of bowl.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">main</span><span class="p">([])</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span> <span class="c"># pragma: no cover</span>
+    <span class="n">main</span><span class="p">()</span><span class="o">.</span><span class="n">app</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

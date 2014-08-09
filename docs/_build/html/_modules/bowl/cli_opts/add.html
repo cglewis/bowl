@@ -1,0 +1,181 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bowl.cli_opts.add &mdash; bowl 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="bowl 0.2.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bowl.cli_opts.add</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is the add command of bowl.</span>
+
+<span class="sd">Created on 26 May 2014</span>
+<span class="sd">@author: Charlie Lewis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">ast</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">link</span>
+
+<div class="viewcode-block" id="Object"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.add.Object">[docs]</a><span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="add"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.add.add">[docs]</a><span class="k">class</span> <span class="nc">add</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is responsible for the add command of the cli.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="add.main"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.add.add.main">[docs]</a>    <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">repository</span><span class="p">:</span>
+            <span class="c"># !! TODO connect to api of repository</span>
+            <span class="k">print</span> <span class="n">args</span><span class="o">.</span><span class="n">repository</span>
+            <span class="k">print</span> <span class="s">&quot;TODO&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">link_args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+            <span class="n">link_args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">link_args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span>
+            <span class="n">link_args</span><span class="o">.</span><span class="n">SERVICE_HOST</span> <span class="o">=</span> <span class="s">&quot;localhost&quot;</span>
+            <span class="k">if</span> <span class="n">link</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">link_args</span><span class="p">):</span>
+                <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&quot;services&quot;</span><span class="p">)</span>
+                <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+                <span class="n">directory_os</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory_os</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory_os</span><span class="p">)</span>
+                <span class="n">directory_version</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_os</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory_version</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory_version</span><span class="p">)</span>
+                <span class="n">directory_type</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_version</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">TYPE</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory_type</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory_type</span><span class="p">)</span>
+                <span class="n">directory_docker</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_type</span><span class="p">,</span> <span class="s">&quot;dockerfiles&quot;</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory_docker</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory_docker</span><span class="p">)</span>
+                <span class="n">directory_name</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory_docker</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">NAME</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory_name</span><span class="p">):</span>
+                    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory_name</span><span class="p">)</span>
+
+                <span class="c"># !! TODO !!!!!</span>
+                <span class="k">try</span><span class="p">:</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s">&quot;services&quot;</span><span class="p">),</span> <span class="s">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&quot;</span> <span class="o">+</span>
+                                <span class="s">&quot;&#39;title&#39;: &#39;localhost&#39;,&quot;</span> <span class="o">+</span>
+                                <span class="s">&quot; &#39;type&#39;: &#39;choice_menu&#39;&quot;</span> <span class="o">+</span>
+                                <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
+                <span class="k">except</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;unable to add service&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;unable to link localhost as a repository&quot;</span>
+
+        <span class="c"># !! TODO</span>
+        <span class="c"># check JSON for path</span>
+        <span class="c"># check JSON for &quot;&quot; of key/values</span>
+        <span class="c"># check JSON for &#39;&#39; of key/values</span>
+        <span class="c"># check JSON for no quoting of key/values</span>
+        <span class="c"># check all necessary fields in JSON are there</span>
+        <span class="c"># check JSON dependencies like background_cmd only if combine_cmd is true, etc.</span>
+
+        <span class="c"># !! TODO</span>
+        <span class="c"># get DOckerfile at path, but also everything in the context of that directory</span>
+
+        <span class="c"># !! TODO</span>
+        <span class="c"># add to new container directory (not .default)</span>
+        <span class="c"># ask the user if they would like to use .default for default services</span>
+        <span class="c"># ask the user if they would like remove .default from their services</span>
+
+        <span class="c"># !! TODO</span>
+        <span class="c"># mkdir ~/.bowl/services</span>
+        <span class="c"># contains a file that says what all of the service directories are</span>
+        <span class="c">#    most likely .default and/or ~/.bowl/services/</span>
+        <span class="c"># contains added services, unless specified to be somewhere else</span>
+
+        <span class="c"># !! TODO</span>
+        <span class="c"># add service to another repository ...</span>
+
+        <span class="c"># !! TODO</span>
+        <span class="k">print</span> <span class="n">args</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

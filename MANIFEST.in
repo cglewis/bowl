@@ -1,2 +1,4 @@
 include LICENSE
 include *.md
+include docs/Makefile
+recursive-include docs *.md *.png *.rst *.bat *.pickle *.doctree *.html *.inv *.js *.txt *.gif *.css *.1 *.py

@@ -1,0 +1,209 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bowl.cli_opts.services &mdash; bowl 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="bowl 0.2.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bowl.cli_opts.services</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is the services command of bowl.</span>
+
+<span class="sd">Created on 17 July 2014</span>
+<span class="sd">@author: Charlie Lewis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<div class="viewcode-block" id="services"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.services.services">[docs]</a><span class="k">class</span> <span class="nc">services</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is responsible for the services command of the cli.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="services.main"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.services.services.main">[docs]</a>    <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">services_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&quot;services&quot;</span><span class="p">)</span>
+        <span class="n">services_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">services_dir</span><span class="p">)</span>
+        <span class="n">default_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;..&quot;</span><span class="p">,</span> <span class="s">&quot;containers/.default&quot;</span><span class="p">))</span>
+        <span class="n">services_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
+
+        <span class="c"># if services exist, use that, otherwise try to use .default</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">services_dir</span><span class="p">):</span>
+            <span class="c"># !! TODO</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;services&quot;</span>
+        <span class="k">elif</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">default_dir</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c"># read oses</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="s">&quot;oses&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">oses</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                <span class="n">os_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">oses</span><span class="p">)</span>
+                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;oses&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">os_dict</span>
+                <span class="k">for</span> <span class="n">os_key</span> <span class="ow">in</span> <span class="n">os_dict</span><span class="p">:</span>
+                    <span class="c"># read versions for each os</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="s">&quot;versions&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">versions</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                    <span class="n">version_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span>
+                    <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;versions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">version_dict</span>
+                    <span class="k">for</span> <span class="n">version_key</span> <span class="ow">in</span> <span class="n">version_dict</span><span class="p">:</span>
+                        <span class="c"># read databases for each version</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="n">version_key</span><span class="p">,</span> <span class="s">&quot;databases/databases&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                            <span class="n">databases</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                        <span class="n">databases</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">databases</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">database</span> <span class="ow">in</span> <span class="n">databases</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">databases</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">database</span> <span class="ow">in</span> <span class="n">databases</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">databases</span><span class="p">[</span><span class="n">database</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
+
+                        <span class="c"># read environment for each version</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="n">version_key</span><span class="p">,</span> <span class="s">&quot;environment/environment&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                            <span class="n">environment</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                        <span class="n">environment</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">environment</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">environment</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">environment</span><span class="p">[</span><span class="n">env</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
+
+                        <span class="c"># read services for each version</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="n">version_key</span><span class="p">,</span> <span class="s">&quot;services/services&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                            <span class="n">services</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                        <span class="n">services</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">services</span><span class="p">[</span><span class="n">service</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
+
+                        <span class="c"># read tools for each version</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="n">version_key</span><span class="p">,</span> <span class="s">&quot;tools/tools&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                            <span class="n">tools</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+                        <span class="n">tools</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tools</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tool</span><span class="p">)</span>
+                        <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tools</span><span class="p">)</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
+                                <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tools</span><span class="p">[</span><span class="n">tool</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;failed&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;no services found!&quot;</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">services_dict</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s">&#39;oses&#39;</span> <span class="ow">and</span> <span class="n">key</span> <span class="o">!=</span> <span class="s">&#39;versions&#39;</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="n">key</span>
+                        <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                            <span class="k">print</span> <span class="s">&quot;</span><span class="se">\t</span><span class="s">&quot;</span><span class="p">,</span><span class="n">service</span>
+            <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
+                <span class="k">print</span> <span class="n">services_dict</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">services_dict</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">key</span> <span class="o">!=</span> <span class="s">&#39;oses&#39;</span> <span class="ow">and</span> <span class="n">key</span> <span class="o">!=</span> <span class="s">&#39;versions&#39;</span><span class="p">:</span>
+                        <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services_dict</span><span class="p">[</span><span class="n">key</span><span class="p">]:</span>
+                            <span class="k">print</span> <span class="n">service</span>
+
+        <span class="k">return</span> <span class="n">services_dict</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

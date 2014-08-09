@@ -1,0 +1,453 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bowl.cli &mdash; bowl 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="bowl 0.2.0 documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bowl.cli</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is the commandline interface of bowl.</span>
+
+<span class="sd">Created on 14 March 2014</span>
+<span class="sd">@author: Charlie Lewis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">add</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">connect</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">delete</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">disconnect</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">hosts</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">image_import</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">images</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">info</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">kill</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">link</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="nb">list</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">login</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">logout</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">logs</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">new</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">remove</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">repositories</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">services</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshot</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshots</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">start</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">stop</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">unlink</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">update</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">version</span>
+
+<div class="viewcode-block" id="cli"><a class="viewcode-back" href="../../bowl.html#bowl.cli.cli">[docs]</a><span class="k">class</span> <span class="nc">cli</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is responsible for all commandline operations.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="cli.parse_args"><a class="viewcode-back" href="../../bowl.html#bowl.cli.cli.parse_args">[docs]</a>    <span class="k">def</span> <span class="nf">parse_args</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">default_metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+
+        <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">()</span>
+
+        <span class="n">subparsers</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">add_subparsers</span><span class="p">(</span><span class="n">title</span><span class="o">=</span><span class="s">&#39;bowl commands&#39;</span><span class="p">)</span>
+
+        <span class="c"># add</span>
+        <span class="n">parse_add</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;add&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;add a service&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;OS&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify operating system for service&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;VERSION&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify version of operating system&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;TYPE&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify type of service (database, environment, service)&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;NAME&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of service&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;JSON&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;JSON object or path to JSON object that contains associated metadata&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;PATH&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;path that contains the Dockerfile&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                               <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="c"># !! TODO use default, and restructure if/else in add</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--repository&#39;</span><span class="p">,</span> <span class="s">&#39;-r&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify repository to add service to, use localhost by default&#39;</span><span class="p">)</span>
+        <span class="n">parse_add</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">add</span><span class="o">.</span><span class="n">add</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># connect</span>
+        <span class="n">parse_connect</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;connect&#39;</span><span class="p">,</span>
+                                              <span class="n">help</span><span class="o">=</span><span class="s">&#39;connect to a docker host&#39;</span><span class="p">)</span>
+        <span class="n">parse_connect</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;DOCKER_HOST&#39;</span><span class="p">,</span>
+                                   <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify docker host to connect to&#39;</span><span class="p">)</span>
+        <span class="n">parse_connect</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                   <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                   <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_connect</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">connect</span><span class="o">.</span><span class="n">connect</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># delete</span>
+        <span class="n">parse_delete</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;delete&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;delete an image&#39;</span><span class="p">)</span>
+        <span class="n">parse_delete</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;IMAGE_NAME&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of image to delete&#39;</span><span class="p">)</span>
+        <span class="n">parse_delete</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_delete</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">delete</span><span class="o">.</span><span class="n">delete</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># disconnect</span>
+        <span class="n">parse_disconnect</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;disconnect&#39;</span><span class="p">,</span>
+                                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;disconnect from a docker host&#39;</span><span class="p">)</span>
+        <span class="n">parse_disconnect</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;DOCKER_HOST&#39;</span><span class="p">,</span>
+                                      <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify docker host to disconnect from&#39;</span><span class="p">)</span>
+        <span class="n">parse_disconnect</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                      <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                      <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_disconnect</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">disconnect</span><span class="o">.</span><span class="n">disconnect</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># hosts</span>
+        <span class="n">parse_hosts</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;hosts&#39;</span><span class="p">,</span>
+                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;list hosts that are registered&#39;</span><span class="p">)</span>
+        <span class="n">parse_hosts</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_hosts</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                 <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_hosts</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">hosts</span><span class="o">.</span><span class="n">hosts</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># images</span>
+        <span class="n">parse_images</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;images&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;list images&#39;</span><span class="p">)</span>
+        <span class="n">parse_images</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_images</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                  <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_images</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">images</span><span class="o">.</span><span class="n">images</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># import</span>
+        <span class="n">parse_import</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;import&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;import an image&#39;</span><span class="p">)</span>
+        <span class="n">parse_import</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;IMAGE_NAME&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of image to import&#39;</span><span class="p">)</span>
+        <span class="n">parse_import</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;DOCKER_HOST&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify Docker host of image to import&#39;</span><span class="p">)</span>
+        <span class="n">parse_import</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-d&#39;</span><span class="p">,</span> <span class="s">&#39;--description&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;description of image to import&#39;</span><span class="p">)</span>
+        <span class="n">parse_import</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_import</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-u&#39;</span><span class="p">,</span> <span class="s">&#39;--uuid&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;uuid of image to import&#39;</span><span class="p">)</span>
+        <span class="c"># use non-standard naming scheme to not conflict with python&#39;s import</span>
+        <span class="n">parse_import</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">image_import</span><span class="o">.</span><span class="n">image_import</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># info</span>
+        <span class="n">parse_info</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;info&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;display system-wide information&#39;</span><span class="p">)</span>
+        <span class="n">parse_info</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_info</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">info</span><span class="o">.</span><span class="n">info</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># kill</span>
+        <span class="n">parse_kill</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;kill&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;kill running container&#39;</span><span class="p">)</span>
+        <span class="n">parse_kill</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;CONTAINER&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify container to kill&#39;</span><span class="p">)</span>
+        <span class="n">parse_kill</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">kill</span><span class="o">.</span><span class="n">kill</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># link</span>
+        <span class="n">parse_link</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;link&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;link to a service repository host&#39;</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;SERVICE_HOST&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify service repository host to connect to&#39;</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">link</span><span class="o">.</span><span class="n">link</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># list</span>
+        <span class="n">parse_list</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;list&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;list containers running&#39;</span><span class="p">)</span>
+        <span class="n">parse_list</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_list</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_list</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="nb">list</span><span class="o">.</span><span class="n">list</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># login</span>
+        <span class="n">parse_login</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;login&#39;</span><span class="p">,</span>
+                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;login with credentials&#39;</span><span class="p">)</span>
+        <span class="n">parse_login</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-e&#39;</span><span class="p">,</span> <span class="s">&#39;--email&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;email address&#39;</span><span class="p">)</span>
+        <span class="n">parse_login</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-u&#39;</span><span class="p">,</span> <span class="s">&#39;--username&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;username&#39;</span><span class="p">)</span>
+        <span class="n">parse_login</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;PASSWORD&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;password&#39;</span><span class="p">)</span>
+        <span class="n">parse_login</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">login</span><span class="o">.</span><span class="n">login</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># logout</span>
+        <span class="n">parse_logout</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;logout&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;logout&#39;</span><span class="p">)</span>
+        <span class="n">parse_logout</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">logout</span><span class="o">.</span><span class="n">logout</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># logs</span>
+        <span class="n">parse_logs</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;logs&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;server logs&#39;</span><span class="p">)</span>
+        <span class="n">parse_logs</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;HOST&#39;</span><span class="p">,</span>
+                                <span class="n">default</span><span class="o">=</span><span class="s">&quot;localhost&quot;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify host to get logs from&#39;</span><span class="p">)</span>
+        <span class="n">parse_logs</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">logs</span><span class="o">.</span><span class="n">logs</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># new</span>
+        <span class="n">parse_new</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;new&#39;</span><span class="p">,</span>
+                                          <span class="n">help</span><span class="o">=</span><span class="s">&#39;new container&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                               <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--no_curses&#39;</span><span class="p">,</span> <span class="s">&#39;-n&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not use curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--service&#39;</span><span class="p">,</span> <span class="s">&#39;-s&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;add a service to the container, can be used more than once, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--image&#39;</span><span class="p">,</span> <span class="s">&#39;-i&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify an image, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--host&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;append&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;add a host to run the container one, can be used more than once, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--command&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;override command at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--entrypoint&#39;</span><span class="p">,</span> <span class="s">&#39;-e&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;override entrypoint at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--volume&#39;</span><span class="p">,</span> <span class="s">&#39;-v&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;add volumes at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--port&#39;</span><span class="p">,</span> <span class="s">&#39;-p&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;set ports at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--link&#39;</span><span class="p">,</span> <span class="s">&#39;-l&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;add links to containers at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--name&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;set ports at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--unique&#39;</span><span class="p">,</span> <span class="s">&#39;-u&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;set different runtime parameters for each container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--user&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;add a user at runtime of container, only used with no_curses&#39;</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">new</span><span class="o">.</span><span class="n">new</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># remove</span>
+        <span class="n">parse_remove</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;rm&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;remove a container&#39;</span><span class="p">)</span>
+        <span class="n">parse_remove</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;CONTAINER&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify container to remove&#39;</span><span class="p">)</span>
+        <span class="n">parse_remove</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_remove</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">remove</span><span class="o">.</span><span class="n">remove</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># repositories</span>
+        <span class="n">parse_repositories</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;repositories&#39;</span><span class="p">,</span>
+                                                   <span class="n">help</span><span class="o">=</span><span class="s">&#39;list repositories that are registered&#39;</span><span class="p">)</span>
+        <span class="n">parse_repositories</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                    <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_repositories</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">repositories</span><span class="o">.</span><span class="n">repositories</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># services</span>
+        <span class="n">parse_services</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;services&#39;</span><span class="p">,</span>
+                                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;list services&#39;</span><span class="p">)</span>
+        <span class="n">parse_services</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-j&#39;</span><span class="p">,</span> <span class="s">&#39;--json&#39;</span><span class="p">,</span>
+                                    <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;print complete JSON object for each service&#39;</span><span class="p">)</span>
+        <span class="n">parse_services</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                    <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_services</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-q&#39;</span><span class="p">,</span> <span class="s">&#39;--quiet&#39;</span><span class="p">,</span>
+                                    <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;print only the name, will ignore -j if also supplied&#39;</span><span class="p">)</span>
+        <span class="n">parse_services</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                    <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_services</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">services</span><span class="o">.</span><span class="n">services</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># snapshot</span>
+        <span class="n">parse_snapshot</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;snapshot&#39;</span><span class="p">,</span>
+                                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;snapshot running container&#39;</span><span class="p">)</span>
+        <span class="n">parse_snapshot</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;CONTAINER&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify container to snapshot&#39;</span><span class="p">)</span>
+        <span class="n">parse_snapshot</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_snapshot</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                    <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_snapshot</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">snapshot</span><span class="o">.</span><span class="n">snapshot</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># snapshots</span>
+        <span class="n">parse_snapshots</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;snapshots&#39;</span><span class="p">,</span>
+                                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;list snapshots&#39;</span><span class="p">)</span>
+        <span class="n">parse_snapshots</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_snapshots</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                    <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_snapshots</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">snapshots</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># start</span>
+        <span class="n">parse_start</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;start&#39;</span><span class="p">,</span>
+                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;start the api server&#39;</span><span class="p">)</span>
+        <span class="n">parse_start</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_start</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                 <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_start</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">start</span><span class="o">.</span><span class="n">start</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># stop</span>
+        <span class="n">parse_stop</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;stop&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;stop the api server&#39;</span><span class="p">)</span>
+        <span class="n">parse_stop</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_stop</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_stop</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">stop</span><span class="o">.</span><span class="n">stop</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># unlink</span>
+        <span class="n">parse_unlink</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;unlink&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;unlink a service repository host&#39;</span><span class="p">)</span>
+        <span class="n">parse_unlink</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;SERVICE_HOST&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify service repository host to disconnect from&#39;</span><span class="p">)</span>
+        <span class="n">parse_unlink</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_unlink</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">unlink</span><span class="o">.</span><span class="n">unlink</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># update</span>
+        <span class="n">parse_update</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;update&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;update service repository hosts&#39;</span><span class="p">)</span>
+        <span class="n">parse_update</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_update</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-r&#39;</span> <span class="s">&#39;--repository&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify service repository host to get updates from&#39;</span><span class="p">)</span>
+        <span class="n">parse_update</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                  <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_false&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_update</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># version</span>
+        <span class="n">parse_version</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;version&#39;</span><span class="p">,</span>
+                                              <span class="n">help</span><span class="o">=</span><span class="s">&#39;show version&#39;</span><span class="p">)</span>
+        <span class="n">parse_version</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">func</span><span class="p">:</span>
+            <span class="n">args</span><span class="o">.</span><span class="n">func</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../../bowl.html#bowl.cli.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">cli</span><span class="p">()</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+</div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span> <span class="c"># pragma: no cover</span>
+    <span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>

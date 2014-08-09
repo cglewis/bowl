@@ -1,0 +1,590 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bowl package &mdash; bowl 0.2.0 documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '0.2.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="bowl 0.2.0 documentation" href="index.html" />
+    <link rel="next" title="bowl.cli_opts package" href="bowl.cli_opts.html" />
+    <link rel="prev" title="Welcome to bowl’s documentation!" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bowl.cli_opts.html" title="bowl.cli_opts package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to bowl’s documentation!"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">bowl 0.2.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="bowl-package">
+<h1>bowl package<a class="headerlink" href="#bowl-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="bowl.cli_opts.html">bowl.cli_opts package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.add">bowl.cli_opts.add module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.connect">bowl.cli_opts.connect module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.delete">bowl.cli_opts.delete module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.disconnect">bowl.cli_opts.disconnect module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.hosts">bowl.cli_opts.hosts module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.image_import">bowl.cli_opts.image_import module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.images">bowl.cli_opts.images module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.info">bowl.cli_opts.info module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.kill">bowl.cli_opts.kill module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.link">bowl.cli_opts.link module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.list">bowl.cli_opts.list module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.login">bowl.cli_opts.login module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.logout">bowl.cli_opts.logout module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.logs">bowl.cli_opts.logs module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.new">bowl.cli_opts.new module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.remove">bowl.cli_opts.remove module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.repositories">bowl.cli_opts.repositories module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.services">bowl.cli_opts.services module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.snapshot">bowl.cli_opts.snapshot module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.snapshots">bowl.cli_opts.snapshots module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.start">bowl.cli_opts.start module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.stop">bowl.cli_opts.stop module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.unlink">bowl.cli_opts.unlink module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.update">bowl.cli_opts.update module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.version">bowl.cli_opts.version module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-bowl.api">
+<span id="bowl-api-module"></span><h2>bowl.api module<a class="headerlink" href="#module-bowl.api" title="Permalink to this headline">¶</a></h2>
+<p>This module is the web server for running the REST API of bowl.</p>
+<p>Created on 14 March 2014
+&#64;author: Charlie Lewis</p>
+<dl class="class">
+<dt id="bowl.api.api_add">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_add</tt><a class="reference internal" href="_modules/bowl/api.html#api_add"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_add" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for adding a service</p>
+<dl class="method">
+<dt id="bowl.api.api_add.POST">
+<tt class="descname">POST</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_add.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_add.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>POSTs the new service being added.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_connect">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_connect</tt><a class="reference internal" href="_modules/bowl/api.html#api_connect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_connect" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for creating a connection to a docker host.</p>
+<dl class="method">
+<dt id="bowl.api.api_connect.GET">
+<tt class="descname">GET</tt><big>(</big><em>host</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_connect.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_connect.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a connection to a new docker host.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_delete">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_delete</tt><a class="reference internal" href="_modules/bowl/api.html#api_delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for deleting an image.</p>
+<dl class="method">
+<dt id="bowl.api.api_delete.GET">
+<tt class="descname">GET</tt><big>(</big><em>image</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_delete.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_delete.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>deletes the specified image.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_disconnect">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_disconnect</tt><a class="reference internal" href="_modules/bowl/api.html#api_disconnect"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_disconnect" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for disconnecting a connection to a docker host.</p>
+<dl class="method">
+<dt id="bowl.api.api_disconnect.GET">
+<tt class="descname">GET</tt><big>(</big><em>host</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_disconnect.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_disconnect.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>disconnects the specified docker host.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_hosts">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_hosts</tt><a class="reference internal" href="_modules/bowl/api.html#api_hosts"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_hosts" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for listing the connected docker hosts.</p>
+<dl class="method">
+<dt id="bowl.api.api_hosts.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_hosts.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_hosts.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the connected docker hosts.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the list of connected docker hosts.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_image_import">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_image_import</tt><a class="reference internal" href="_modules/bowl/api.html#api_image_import"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_image_import" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for importing an image.</p>
+<dl class="method">
+<dt id="bowl.api.api_image_import.POST">
+<tt class="descname">POST</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_image_import.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_image_import.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>POSTs the image being imported.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_images">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_images</tt><a class="reference internal" href="_modules/bowl/api.html#api_images"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_images" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for listing the images.</p>
+<dl class="method">
+<dt id="bowl.api.api_images.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_images.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_images.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the images.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the list of images.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_info">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_info</tt><a class="reference internal" href="_modules/bowl/api.html#api_info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_info" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for giving system-wide information.</p>
+<dl class="method">
+<dt id="bowl.api.api_info.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_info.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_info.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the system-wide information and renders it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the information.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_kill">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_kill</tt><a class="reference internal" href="_modules/bowl/api.html#api_kill"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_kill" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for killing a container.</p>
+<dl class="method">
+<dt id="bowl.api.api_kill.GET">
+<tt class="descname">GET</tt><big>(</big><em>container</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_kill.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_kill.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>the container to kill.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_link">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_link</tt><a class="reference internal" href="_modules/bowl/api.html#api_link"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_link" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for linking a service repository host.</p>
+<dl class="method">
+<dt id="bowl.api.api_link.GET">
+<tt class="descname">GET</tt><big>(</big><em>repository</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_link.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_link.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a link to a new service repository.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_list">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_list</tt><a class="reference internal" href="_modules/bowl/api.html#api_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for listing the running containers.</p>
+<dl class="method">
+<dt id="bowl.api.api_list.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_list.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_list.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the list of running containers.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the list of running containers.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_login">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_login</tt><a class="reference internal" href="_modules/bowl/api.html#api_login"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_login" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for logging in.</p>
+<dl class="method">
+<dt id="bowl.api.api_login.POST">
+<tt class="descname">POST</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_login.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_login.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>POSTs the user to login.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_logout">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_logout</tt><a class="reference internal" href="_modules/bowl/api.html#api_logout"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_logout" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for logging out.</p>
+<dl class="method">
+<dt id="bowl.api.api_logout.POST">
+<tt class="descname">POST</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_logout.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_logout.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>POSTs the user to logout.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_logs">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_logs</tt><a class="reference internal" href="_modules/bowl/api.html#api_logs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_logs" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for returning logs of a server.</p>
+<dl class="method">
+<dt id="bowl.api.api_logs.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_logs.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_logs.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the logs of a server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the logs of a server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_new">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_new</tt><a class="reference internal" href="_modules/bowl/api.html#api_new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_new" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for creating a new container.</p>
+<dl class="method">
+<dt id="bowl.api.api_new.POST">
+<tt class="descname">POST</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_new.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_new.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>POSTs the creation of a new container.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_remove">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_remove</tt><a class="reference internal" href="_modules/bowl/api.html#api_remove"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_remove" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for removing a container.</p>
+<dl class="method">
+<dt id="bowl.api.api_remove.POST">
+<tt class="descname">POST</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_remove.POST"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_remove.POST" title="Permalink to this definition">¶</a></dt>
+<dd><p>POSTs the removal of a container.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_repo_services">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_repo_services</tt><a class="reference internal" href="_modules/bowl/api.html#api_repo_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_repo_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for sending services to the client.</p>
+<dl class="method">
+<dt id="bowl.api.api_repo_services.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_repo_services.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_repo_services.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the services and packages them up and serves them up as a static
+file.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="bowl.api.api_repo_services.make_tarfile">
+<tt class="descname">make_tarfile</tt><big>(</big><em>output_filename</em>, <em>source_dir</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_repo_services.make_tarfile"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_repo_services.make_tarfile" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_repositories">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_repositories</tt><a class="reference internal" href="_modules/bowl/api.html#api_repositories"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_repositories" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for listing the connected repositories.</p>
+<dl class="method">
+<dt id="bowl.api.api_repositories.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_repositories.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_repositories.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the connected repositories.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the list of connected repositories.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_services">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_services</tt><a class="reference internal" href="_modules/bowl/api.html#api_services"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_services" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for listing services.</p>
+<dl class="method">
+<dt id="bowl.api.api_services.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_services.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_services.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the list of services.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_snapshot">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_snapshot</tt><a class="reference internal" href="_modules/bowl/api.html#api_snapshot"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_snapshot" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for snapshotting a container.</p>
+<dl class="method">
+<dt id="bowl.api.api_snapshot.GET">
+<tt class="descname">GET</tt><big>(</big><em>container</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_snapshot.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_snapshot.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>creates a snapshot of a container.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_snapshots">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_snapshots</tt><a class="reference internal" href="_modules/bowl/api.html#api_snapshots"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_snapshots" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for listing snapshots.</p>
+<dl class="method">
+<dt id="bowl.api.api_snapshots.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_snapshots.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_snapshots.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the list of snapshots.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_unlink">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_unlink</tt><a class="reference internal" href="_modules/bowl/api.html#api_unlink"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_unlink" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for unlinking a service repository host.</p>
+<dl class="method">
+<dt id="bowl.api.api_unlink.GET">
+<tt class="descname">GET</tt><big>(</big><em>repository</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_unlink.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_unlink.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>unlinks the specified service repository.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_uptime">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_uptime</tt><a class="reference internal" href="_modules/bowl/api.html#api_uptime"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_uptime" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for returning the uptime of the API server.</p>
+<dl class="method">
+<dt id="bowl.api.api_uptime.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_uptime.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_uptime.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the uptime of the API server.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the uptime of the API server.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_version">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_version</tt><a class="reference internal" href="_modules/bowl/api.html#api_version"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_version" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for returning the version of bowl.</p>
+<dl class="method">
+<dt id="bowl.api.api_version.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_version.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_version.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the version of bowl.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the version of bowl.</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.main">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">main</tt><big>(</big><em>port=8080</em>, <em>host='0.0.0.0'</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.main" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>This class is responsible for initializing the urls and web server.</p>
+<dl class="method">
+<dt id="bowl.api.main.setup">
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#main.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.main.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.root">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">root</tt><a class="reference internal" href="_modules/bowl/api.html#root"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.root" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for giving information about the rest server.</p>
+<dl class="method">
+<dt id="bowl.api.root.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#root.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.root.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>GETs the information about the rest server and renders it.</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Returns:</th><td class="field-body">returns the information</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-bowl.cli">
+<span id="bowl-cli-module"></span><h2>bowl.cli module<a class="headerlink" href="#module-bowl.cli" title="Permalink to this headline">¶</a></h2>
+<p>This module is the commandline interface of bowl.</p>
+<p>Created on 14 March 2014
+&#64;author: Charlie Lewis</p>
+<dl class="class">
+<dt id="bowl.cli.cli">
+<em class="property">class </em><tt class="descclassname">bowl.cli.</tt><tt class="descname">cli</tt><a class="reference internal" href="_modules/bowl/cli.html#cli"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.cli.cli" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>This class is responsible for all commandline operations.</p>
+<dl class="method">
+<dt id="bowl.cli.cli.parse_args">
+<tt class="descname">parse_args</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/cli.html#cli.parse_args"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.cli.cli.parse_args" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="function">
+<dt id="bowl.cli.main">
+<tt class="descclassname">bowl.cli.</tt><tt class="descname">main</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/cli.html#main"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.cli.main" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-bowl">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-bowl" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">bowl package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-bowl.api">bowl.api module</a></li>
+<li><a class="reference internal" href="#module-bowl.cli">bowl.cli module</a></li>
+<li><a class="reference internal" href="#module-bowl">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="index.html"
+                        title="previous chapter">Welcome to bowl&#8217;s documentation!</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="bowl.cli_opts.html"
+                        title="next chapter">bowl.cli_opts package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/bowl.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="bowl.cli_opts.html" title="bowl.cli_opts package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="index.html" title="Welcome to bowl’s documentation!"
+             >previous</a> |</li>
+        <li><a href="index.html">bowl 0.2.0 documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+    </div>
+  </body>
+</html>
