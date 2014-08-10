@@ -148,6 +148,12 @@ class cli(object):
                                            help='kill running container')
         parse_kill.add_argument('CONTAINER',
                                 help='specify container to kill')
+        parse_kill.add_argument('--metadata_path', '-m',
+                                default=default_metadata_path,
+                                help='metadata path, default '+default_metadata_path)
+        parse_kill.add_argument('-z',
+                                action='store_true',
+                                help='do not print any output')
         parse_kill.set_defaults(func=kill.kill.main)
 
         # link
@@ -249,6 +255,9 @@ class cli(object):
         parse_remove.add_argument('--metadata_path', '-m',
                                   default=default_metadata_path,
                                   help='metadata path, default '+default_metadata_path)
+        parse_remove.add_argument('-z',
+                                  action='store_true',
+                                  help='do not print any output')
         parse_remove.set_defaults(func=remove.remove.main)
 
         # repositories

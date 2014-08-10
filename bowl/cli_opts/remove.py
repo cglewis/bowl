@@ -28,7 +28,10 @@ class remove(object):
                         c = docker.Client(base_url='tcp://'+container['host']+':2375', version='1.9',
                                           timeout=10)
                         c.remove_container(args.CONTAINER)
-                        print "removed "+container['container_id']+" on "+container['host']
+                        if not args.z:
+                            print "removed "+container['container_id']+" on "+container['host']
         except:
+            if not args.z:
+                print "unable to remove ",args.CONTAINER
             return False
         return True
