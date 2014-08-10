@@ -21,7 +21,7 @@ class TestClass:
         args.CONTAINER = "test"
         args.z = True
         a = kill.kill()
-        # !! TODO fails on travis for some reason
-        #with pytest.raises(client.APIError):
-        #    a.main(args)
+        a.main(args)
+        args.z = False
+        a.main(args)
         assert 1
