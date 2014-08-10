@@ -229,6 +229,7 @@ class api_kill:
         class Object(object):
             pass
         args = Object()
+        args.z = True
         args.CONTAINER = container
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
@@ -390,6 +391,12 @@ class api_remove:
         """
         POSTs the removal of a container.
         """
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
         return ""
 
 class api_repositories:
