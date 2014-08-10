@@ -19,6 +19,7 @@ class TestClass:
     def test_cli_opts_remove(self):
         args = Object()
         args.CONTAINER="test"
+        args.z = True
         a = remove.remove()
         # !! TODO fails on travis for some reason
         #with pytest.raises(client.APIError):
