@@ -149,6 +149,12 @@ class TestClass:
         a.GET()
         assert 1
 
+    def test_test(self):
+        # !! TODO make sure this isn't recursive
+        a = api.api_test()
+        a.GET()
+        assert 1
+
     def test_unlink(self):
         a = api.api_unlink()
         a.GET("repository")
