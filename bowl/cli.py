@@ -28,6 +28,7 @@ from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
 from bowl.cli_opts import start
 from bowl.cli_opts import stop
+from bowl.cli_opts import test
 from bowl.cli_opts import unlink
 from bowl.cli_opts import update
 from bowl.cli_opts import version
@@ -330,6 +331,11 @@ class cli(object):
                                 action='store_true',
                                 help='do not print any output')
         parse_stop.set_defaults(func=stop.stop.main)
+
+        # test
+        parse_test = subparsers.add_parser('test',
+                                              help='run tests')
+        parse_test.set_defaults(func=test.test.main)
 
         # unlink
         parse_unlink = subparsers.add_parser('unlink',

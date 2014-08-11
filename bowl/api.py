@@ -31,6 +31,7 @@ from bowl.cli_opts import repositories
 from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
+from bowl.cli_opts import test
 from bowl.cli_opts import unlink
 from bowl.cli_opts import version
 
@@ -76,6 +77,7 @@ class main(object):
             '/services', 'api_services',
             '/snapshot/(.*)', 'api_snapshot',
             '/snapshots', 'api_snapshots',
+            '/test', 'api_test',
             '/unlink/(.*)', 'api_unlink',
             '/uptime', 'api_uptime',
             '/version', 'api_version',
@@ -486,6 +488,16 @@ class api_snapshots:
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
         return snapshots.snapshots.main(args)
+
+class api_test:
+    """
+    This class is resposible for running the tests.
+    """
+    def GET(self):
+        """
+        runs the tests.
+        """
+        return ""
 
 class api_unlink:
     """

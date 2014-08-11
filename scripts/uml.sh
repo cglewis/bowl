@@ -63,4 +63,5 @@ docker -H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -d &
 sleep 5
 
 # Use docker
-docker run ubuntu /bin/echo hello world
+#docker run ubuntu /bin/echo hello world
+docker run -it cglewis/bowl test
