@@ -63,6 +63,10 @@ docker -H tcp://127.0.0.1:2375 -H unix:///var/run/docker.sock -d &
 sleep 5
 
 # Use docker
+pwd
+ls -lah
+ls -lah /
+
 cd /bowl
 docker build -t bowl .
 docker run -it bowl test
