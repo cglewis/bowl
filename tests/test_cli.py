@@ -26,6 +26,8 @@ class TestClass:
         sys.argv = ["", "new", "-n", "--host", "test", "-s", "os:version:type:service", "-l"]
         with pytest.raises(exceptions.ConnectionError):
             cli.main()
+        sys.argv = ["", "test"]
+        cli.main()
         #sys.argv = ["", "new", "-n", "--host", "127.0.0.1", "-s", "os:version:type:service", "-l"]
         #with pytest.raises(client.APIError):
         #    cli.main()

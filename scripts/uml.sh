@@ -64,4 +64,4 @@ sleep 5
 
 # Use docker
 docker build -t bowl .
-docker run -it bowl test
+docker run -v /home/travis/build/cglewis/bowl:/bowl bowl test

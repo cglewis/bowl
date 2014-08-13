@@ -9,5 +9,7 @@ ADD . /bowl
 RUN pip install -r /bowl/requirements.txt
 RUN cd /bowl; python setup.py install
 
+WORKDIR /bowl
+
 ENTRYPOINT ["/usr/local/bin/bowl"]
 CMD ["new"]
