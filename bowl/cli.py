@@ -336,7 +336,7 @@ class cli(object):
         parse_test = subparsers.add_parser('test',
                                               help='run tests')
         parse_test.add_argument('-f',
-                                action='store_false',
+                                action='store_true',
                                 help='do not run tests')
         parse_test.set_defaults(func=test.test.main)
 

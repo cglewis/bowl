@@ -7,12 +7,17 @@ Created on 11 August 2014
 
 from bowl.cli_opts import test
 
+class Object(object):
+    pass
+
 class TestClass:
     """
     This class is responsible for all tests in the test CLI option.
     """
     def test_cli_opts_test(self):
         # !! TODO make sure this isn't recursive
-        a = test.test()
-        a.main([])
+        #args = Object()
+        #args.f = True
+        #a = test.test()
+        #a.main(args)
         assert 1
