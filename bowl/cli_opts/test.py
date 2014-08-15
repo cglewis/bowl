@@ -18,5 +18,5 @@ class test(object):
             pass
         else:
             # run tests
-            out = pytest.main(['-x', '/bowl/tests'])
+            out = pytest.main(['-x', '/bowl'])
             print out
