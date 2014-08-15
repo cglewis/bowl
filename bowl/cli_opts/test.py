@@ -18,5 +18,6 @@ class test(object):
             pass
         else:
             # run tests
-            out = pytest.main(['-x', '/bowl'])
-            print out
+            #out = pytest.main(['-x', '/bowl'])
+           # print out
+           pass
