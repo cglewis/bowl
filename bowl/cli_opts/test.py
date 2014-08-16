@@ -4,6 +4,7 @@ This module is the test command of bowl.
 Created on 11 August 2014
 @author: Charlie Lewis
 """
+import os
 import pytest
 
 class test(object):
@@ -18,6 +19,8 @@ class test(object):
             pass
         else:
             # run tests
-            #out = pytest.main(['-x', '/bowl'])
-           # print out
-           pass
+            #out = pytest.main(['-v', '--cov', 'bowl', '--cov-report', 'term-missing', '-x', args.path])
+            cmd = 'py.test -v --cov bowl --cov-report term-missing -x ' + args.path
+            out = os.popen(cmd).read()
+            print out
+            pass

@@ -39,6 +39,7 @@ class cli(object):
     """
     def parse_args(self):
         default_metadata_path = "~/.bowl"
+        default_path = "/bowl"
 
         parser = argparse.ArgumentParser()
 
@@ -338,6 +339,9 @@ class cli(object):
         parse_test.add_argument('-f',
                                 action='store_true',
                                 help='do not run tests')
+        parse_test.add_argument('--path', '-p',
+                                default=default_path,
+                                help='path to test, default '+default_path)
         parse_test.set_defaults(func=test.test.main)
 
         # unlink
