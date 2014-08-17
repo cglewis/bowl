@@ -17,6 +17,7 @@ install:
   - chmod +x linux
 script:
   - ./linux quiet mem=2G rootfstype=hostfs rw eth0=slirp,,/usr/bin/slirp-fullbolt init=$(pwd)/scripts/uml.sh WORKDIR=$(pwd) HOME=$HOME
+  - sed -i 's|/bowl|/home/travis/build/cglewis/bowl|g' .coverage
   - pwd
   - ls -lah
   #- py.test -v --cov bowl --cov-report term-missing
