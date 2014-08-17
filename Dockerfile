@@ -3,6 +3,7 @@ MAINTAINER Charlie Lewis
 
 RUN apt-get update
 RUN apt-get install -y python-setuptools
+RUN apt-get install -y git
 RUN easy_install pip
 ADD . /bowl
 
