@@ -337,7 +337,7 @@ class cli(object):
         parse_test = subparsers.add_parser('test',
                                               help='run tests')
         parse_test.add_argument('-c',
-                                action='store_false',
+                                action='store_true',
                                 help='send to coveralls')
         parse_test.add_argument('-f',
                                 action='store_true',
