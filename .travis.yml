@@ -22,7 +22,7 @@ script:
   - ls -lah
   #- py.test -v --cov bowl --cov-report term-missing
 after_success:
-  - coveralls
+  - coveralls --base_dir /home/travis/build/cglewis/bowl
 branches:
   except:
   - gh-pages
