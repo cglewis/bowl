@@ -16,8 +16,8 @@ class TestClass:
     """
     def test_cli_opts_test(self):
         # !! TODO make sure this isn't recursive
-        #args = Object()
-        #args.f = True
-        #a = test.test()
-        #a.main(args)
+        args = Object()
+        args.f = True
+        a = test.test()
+        a.main(args)
         assert 1

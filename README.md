@@ -4,5 +4,6 @@ bowl
 [![Coverage Status](https://coveralls.io/repos/cglewis/bowl/badge.png?branch=master)](https://coveralls.io/r/cglewis/bowl?branch=master) 
 [![Docs version](https://readthedocs.org/projects/bowl/badge/?version=latest)](http://bowl.readthedocs.org/en/latest/)
 [![PyPI version](https://badge.fury.io/py/bowl.svg)](http://badge.fury.io/py/bowl)
-[![downloads](https://pypip.in/d/bowl/badge.png)](https://pypi.python.org/pypi/bowl) 
+[![downloads](https://pypip.in/d/bowl/badge.png)](https://pypi.python.org/pypi/bowl)
 
+Tool for easily building and configuring virtual environments on top of Docker.
