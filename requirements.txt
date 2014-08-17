@@ -2,3 +2,5 @@ docker-py==0.3.1
 requests==2.2.1
 web.py
 pytest
+pytest-cov
+python-coveralls
