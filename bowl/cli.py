@@ -140,6 +140,9 @@ class cli(object):
         # info
         parse_info = subparsers.add_parser('info',
                                            help='display system-wide information')
+        parse_info.add_argument('--metadata_path', '-m',
+                                default=default_metadata_path,
+                                help='metadata path, default '+default_metadata_path)
         parse_info.add_argument('-z',
                                 action='store_true',
                                 help='do not print any output')
