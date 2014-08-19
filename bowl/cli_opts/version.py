@@ -13,5 +13,6 @@ class version(object):
     """
     @classmethod
     def main(self, args):
-        print pkg_resources.get_distribution("bowl").version
+        if not args.z:
+            print pkg_resources.get_distribution("bowl").version
         return pkg_resources.get_distribution("bowl").version

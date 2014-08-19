@@ -7,12 +7,19 @@ Created on 14 March 2014
 import ast
 import os
 
+from bowl.cli_opts import version
+
+class Object(object):
+    pass
+
 class info(object):
     """
     This class is responsible for the info command of the cli.
     """
     @classmethod
     def main(self, args):
+        version_args = Object()
+        version_args.z = True
         containers = 0
         hosts = 0
         images = 0
@@ -46,5 +53,6 @@ class info(object):
             print "images: ",images
             print "repositories: ",repositories
             print "snapshots: ",snapshots
+            print "version: ",version.version.main(version_args)
         except:
             print "unable to get info"

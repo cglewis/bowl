@@ -376,6 +376,9 @@ class cli(object):
         # version
         parse_version = subparsers.add_parser('version',
                                               help='show version')
+        parse_version.add_argument('-z',
+                                   action='store_false',
+                                   help='do not print any output')
         parse_version.set_defaults(func=version.version.main)
 
         args = parser.parse_args()
