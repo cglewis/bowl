@@ -64,4 +64,4 @@ sleep 5
 
 # Use docker
 docker build -t bowl .
-sudo docker run -v /bowl:/home/travis/build/cglewis/bowl bowl test --path=/bowl -c
+docker run -v /bowl:/home/travis/build/cglewis/bowl bowl test --path=/bowl -c

@@ -5,6 +5,7 @@ RUN apt-get update
 RUN apt-get install -y python-setuptools
 RUN apt-get install -y git
 RUN easy_install pip
+RUN mkdir /bowl
 ADD . /bowl
 
 RUN pip install -r /bowl/requirements.txt
