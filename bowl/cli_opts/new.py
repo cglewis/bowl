@@ -794,11 +794,14 @@ class new(object):
                     # !! TODO ask if more than one user
                 except:
                     print "SSH Key file not found, failed to create user"
-            if "CMD" not in dockerfile:
-                dockerfile.append("CMD /bin/bash")
             print "\n### GENERATED DOCKERFILE ###"
+            cmd = False
             for line in dockerfile:
+                if "CMD" in line:
+                    cmd = True
                 print line
+            if not cmd:
+                dockerfile.append("CMD /bin/bash")
             print "### END GENERATED DOCKERFILE ###\n"
             self.build_dockerfile(self, dockerfile, uuid_dir, args)
 

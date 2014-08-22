@@ -43,7 +43,7 @@ class list(object):
         compare_containers = []
         try:
             for container in host_c[0]:
-                compare_containers.append(container['Names'][0][1:])
+                compare_containers.append(container['Id'])
         except:
             if not args.z:
                 print "no hosts found"
