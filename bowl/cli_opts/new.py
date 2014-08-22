@@ -40,10 +40,11 @@ class new(object):
                               version='1.9', timeout=2)
 
             # !! TODO check that the build actually created an image before trying to create the container
-            c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
-                    nocache=False, rm=False, stream=False)
+            output = c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
+                               nocache=False, rm=False, stream=False)
+            # !! TODO cleanup, but for now ensures that the build finishes prior to container creation
+            print list(output)
 
-            time.sleep(5)
             # TODO check if tty and stdin_open (interactive) are needed
             if len(self.names) != 0:
                 if self.unique:
@@ -160,13 +161,13 @@ class new(object):
                       'subtitle': "Please select databases...",
                       'options': []
                     }
-                    for database_key in all_dict['databases'][0]:
-                        database_dict['options'].append(all_dict['databases'][0][database_key])
+                    for database_key in all_dict['databases'][version_num]:
+                        database_dict['options'].append(all_dict['databases'][version_num][database_key])
                         key = os_key+"."+version_key+".databases."+database_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['databases'][0][database_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['databases'][version_num][database_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['databases'][0][database_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['databases'][version_num][database_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -176,13 +177,13 @@ class new(object):
                       'subtitle': "Please select environment tools...",
                       'options': []
                     }
-                    for environment_key in all_dict['environment'][0]:
-                        environment_dict['options'].append(all_dict['environment'][0][environment_key])
+                    for environment_key in all_dict['environment'][version_num]:
+                        environment_dict['options'].append(all_dict['environment'][version_num][environment_key])
                         key = os_key+"."+version_key+".environment."+environment_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['environment'][0][environment_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['environment'][version_num][environment_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['environment'][0][environment_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['environment'][version_num][environment_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -192,13 +193,13 @@ class new(object):
                       'subtitle': "Please select services...",
                       'options': []
                     }
-                    for service_key in all_dict['services'][0]:
-                        service_dict['options'].append(all_dict['services'][0][service_key])
+                    for service_key in all_dict['services'][version_num]:
+                        service_dict['options'].append(all_dict['services'][version_num][service_key])
                         key = os_key+"."+version_key+".services."+service_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['services'][0][service_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['services'][version_num][service_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['services'][0][service_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['services'][version_num][service_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -208,13 +209,13 @@ class new(object):
                       'subtitle': "Please select tools...",
                       'options': []
                     }
-                    for tool_key in all_dict['tools'][0]:
-                        tool_dict['options'].append(all_dict['tools'][0][tool_key])
+                    for tool_key in all_dict['tools'][version_num]:
+                        tool_dict['options'].append(all_dict['tools'][version_num][tool_key])
                         key = os_key+"."+version_key+".tools."+tool_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['tools'][0][tool_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['tools'][version_num][tool_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['tools'][0][tool_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['tools'][version_num][tool_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -783,9 +784,9 @@ class new(object):
                                 fo.write(line)
                     dockerfile.append("RUN useradd "+username)
                     dockerfile.append("RUN mkdir -p /home/"+username+
-                                      "/.ssh; chown "+username+
+                                      "/.ssh && chown "+username+
                                       " /home/"+username+
-                                      "/.ssh; chmod 700 /home/"+username+"/.ssh")
+                                      "/.ssh && chmod 700 /home/"+username+"/.ssh")
                     dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
                     # !! TODO ask if user needs sudo
                     dockerfile.append("RUN apt-get install -y sudo")
