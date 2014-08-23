@@ -111,7 +111,7 @@ class TestClass:
 
     def test_logs(self):
         a = api.api_logs()
-        a.GET()
+        a.GET("container")
         assert 1
 
     def test_new(self):
