@@ -69,7 +69,7 @@ class main(object):
             '/list', 'api_list',
             '/login', 'api_login',
             '/logout', 'api_logout',
-            '/logs', 'api_logs',
+            '/logs/(.*)', 'api_logs',
             '/new', 'api_new',
             '/remove', 'api_remove',
             '/repositories', 'api_repositories',
@@ -296,13 +296,20 @@ class api_logs:
     """
     This class is resposible for returning logs of a server.
     """
-    def GET(self):
+    def GET(self, container):
         """
         GETs the logs of a server.
 
         :return: returns the logs of a server.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        args.CONTAINER = container
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        return logs.logs.main(args)
 
 class api_new:
     """
