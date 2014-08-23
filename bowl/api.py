@@ -94,6 +94,7 @@ class root:
 
         :return: returns the information
         """
+        # !! TODO
         return ""
 
 class api_add:
@@ -104,6 +105,7 @@ class api_add:
         """
         POSTs the new service being added.
         """
+        # !! TODO
         return ""
 
 class api_connect:
@@ -182,6 +184,7 @@ class api_image_import:
         """
         POSTs the image being imported.
         """
+        # !! TODO
         return ""
 
 class api_images:
@@ -280,6 +283,7 @@ class api_login:
         """
         POSTs the user to login.
         """
+        # !! TODO
         return ""
 
 class api_logout:
@@ -290,6 +294,7 @@ class api_logout:
         """
         POSTs the user to logout.
         """
+        # !! TODO
         return ""
 
 class api_logs:
@@ -406,6 +411,7 @@ class api_remove:
         args.z = True
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
+        # !! TODO
         return ""
 
 class api_repositories:
@@ -504,6 +510,7 @@ class api_test:
         """
         runs the tests.
         """
+        # !! TODO
         return ""
 
 class api_unlink:
