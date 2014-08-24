@@ -713,7 +713,7 @@ class new(object):
                                         if self.combine_cmd_dict[key] == "yes":
                                             envs[service].append(line.rstrip('\n'))
                                         # !! TODO
-                                        dockerfile.append(line.rstrip('\n'))
+                                        #dockerfile.append(line.rstrip('\n'))
                                 elif line.startswith("ENV"):
                                     # !! TODO
                                     if num_services == 1:
@@ -772,9 +772,12 @@ class new(object):
             if len(cmds) > 1:
                 print "\nFound more than one service that runs a command, installing supervisord..."
                 dockerfile.append("RUN apt-get install -y supervisor")
-                print cmds
-                # !! TODO
-
+                for cmd in cmds:
+                    cmd_a = cmd.split(":")
+                    with open("/tmp/"+uuid_dir+"/"+cmd_a[-1]+".conf", 'w') as f:
+                        f.write("[program:"+cmd_a[-1]+"]\n")
+                        f.write("command="+cmds[cmd][0])
+                        dockerfile.append("ADD "+cmd_a[-1]+".conf /etc/supervisor/conf.d/"+cmd_a[-1]+".conf")
             if self.user:
                 try:
                     # !! TODO try/except
@@ -800,9 +803,14 @@ class new(object):
             for line in dockerfile:
                 if "CMD" in line:
                     cmd = True
-                print line
             if not cmd:
-                dockerfile.append("CMD /bin/bash")
+                if len(cmds) > 1:
+                    # !! TODO check user and workdir
+                    dockerfile.append("CMD /usr/bin/supervisord -n")
+                else:
+                    dockerfile.append("CMD /bin/bash")
+            for line in dockerfile:
+                print line
             print "### END GENERATED DOCKERFILE ###\n"
             self.build_dockerfile(self, dockerfile, uuid_dir, args)
 

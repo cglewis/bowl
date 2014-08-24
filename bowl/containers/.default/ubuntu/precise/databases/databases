@@ -20,7 +20,7 @@
   "object": "database",
   "cluster": "yes",
   "combine_cmd": "yes",
-  "background_cmd": "TODO",
+  "background_cmd": "/usr/bin/influxdb -config=/opt/influxdb/shared/config.toml &",
   "tty": "no",
   "interactive": "no"
  },
