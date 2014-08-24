@@ -7,7 +7,7 @@
   "object": "database",
   "cluster": "yes",
   "combine_cmd": "yes",
-  "background_cmd": "TODO",
+  "background_cmd": "/elasticsearch/bin/elasticsearch -d",
   "tty": "no",
   "interactive": "no"
  },
