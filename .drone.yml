@@ -20,9 +20,9 @@ script:
   #- sed -i 's|/bowl|/home/travis/build/cglewis/bowl|g' .coverage
   #- pwd
   #- ls -lah
-  #- py.test -v --cov bowl --cov-report term-missing
+  - py.test -v --cov bowl --cov-report term-missing
 after_success:
-  #- coveralls --base_dir /home/travis/build/cglewis/bowl
+  - coveralls --base_dir /home/travis/build/cglewis/bowl
 branches:
   except:
   - gh-pages
