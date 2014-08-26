@@ -17,6 +17,7 @@ class services(object):
         services_dir = os.path.expanduser(services_dir)
         default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "containers/.default"))
         services_dict = {}
+        # !! TODO BUG these need to be per version
         services_dict['databases'] = []
         services_dict['environment'] = []
         services_dict['services'] = []
@@ -39,6 +40,7 @@ class services(object):
                     with open(os.path.join(default_dir, os_key, "versions"), 'r') as f:
                         versions = f.read()
                     version_dict = json.loads(versions)
+                    # !! TODO BUG this needs to be per os
                     services_dict['versions'] = version_dict
                     for version_key in version_dict:
                         # read databases for each version

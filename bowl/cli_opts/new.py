@@ -147,6 +147,8 @@ class new(object):
         args.z = True
         args.metadata_path = main_arg.metadata_path
         all_dict = services.services.main(args)
+        # !! TODO ensure this is right
+        #print all_dict
         os_num = 0
         try:
             for os_key in all_dict['oses']:

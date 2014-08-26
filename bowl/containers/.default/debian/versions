@@ -1,0 +1,10 @@
+{
+ "jessie":
+ {
+  "title": "Jessie",
+  "type": "menu",
+  "subtitle": "Please select services...",
+  "object": "version",
+  "options": []
+ }
+}
