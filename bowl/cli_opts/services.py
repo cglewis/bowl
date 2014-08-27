@@ -30,6 +30,7 @@ class services(object):
                 print "services"
         elif os.path.exists(default_dir):
             try:
+                # !! TODO BUG this entire try/except needs to be redone, breaks multiple versions of os
                 # read oses
                 with open(os.path.join(default_dir, "oses"), 'r') as f:
                     oses = f.read()
