@@ -147,15 +147,11 @@ class new(object):
         args.z = True
         args.metadata_path = main_arg.metadata_path
         all_dict = services.services.main(args)
-        # !! TODO ensure this is right
-        #print all_dict
-        os_num = 0
         try:
             for os_key in all_dict['oses']:
                 menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
-                version_num = 0
-                for version_key in all_dict['versions']:
-                    menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['versions'][version_key])
+                for version_key in all_dict['oses'][os_key]['versions']:
+                    menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['oses'][os_key]['versions'][version_key])
 
                     database_dict = {
                       'title': "Databases",
@@ -163,13 +159,13 @@ class new(object):
                       'subtitle': "Please select databases...",
                       'options': []
                     }
-                    for database_key in all_dict['databases'][version_num]:
-                        database_dict['options'].append(all_dict['databases'][version_num][database_key])
+                    for database_key in all_dict['oses'][os_key]['versions'][version_key]['databases']:
+                        database_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['databases'][database_key])
                         key = os_key+"."+version_key+".databases."+database_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['databases'][version_num][database_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['databases'][database_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['databases'][version_num][database_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['databases'][database_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -179,13 +175,13 @@ class new(object):
                       'subtitle': "Please select environment tools...",
                       'options': []
                     }
-                    for environment_key in all_dict['environment'][version_num]:
-                        environment_dict['options'].append(all_dict['environment'][version_num][environment_key])
+                    for environment_key in all_dict['oses'][os_key]['versions'][version_key]['environment']:
+                        environment_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['environment'][environment_key])
                         key = os_key+"."+version_key+".environment."+environment_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['environment'][version_num][environment_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['environment'][environment_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['environment'][version_num][environment_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['environment'][environment_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -195,13 +191,13 @@ class new(object):
                       'subtitle': "Please select services...",
                       'options': []
                     }
-                    for service_key in all_dict['services'][version_num]:
-                        service_dict['options'].append(all_dict['services'][version_num][service_key])
+                    for service_key in all_dict['oses'][os_key]['versions'][version_key]['services']:
+                        service_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['services'][service_key])
                         key = os_key+"."+version_key+".services."+service_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['services'][version_num][service_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['services'][service_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['services'][version_num][service_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['services'][service_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -211,13 +207,13 @@ class new(object):
                       'subtitle': "Please select tools...",
                       'options': []
                     }
-                    for tool_key in all_dict['tools'][version_num]:
-                        tool_dict['options'].append(all_dict['tools'][version_num][tool_key])
+                    for tool_key in all_dict['oses'][os_key]['versions'][version_key]['tools']:
+                        tool_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['tools'][tool_key])
                         key = os_key+"."+version_key+".tools."+tool_key
                         try:
-                            self.combine_cmd_dict[key] = all_dict['tools'][version_num][tool_key]['combine_cmd']
+                            self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['tools'][tool_key]['combine_cmd']
                             if self.combine_cmd_dict[key] == "yes":
-                                self.background_cmd_dict[key] = all_dict['tools'][version_num][tool_key]['background_cmd']
+                                self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['tools'][tool_key]['background_cmd']
                         except:
                             print "key error"
 
@@ -242,9 +238,6 @@ class new(object):
                     menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(tool_dict)
                     menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
                     menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
-
-                    version_num += 1
-                os_num += 1
 
             menu_dict['options'][1]['options'].append(launch_image_dict)
         except:

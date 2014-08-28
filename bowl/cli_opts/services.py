@@ -17,7 +17,7 @@ class services(object):
         services_dir = os.path.expanduser(services_dir)
         default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "containers/.default"))
         services_dict = {}
-        # !! TODO BUG these need to be per version
+        # !! TODO still used for non-json, needs cleanup
         services_dict['databases'] = []
         services_dict['environment'] = []
         services_dict['services'] = []
@@ -30,7 +30,6 @@ class services(object):
                 print "services"
         elif os.path.exists(default_dir):
             try:
-                # !! TODO BUG this entire try/except needs to be redone, breaks multiple versions of os
                 # read oses
                 with open(os.path.join(default_dir, "oses"), 'r') as f:
                     oses = f.read()
@@ -41,8 +40,7 @@ class services(object):
                     with open(os.path.join(default_dir, os_key, "versions"), 'r') as f:
                         versions = f.read()
                     version_dict = json.loads(versions)
-                    # !! TODO BUG this needs to be per os
-                    services_dict['versions'] = version_dict
+                    services_dict['oses'][os_key]['versions'] = version_dict
                     for version_key in version_dict:
                         # read databases for each version
                         with open(os.path.join(default_dir, os_key, version_key, "databases/databases"), 'r') as f:
@@ -50,9 +48,10 @@ class services(object):
                         databases = json.loads(databases)
                         if args.quiet:
                             for database in databases:
+                                # !! TODO fix duplicates
                                 services_dict['databases'].append(database)
                         elif args.json:
-                            services_dict['databases'].append(databases)
+                            services_dict['oses'][os_key]['versions'][version_key]['databases'] = databases
                         else:
                             for database in databases:
                                 services_dict['databases'].append(databases[database]['command'])
@@ -63,9 +62,10 @@ class services(object):
                         environment = json.loads(environment)
                         if args.quiet:
                             for env in environment:
+                                # !! TODO fix duplicates
                                 services_dict['environment'].append(env)
                         elif args.json:
-                            services_dict['environment'].append(environment)
+                            services_dict['oses'][os_key]['versions'][version_key]['environment'] = environment
                         else:
                             for env in environment:
                                 services_dict['environment'].append(environment[env]['command'])
@@ -76,9 +76,10 @@ class services(object):
                         services = json.loads(services)
                         if args.quiet:
                             for service in services:
+                                # !! TODO fix duplicates
                                 services_dict['services'].append(service)
                         elif args.json:
-                            services_dict['services'].append(services)
+                            services_dict['oses'][os_key]['versions'][version_key]['services'] = services
                         else:
                             for service in services:
                                 services_dict['services'].append(services[service]['command'])
@@ -89,9 +90,10 @@ class services(object):
                         tools = json.loads(tools)
                         if args.quiet:
                             for tool in tools:
+                                # !! TODO fix duplicates
                                 services_dict['tools'].append(tool)
                         elif args.json:
-                            services_dict['tools'].append(tools)
+                            services_dict['oses'][os_key]['versions'][version_key]['tools'] = tools
                         else:
                             for tool in tools:
                                 services_dict['tools'].append(tools[tool]['command'])
