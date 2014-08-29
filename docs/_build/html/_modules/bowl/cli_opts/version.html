@@ -62,7 +62,8 @@
 <span class="sd">    &quot;&quot;&quot;</span>
     <span class="nd">@classmethod</span>
 <div class="viewcode-block" id="version.main"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.version.version.main">[docs]</a>    <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
-        <span class="k">print</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="s">&quot;bowl&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+            <span class="k">print</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="s">&quot;bowl&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span>
         <span class="k">return</span> <span class="n">pkg_resources</span><span class="o">.</span><span class="n">get_distribution</span><span class="p">(</span><span class="s">&quot;bowl&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">version</span></div></div>
 </pre></div>
 
@@ -103,7 +104,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

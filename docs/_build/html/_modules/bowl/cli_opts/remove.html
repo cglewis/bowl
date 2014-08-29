@@ -77,8 +77,11 @@
                         <span class="n">c</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s">&#39;tcp://&#39;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;:2375&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.9&#39;</span><span class="p">,</span>
                                           <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
                         <span class="n">c</span><span class="o">.</span><span class="n">remove_container</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span><span class="p">)</span>
-                        <span class="k">print</span> <span class="s">&quot;removed &quot;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;container_id&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&quot; on &quot;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="s">&quot;removed &quot;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;container_id&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&quot; on &quot;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;unable to remove &quot;</span><span class="p">,</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">return</span> <span class="bp">True</span></div></div>
 </pre></div>
@@ -120,7 +123,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

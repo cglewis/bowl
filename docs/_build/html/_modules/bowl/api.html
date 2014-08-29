@@ -80,6 +80,7 @@
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">services</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshot</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshots</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">test</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">unlink</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">version</span>
 
@@ -117,7 +118,7 @@
             <span class="s">&#39;/list&#39;</span><span class="p">,</span> <span class="s">&#39;api_list&#39;</span><span class="p">,</span>
             <span class="s">&#39;/login&#39;</span><span class="p">,</span> <span class="s">&#39;api_login&#39;</span><span class="p">,</span>
             <span class="s">&#39;/logout&#39;</span><span class="p">,</span> <span class="s">&#39;api_logout&#39;</span><span class="p">,</span>
-            <span class="s">&#39;/logs&#39;</span><span class="p">,</span> <span class="s">&#39;api_logs&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/logs/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_logs&#39;</span><span class="p">,</span>
             <span class="s">&#39;/new&#39;</span><span class="p">,</span> <span class="s">&#39;api_new&#39;</span><span class="p">,</span>
             <span class="s">&#39;/remove&#39;</span><span class="p">,</span> <span class="s">&#39;api_remove&#39;</span><span class="p">,</span>
             <span class="s">&#39;/repositories&#39;</span><span class="p">,</span> <span class="s">&#39;api_repositories&#39;</span><span class="p">,</span>
@@ -125,6 +126,7 @@
             <span class="s">&#39;/services&#39;</span><span class="p">,</span> <span class="s">&#39;api_services&#39;</span><span class="p">,</span>
             <span class="s">&#39;/snapshot/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_snapshot&#39;</span><span class="p">,</span>
             <span class="s">&#39;/snapshots&#39;</span><span class="p">,</span> <span class="s">&#39;api_snapshots&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/test&#39;</span><span class="p">,</span> <span class="s">&#39;api_test&#39;</span><span class="p">,</span>
             <span class="s">&#39;/unlink/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_unlink&#39;</span><span class="p">,</span>
             <span class="s">&#39;/uptime&#39;</span><span class="p">,</span> <span class="s">&#39;api_uptime&#39;</span><span class="p">,</span>
             <span class="s">&#39;/version&#39;</span><span class="p">,</span> <span class="s">&#39;api_version&#39;</span><span class="p">,</span>
@@ -141,6 +143,7 @@
 
 <span class="sd">        :return: returns the information</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
         <span class="k">return</span> <span class="s">&quot;&quot;</span>
 </div></div>
 <div class="viewcode-block" id="api_add"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_add">[docs]</a><span class="k">class</span> <span class="nc">api_add</span><span class="p">:</span>
@@ -151,6 +154,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        POSTs the new service being added.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
         <span class="k">return</span> <span class="s">&quot;&quot;</span>
 </div></div>
 <div class="viewcode-block" id="api_connect"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_connect">[docs]</a><span class="k">class</span> <span class="nc">api_connect</span><span class="p">:</span>
@@ -229,6 +233,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        POSTs the image being imported.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
         <span class="k">return</span> <span class="s">&quot;&quot;</span>
 </div></div>
 <div class="viewcode-block" id="api_images"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_images">[docs]</a><span class="k">class</span> <span class="nc">api_images</span><span class="p">:</span>
@@ -278,6 +283,7 @@
         <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
             <span class="k">pass</span>
         <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
         <span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span> <span class="o">=</span> <span class="n">container</span>
         <span class="c"># !! TODO figure out a way to make this an option</span>
         <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
@@ -326,6 +332,7 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        POSTs the user to login.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
         <span class="k">return</span> <span class="s">&quot;&quot;</span>
 </div></div>
 <div class="viewcode-block" id="api_logout"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logout">[docs]</a><span class="k">class</span> <span class="nc">api_logout</span><span class="p">:</span>
@@ -336,19 +343,27 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        POSTs the user to logout.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
         <span class="k">return</span> <span class="s">&quot;&quot;</span>
 </div></div>
 <div class="viewcode-block" id="api_logs"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logs">[docs]</a><span class="k">class</span> <span class="nc">api_logs</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class is resposible for returning logs of a server.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
-<div class="viewcode-block" id="api_logs.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logs.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="api_logs.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_logs.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        GETs the logs of a server.</span>
 
 <span class="sd">        :return: returns the logs of a server.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
-        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span> <span class="o">=</span> <span class="n">container</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="k">return</span> <span class="n">logs</span><span class="o">.</span><span class="n">logs</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </div></div>
 <div class="viewcode-block" id="api_new"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_new">[docs]</a><span class="k">class</span> <span class="nc">api_new</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -439,6 +454,13 @@
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        POSTs the removal of a container.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">class</span> <span class="nc">Object</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+            <span class="k">pass</span>
+        <span class="n">args</span> <span class="o">=</span> <span class="n">Object</span><span class="p">()</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">z</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="c"># !! TODO figure out a way to make this an option</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
+        <span class="c"># !! TODO</span>
         <span class="k">return</span> <span class="s">&quot;&quot;</span>
 </div></div>
 <div class="viewcode-block" id="api_repositories"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_repositories">[docs]</a><span class="k">class</span> <span class="nc">api_repositories</span><span class="p">:</span>
@@ -529,6 +551,17 @@
         <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
         <span class="k">return</span> <span class="n">snapshots</span><span class="o">.</span><span class="n">snapshots</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
 </div></div>
+<div class="viewcode-block" id="api_test"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_test">[docs]</a><span class="k">class</span> <span class="nc">api_test</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for running the tests.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_test.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_test.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        runs the tests.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
+        <span class="k">return</span> <span class="s">&quot;&quot;</span>
+</div></div>
 <div class="viewcode-block" id="api_unlink"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_unlink">[docs]</a><span class="k">class</span> <span class="nc">api_unlink</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    This class is resposible for unlinking a service repository host.</span>
@@ -613,7 +646,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

@@ -53,7 +53,9 @@
 <span class="sd">Created on 15 March 2014</span>
 <span class="sd">@author: Charlie Lewis</span>
 <span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">ast</span>
 <span class="kn">import</span> <span class="nn">docker</span>
+<span class="kn">import</span> <span class="nn">os</span>
 
 <div class="viewcode-block" id="kill"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.kill.kill">[docs]</a><span class="k">class</span> <span class="nc">kill</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -65,11 +67,22 @@
         <span class="c">#         also deal with the possibility of more than one</span>
         <span class="c">#         container having the same name on different hosts</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="n">c</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s">&#39;tcp://localhost:2375&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.9&#39;</span><span class="p">,</span>
-                              <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-            <span class="n">c</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span><span class="p">)</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span>
+            <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+            <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s">&quot;containers&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">container</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">))</span>
+                    <span class="k">if</span> <span class="n">container</span><span class="p">[</span><span class="s">&#39;container_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span><span class="p">:</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s">&#39;tcp://&#39;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;:2375&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.9&#39;</span><span class="p">,</span>
+                                          <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+                        <span class="n">c</span><span class="o">.</span><span class="n">kill</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span><span class="p">)</span>
+                        <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="s">&quot;killed &quot;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;container_id&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&quot; on &quot;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot;unable to kill &quot;</span><span class="p">,</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span></div></div>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;unable to kill &quot;</span><span class="p">,</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span>
+            <span class="k">return</span> <span class="bp">False</span>
+        <span class="k">return</span> <span class="bp">True</span></div></div>
 </pre></div>
 
           </div>
@@ -109,7 +122,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

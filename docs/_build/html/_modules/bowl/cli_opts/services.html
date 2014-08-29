@@ -66,6 +66,7 @@
         <span class="n">services_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">services_dir</span><span class="p">)</span>
         <span class="n">default_dir</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">abspath</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">dirname</span><span class="p">(</span><span class="n">__file__</span><span class="p">),</span> <span class="s">&quot;..&quot;</span><span class="p">,</span> <span class="s">&quot;containers/.default&quot;</span><span class="p">))</span>
         <span class="n">services_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="c"># !! TODO still used for non-json, needs cleanup</span>
         <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
         <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">[]</span>
@@ -88,7 +89,7 @@
                     <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="s">&quot;versions&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                         <span class="n">versions</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
                     <span class="n">version_dict</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">versions</span><span class="p">)</span>
-                    <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;versions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">version_dict</span>
+                    <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;oses&#39;</span><span class="p">][</span><span class="n">os_key</span><span class="p">][</span><span class="s">&#39;versions&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">version_dict</span>
                     <span class="k">for</span> <span class="n">version_key</span> <span class="ow">in</span> <span class="n">version_dict</span><span class="p">:</span>
                         <span class="c"># read databases for each version</span>
                         <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">default_dir</span><span class="p">,</span> <span class="n">os_key</span><span class="p">,</span> <span class="n">version_key</span><span class="p">,</span> <span class="s">&quot;databases/databases&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
@@ -96,9 +97,10 @@
                         <span class="n">databases</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">databases</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">database</span> <span class="ow">in</span> <span class="n">databases</span><span class="p">:</span>
+                                <span class="c"># !! TODO fix duplicates</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">database</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
-                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">databases</span><span class="p">)</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;oses&#39;</span><span class="p">][</span><span class="n">os_key</span><span class="p">][</span><span class="s">&#39;versions&#39;</span><span class="p">][</span><span class="n">version_key</span><span class="p">][</span><span class="s">&#39;databases&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">databases</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">database</span> <span class="ow">in</span> <span class="n">databases</span><span class="p">:</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;databases&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">databases</span><span class="p">[</span><span class="n">database</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
@@ -109,9 +111,10 @@
                         <span class="n">environment</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">environment</span><span class="p">:</span>
+                                <span class="c"># !! TODO fix duplicates</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">env</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
-                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">environment</span><span class="p">)</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;oses&#39;</span><span class="p">][</span><span class="n">os_key</span><span class="p">][</span><span class="s">&#39;versions&#39;</span><span class="p">][</span><span class="n">version_key</span><span class="p">][</span><span class="s">&#39;environment&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">environment</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">env</span> <span class="ow">in</span> <span class="n">environment</span><span class="p">:</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;environment&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">environment</span><span class="p">[</span><span class="n">env</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
@@ -122,9 +125,10 @@
                         <span class="n">services</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services</span><span class="p">:</span>
+                                <span class="c"># !! TODO fix duplicates</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">service</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
-                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">services</span><span class="p">)</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;oses&#39;</span><span class="p">][</span><span class="n">os_key</span><span class="p">][</span><span class="s">&#39;versions&#39;</span><span class="p">][</span><span class="n">version_key</span><span class="p">][</span><span class="s">&#39;services&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">services</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">service</span> <span class="ow">in</span> <span class="n">services</span><span class="p">:</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;services&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">services</span><span class="p">[</span><span class="n">service</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
@@ -135,9 +139,10 @@
                         <span class="n">tools</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">tools</span><span class="p">)</span>
                         <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">quiet</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
+                                <span class="c"># !! TODO fix duplicates</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tool</span><span class="p">)</span>
                         <span class="k">elif</span> <span class="n">args</span><span class="o">.</span><span class="n">json</span><span class="p">:</span>
-                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tools</span><span class="p">)</span>
+                            <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;oses&#39;</span><span class="p">][</span><span class="n">os_key</span><span class="p">][</span><span class="s">&#39;versions&#39;</span><span class="p">][</span><span class="n">version_key</span><span class="p">][</span><span class="s">&#39;tools&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">tools</span>
                         <span class="k">else</span><span class="p">:</span>
                             <span class="k">for</span> <span class="n">tool</span> <span class="ow">in</span> <span class="n">tools</span><span class="p">:</span>
                                 <span class="n">services_dict</span><span class="p">[</span><span class="s">&#39;tools&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">tools</span><span class="p">[</span><span class="n">tool</span><span class="p">][</span><span class="s">&#39;command&#39;</span><span class="p">])</span>
@@ -203,7 +208,7 @@
     </div>
     <div class="footer">
         &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

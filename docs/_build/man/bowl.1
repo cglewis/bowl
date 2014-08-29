@@ -1,6 +1,6 @@
 .\" Man page generated from reStructuredText.
 .
-.TH "BOWL" "1" "August 09, 2014" "0.2.0" "bowl"
+.TH "BOWL" "1" "August 28, 2014" "0.2.0" "bowl"
 .SH NAME
 bowl \- Bowl Documentation
 .
@@ -168,6 +168,11 @@ Created on 14 March 2014
 @author: Charlie Lewis
 .INDENT 0.0
 .TP
+.B class bowl.cli_opts.info.Object
+Bases: \fBobject\fP
+.UNINDENT
+.INDENT 0.0
+.TP
 .B class bowl.cli_opts.info.info
 Bases: \fBobject\fP
 .sp
@@ -273,6 +278,11 @@ This module is the logs command of bowl.
 .sp
 Created on 14 March 2014
 @author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.logs.Object
+Bases: \fBobject\fP
+.UNINDENT
 .INDENT 0.0
 .TP
 .B class bowl.cli_opts.logs.logs
@@ -471,6 +481,23 @@ This class is responsible for the stop command of the cli.
 .B classmethod check_pid(pid)
 Check for the existence of a unix pid.
 .UNINDENT
+.INDENT 7.0
+.TP
+.B classmethod main(args)
+.UNINDENT
+.UNINDENT
+.SS bowl.cli_opts.test module
+.sp
+This module is the test command of bowl.
+.sp
+Created on 11 August 2014
+@author: Charlie Lewis
+.INDENT 0.0
+.TP
+.B class bowl.cli_opts.test.test
+Bases: \fBobject\fP
+.sp
+This class is responsible for the test command of the cli.
 .INDENT 7.0
 .TP
 .B classmethod main(args)
@@ -691,7 +718,7 @@ POSTs the user to logout.
 This class is resposible for returning logs of a server.
 .INDENT 7.0
 .TP
-.B GET()
+.B GET(container)
 GETs the logs of a server.
 .INDENT 7.0
 .TP
@@ -778,6 +805,16 @@ This class is resposible for listing snapshots.
 .TP
 .B GET()
 GETs the list of snapshots.
+.UNINDENT
+.UNINDENT
+.INDENT 0.0
+.TP
+.B class bowl.api.api_test
+This class is resposible for running the tests.
+.INDENT 7.0
+.TP
+.B GET()
+runs the tests.
 .UNINDENT
 .UNINDENT
 .INDENT 0.0

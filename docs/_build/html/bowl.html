@@ -82,6 +82,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.snapshots">bowl.cli_opts.snapshots module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.start">bowl.cli_opts.start module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.stop">bowl.cli_opts.stop module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.test">bowl.cli_opts.test module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.unlink">bowl.cli_opts.unlink module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.update">bowl.cli_opts.update module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.version">bowl.cli_opts.version module</a></li>
@@ -293,7 +294,7 @@
 <dd><p>This class is resposible for returning logs of a server.</p>
 <dl class="method">
 <dt id="bowl.api.api_logs.GET">
-<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_logs.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_logs.GET" title="Permalink to this definition">¶</a></dt>
+<tt class="descname">GET</tt><big>(</big><em>container</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_logs.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_logs.GET" title="Permalink to this definition">¶</a></dt>
 <dd><p>GETs the logs of a server.</p>
 <table class="docutils field-list" frame="void" rules="none">
 <col class="field-name" />
@@ -401,6 +402,18 @@ file.</p>
 <dt id="bowl.api.api_snapshots.GET">
 <tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_snapshots.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_snapshots.GET" title="Permalink to this definition">¶</a></dt>
 <dd><p>GETs the list of snapshots.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_test">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_test</tt><a class="reference internal" href="_modules/bowl/api.html#api_test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_test" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for running the tests.</p>
+<dl class="method">
+<dt id="bowl.api.api_test.GET">
+<tt class="descname">GET</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_test.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_test.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>runs the tests.</p>
 </dd></dl>
 
 </dd></dl>
@@ -584,7 +597,7 @@ file.</p>
     </div>
     <div class="footer">
         &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
-      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.1.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
     </div>
   </body>
 </html>

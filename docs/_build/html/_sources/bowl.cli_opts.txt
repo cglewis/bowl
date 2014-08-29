@@ -180,6 +180,14 @@ bowl.cli_opts.stop module
     :undoc-members:
     :show-inheritance:
 
+bowl.cli_opts.test module
+-------------------------
+
+.. automodule:: bowl.cli_opts.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 bowl.cli_opts.unlink module
 ---------------------------
 
