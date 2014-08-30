@@ -147,8 +147,10 @@ class new(object):
         args.z = True
         args.metadata_path = main_arg.metadata_path
         all_dict = services.services.main(args)
+        os_num = 0
         try:
             for os_key in all_dict['oses']:
+                version_num = 0
                 menu_dict['options'][0]['options'].append(all_dict['oses'][os_key])
                 for version_key in all_dict['oses'][os_key]['versions']:
                     menu_dict['options'][0]['options'][os_num]['options'].append(all_dict['oses'][os_key]['versions'][version_key])
@@ -239,6 +241,8 @@ class new(object):
                     menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(host_dict)
                     menu_dict['options'][0]['options'][os_num]['options'][version_num]['options'].append(launch_dict)
 
+                    version_num += 1
+                os_num += 1
             menu_dict['options'][1]['options'].append(launch_image_dict)
         except:
             print "failure"
