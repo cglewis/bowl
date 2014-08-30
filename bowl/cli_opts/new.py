@@ -34,6 +34,9 @@ class new(object):
 
         image_tag = 'bowl-'+uuid_dir
 
+        if len(self.hosts) == 0:
+            print "WARNING: No hosts were selected to run these services."
+
         for index, host in enumerate(self.hosts):
             # !! TODO try/except - verify that hosts specified can be reached
             c = docker.Client(base_url='tcp://'+host['title']+':2375',
