@@ -36,6 +36,7 @@ from bowl.cli_opts import unlink
 from bowl.cli_opts import version
 
 START_TIME = datetime.datetime.now()
+URLS = ()
 
 class main(object):
     """
@@ -54,6 +55,7 @@ class main(object):
         web.httpserver.runsimple(app.wsgifunc(), (host, port))
 
     def setup(self):
+        global URLS
         urls = (
             '/', 'root',
             '/add', 'api_add',
@@ -82,6 +84,7 @@ class main(object):
             '/uptime', 'api_uptime',
             '/version', 'api_version',
         )
+        URLS = urls
         return urls
 
 class root:
@@ -94,8 +97,19 @@ class root:
 
         :return: returns the information
         """
-        # !! TODO
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        string = version.version.main(args)
+        string += "\n\n"
+        global URLS
+        i = 0
+        for url in URLS:
+            if i % 2 == 0:
+                string += url+"\n"
+            i += 1
+        return string
 
 class api_add:
     """
@@ -554,7 +568,11 @@ class api_version:
 
         :return: returns the version of bowl.
         """
-        return version.version.main([])
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return version.version.main(args)
 
 if __name__ == "__main__": # pragma: no cover
     main().app.run()
