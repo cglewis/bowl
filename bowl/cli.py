@@ -166,6 +166,9 @@ class cli(object):
                                            help='link to a service repository host')
         parse_link.add_argument('SERVICE_HOST',
                                 help='specify service repository host to connect to')
+        parse_link.add_argument('--port', '-p',
+                                default='8080',
+                                help='specify port that service host is running on, default=8080')
         parse_link.add_argument('--metadata_path', '-m',
                                 default=default_metadata_path,
                                 help='metadata path, default '+default_metadata_path)
@@ -273,6 +276,9 @@ class cli(object):
         # repositories
         parse_repositories = subparsers.add_parser('repositories',
                                                    help='list repositories that are registered')
+        parse_repositories.add_argument('--metadata_path', '-m',
+                                        default=default_metadata_path,
+                                        help='metadata path, default '+default_metadata_path)
         parse_repositories.add_argument('-z',
                                     action='store_true',
                                     help='do not print any output')
@@ -321,7 +327,7 @@ class cli(object):
 
         # start
         parse_start = subparsers.add_parser('start',
-                                            help='start the api server')
+                                            help='start the api/repository service server')
         parse_start.add_argument('--metadata_path', '-m',
                                  default=default_metadata_path,
                                  help='metadata path, default '+default_metadata_path)
@@ -332,7 +338,7 @@ class cli(object):
 
         # stop
         parse_stop = subparsers.add_parser('stop',
-                                           help='stop the api server')
+                                           help='stop the api/repository service server')
         parse_stop.add_argument('--metadata_path', '-m',
                                 default=default_metadata_path,
                                 help='metadata path, default '+default_metadata_path)
@@ -374,7 +380,7 @@ class cli(object):
         parse_update.add_argument('-r' '--repository',
                                   help='specify service repository host to get updates from')
         parse_update.add_argument('-z',
-                                  action='store_false',
+                                  action='store_true',
                                   help='do not print any output')
         parse_update.set_defaults(func=update.update.main)
 
@@ -382,7 +388,7 @@ class cli(object):
         parse_version = subparsers.add_parser('version',
                                               help='show version')
         parse_version.add_argument('-z',
-                                   action='store_false',
+                                   action='store_true',
                                    help='do not print any output')
         parse_version.set_defaults(func=version.version.main)
 

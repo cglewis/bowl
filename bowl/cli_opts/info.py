@@ -40,14 +40,14 @@ class info(object):
                 with open(os.path.join(directory, "images"), 'r') as f:
                     for line in f:
                         images += 1
-            if os.path.exists(os.path.join(directory, "images")):
-                with open(os.path.join(directory, "images"), 'r') as f:
+            if os.path.exists(os.path.join(directory, "repositories")):
+                with open(os.path.join(directory, "repositories"), 'r') as f:
                     for line in f:
-                        images += 1
-            if os.path.exists(os.path.join(directory, "images")):
-                with open(os.path.join(directory, "images"), 'r') as f:
+                        repositories += 1
+            if os.path.exists(os.path.join(directory, "snapshots")):
+                with open(os.path.join(directory, "snapshots"), 'r') as f:
                     for line in f:
-                        images += 1
+                        snapshots += 1
             print "containers: ",containers
             print "hosts: ",hosts
             print "images: ",images
