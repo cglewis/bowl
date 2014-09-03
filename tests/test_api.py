@@ -149,6 +149,11 @@ class TestClass:
         a.GET()
         assert 1
 
+    def test_subtract(self):
+        a = api.api_subtract()
+        a.GET()
+        assert 1
+
     def test_test(self):
         # !! TODO make sure this isn't recursive
         a = api.api_test()

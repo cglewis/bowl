@@ -28,6 +28,7 @@ from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
 from bowl.cli_opts import start
 from bowl.cli_opts import stop
+from bowl.cli_opts import subtract
 from bowl.cli_opts import test
 from bowl.cli_opts import unlink
 from bowl.cli_opts import update
@@ -53,7 +54,7 @@ class cli(object):
         parse_add.add_argument('VERSION',
                                 help='specify version of operating system')
         parse_add.add_argument('TYPE',
-                                help='specify type of service (database, environment, service)')
+                                help='specify type of service (database, environment, service, tool)')
         parse_add.add_argument('NAME',
                                 help='specify name of service')
         parse_add.add_argument('JSON',
@@ -346,6 +347,25 @@ class cli(object):
                                 action='store_true',
                                 help='do not print any output')
         parse_stop.set_defaults(func=stop.stop.main)
+
+        # subtract
+        parse_subtract = subparsers.add_parser('subtract',
+                                           help='subtract a service')
+        parse_subtract.add_argument('OS',
+                                help='specify operating system for service')
+        parse_subtract.add_argument('VERSION',
+                                help='specify version of operating system')
+        parse_subtract.add_argument('TYPE',
+                                help='specify type of service (database, environment, service, tool)')
+        parse_subtract.add_argument('NAME',
+                                help='specify name of service')
+        parse_subtract.add_argument('--metadata_path', '-m',
+                               default=default_metadata_path,
+                               help='metadata path, default '+default_metadata_path)
+        # !! TODO use default, and restructure if/else in subtract
+        parse_subtract.add_argument('--repository', '-r',
+                                help='specify repository to subtract service from, use localhost by default')
+        parse_subtract.set_defaults(func=subtract.subtract.main)
 
         # test
         parse_test = subparsers.add_parser('test',
