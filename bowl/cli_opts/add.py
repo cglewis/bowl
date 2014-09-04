@@ -5,7 +5,9 @@ Created on 26 May 2014
 @author: Charlie Lewis
 """
 import ast
+import fileinput
 import os
+import sys
 
 from bowl.cli_opts import link
 
@@ -38,25 +40,159 @@ class add(object):
                 directory_version = os.path.join(directory_os, args.VERSION)
                 if not os.path.exists(directory_version):
                     os.makedirs(directory_version)
-                directory_type = os.path.join(directory_version, args.TYPE)
-                if not os.path.exists(directory_type):
-                    os.makedirs(directory_type)
-                directory_docker = os.path.join(directory_type, "dockerfiles")
+                directory_databases = os.path.join(directory_version, "databases")
+                if not os.path.exists(directory_databases):
+                    os.makedirs(directory_databases)
+                directory_docker = os.path.join(directory_databases, "dockerfiles")
+                if not os.path.exists(directory_docker):
+                    os.makedirs(directory_docker)
+                directory_environment = os.path.join(directory_version, "environment")
+                if not os.path.exists(directory_environment):
+                    os.makedirs(directory_environment)
+                directory_docker = os.path.join(directory_environment, "dockerfiles")
+                if not os.path.exists(directory_docker):
+                    os.makedirs(directory_docker)
+                directory_services = os.path.join(directory_version, "services")
+                if not os.path.exists(directory_services):
+                    os.makedirs(directory_services)
+                directory_docker = os.path.join(directory_services, "dockerfiles")
+                if not os.path.exists(directory_docker):
+                    os.makedirs(directory_docker)
+                directory_tools = os.path.join(directory_version, "tools")
+                if not os.path.exists(directory_tools):
+                    os.makedirs(directory_tools)
+                directory_docker = os.path.join(directory_tools, "dockerfiles")
                 if not os.path.exists(directory_docker):
                     os.makedirs(directory_docker)
                 directory_name = os.path.join(directory_docker, args.NAME)
                 if not os.path.exists(directory_name):
                     os.makedirs(directory_name)
 
-                # !! TODO !!!!!
                 try:
-                    with open(os.path.join(directory, "services"), 'a') as f:
-                        f.write("{" +
-                                "'title': 'localhost'," +
-                                " 'type': 'choice_menu'" +
-                                "}\n")
+                    if os.path.exists(os.path.join(directory, "oses")):
+                        os_name = "\""+args.OS+"\":"
+                        if not os_name in open(os.path.join(directory, "oses")).read():
+                            num_lines = sum(1 for line in open(os.path.join(directory, "oses")))
+                            for line_number, line in enumerate(fileinput.input(os.path.join(directory, "oses"), inplace=1)):
+                                try:
+                                    if line_number == num_lines-2:
+                                        sys.stdout.write(line.rstrip('\n')+",\n")
+                                    elif line_number == num_lines-1:
+                                        sys.stdout.write("\n")
+                                    else:
+                                        sys.stdout.write(line)
+                                except:
+                                    print "Malformed oses file, not enough lines"
+                            with open(os.path.join(directory, "oses"), 'a') as f:
+                                f.write(" \""+args.OS+"\":\n" +
+                                        " {\n" +
+                                        "  \"title\": \""+args.OS.capitalize()+"\",\n" +
+                                        "  \"type\": \"menu\",\n" +
+                                        "  \"subtitle\": \"Please select a version...\",\n" +
+                                        "  \"object\": \"os\",\n" +
+                                        "  \"options\": []\n" +
+                                        " }\n" +
+                                        "}")
+                    else:
+                        with open(os.path.join(directory, "oses"), 'a') as f:
+                            f.write("{\n" +
+                                    " \""+args.OS+"\":\n" +
+                                    " {\n" +
+                                    "  \"title\": \""+args.OS.capitalize()+"\",\n" +
+                                    "  \"type\": \"menu\",\n" +
+                                    "  \"subtitle\": \"Please select a version...\",\n" +
+                                    "  \"object\": \"os\",\n" +
+                                    "  \"options\": []\n" +
+                                    " }\n" +
+                                    "}")
                 except:
-                    print "unable to add service"
+                    print "unable to add operating systems"
+                try:
+                    directory = os.path.join(directory, args.OS)
+                    if os.path.exists(os.path.join(directory, "versions")):
+                        version_name = "\""+args.VERSION+"\":"
+                        if not version_name in open(os.path.join(directory, "versions")).read():
+                            num_lines = sum(1 for line in open(os.path.join(directory, "versions")))
+                            for line_number, line in enumerate(fileinput.input(os.path.join(directory, "versions"), inplace=1)):
+                                try:
+                                    if line_number == num_lines-2:
+                                        sys.stdout.write(line.rstrip('\n')+",\n")
+                                    elif line_number == num_lines-1:
+                                        sys.stdout.write("\n")
+                                    else:
+                                        sys.stdout.write(line)
+                                except:
+                                    print "Malformed version file, not enough lines"
+                            with open(os.path.join(directory, "versions"), 'a') as f:
+                                f.write(" \""+args.VERSION+"\":\n" +
+                                        " {\n" +
+                                        "  \"title\": \""+args.VERSION.capitalize()+"\",\n" +
+                                        "  \"type\": \"menu\",\n" +
+                                        "  \"subtitle\": \"Please select services...\",\n" +
+                                        "  \"object\": \"version\",\n" +
+                                        "  \"options\": []\n" +
+                                        " }\n" +
+                                        "}")
+                    else:
+                        with open(os.path.join(directory, "versions"), 'a') as f:
+                            f.write("{\n" +
+                                    " \""+args.VERSION+"\":\n" +
+                                    " {\n" +
+                                    "  \"title\": \""+args.VERSION.capitalize()+"\",\n" +
+                                    "  \"type\": \"menu\",\n" +
+                                    "  \"subtitle\": \"Please select services...\",\n" +
+                                    "  \"object\": \"version\",\n" +
+                                    "  \"options\": []\n" +
+                                    " }\n" +
+                                    "}")
+                except:
+                    print "unable to add versions"
+                # !! TODO !!!!!
+                if args.TYPE == 'database':
+                    try:
+                        if os.path.exists(os.path.join(directory_databases, "databases")):
+                            db_name = "\""+args.NAME+"\":"
+                            if not db_name in open(os.path.join(directory_databases, "databases")).read():
+                                num_lines = sum(1 for line in open(os.path.join(directory_databases, "databases")))
+                                for line_number, line in enumerate(fileinput.input(os.path.join(directory_databases, "databases"), inplace=1)):
+                                    try:
+                                        if line_number == num_lines-2:
+                                            sys.stdout.write(line.rstrip('\n')+",\n")
+                                        elif line_number == num_lines-1:
+                                            sys.stdout.write("\n")
+                                        else:
+                                            sys.stdout.write(line)
+                                    except:
+                                        print "Malformed databases file, not enough lines"
+                                with open(os.path.join(directory_databases, "databases"), 'a') as f:
+                                    # !! TODO edd in args.JSON
+                                    f.write(" \""+args.NAME+"\":\n" +
+                                            " {\n" +
+                                            "  \"title\": \""+args.NAME+"\",\n" +
+                                            "  \"type\": \"choice_menu\",\n" +
+                                            "  \"object\": \"database\",\n" +
+                                            " }\n" +
+                                            "}")
+                        else:
+                            with open(os.path.join(directory_databases, "databases"), 'a') as f:
+                                # !! TODO edd in args.JSON
+                                f.write("{\n" +
+                                        " \""+args.NAME+"\":\n" +
+                                        " {\n" +
+                                        "  \"title\": \""+args.NAME+"\",\n" +
+                                        "  \"type\": \"choice_menu\",\n" +
+                                        "  \"object\": \"database\",\n" +
+                                        " }\n" +
+                                        "}")
+                    except:
+                        print "unable to add databases"
+                else:
+                    try:
+                        if !os.path.exists(os.path.join(directory_databases, "databases")):
+                            with open(os.path.join(directory_databases, "databases")) as f:
+                                f.write("{\n}")
+                    except:
+                        print "unable to add databases file for that version"
             else:
                 print "unable to link localhost as a repository"
 
