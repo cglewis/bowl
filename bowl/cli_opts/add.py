@@ -6,6 +6,7 @@ Created on 26 May 2014
 """
 import ast
 import fileinput
+import json
 import os
 import sys
 
@@ -193,6 +194,144 @@ class add(object):
                                 f.write("{\n}")
                     except:
                         print "unable to add databases file for that version"
+                # !! TODO !!!!!
+                if args.TYPE == 'environment':
+                    try:
+                        if os.path.exists(os.path.join(directory_environment, "environment")):
+                            env_name = "\""+args.NAME+"\":"
+                            if not env_name in open(os.path.join(directory_environment, "environment")).read():
+                                num_lines = sum(1 for line in open(os.path.join(directory_environemnt, "environemnt")))
+                                for line_number, line in enumerate(fileinput.input(os.path.join(directory_environment, "environment"), inplace=1)):
+                                    try:
+                                        if line_number == num_lines-2:
+                                            sys.stdout.write(line.rstrip('\n')+",\n")
+                                        elif line_number == num_lines-1:
+                                            sys.stdout.write("\n")
+                                        else:
+                                            sys.stdout.write(line)
+                                    except:
+                                        print "Malformed environment file, not enough lines"
+                                with open(os.path.join(directory_environment, "environment"), 'a') as f:
+                                    # !! TODO edd in args.JSON
+                                    f.write(" \""+args.NAME+"\":\n" +
+                                            " {\n" +
+                                            "  \"title\": \""+args.NAME+"\",\n" +
+                                            "  \"type\": \"choice_menu\",\n" +
+                                            "  \"object\": \"environment\",\n" +
+                                            " }\n" +
+                                            "}")
+                        else:
+                            with open(os.path.join(directory_environment, "environment"), 'a') as f:
+                                # !! TODO edd in args.JSON
+                                f.write("{\n" +
+                                        " \""+args.NAME+"\":\n" +
+                                        " {\n" +
+                                        "  \"title\": \""+args.NAME+"\",\n" +
+                                        "  \"type\": \"choice_menu\",\n" +
+                                        "  \"object\": \"environment\",\n" +
+                                        " }\n" +
+                                        "}")
+                    except:
+                        print "unable to add environment"
+                else:
+                    try:
+                        if !os.path.exists(os.path.join(directory_environment, "environment")):
+                            with open(os.path.join(directory_environment, "environment")) as f:
+                                f.write("{\n}")
+                    except:
+                        print "unable to add environment file for that version"
+                # !! TODO !!!!!
+                if args.TYPE == 'services':
+                    try:
+                        if os.path.exists(os.path.join(directory_services, "services")):
+                            service_name = "\""+args.NAME+"\":"
+                            if not service_name in open(os.path.join(directory_services, "services")).read():
+                                num_lines = sum(1 for line in open(os.path.join(directory_services, "services")))
+                                for line_number, line in enumerate(fileinput.input(os.path.join(directory_services, "services"), inplace=1)):
+                                    try:
+                                        if line_number == num_lines-2:
+                                            sys.stdout.write(line.rstrip('\n')+",\n")
+                                        elif line_number == num_lines-1:
+                                            sys.stdout.write("\n")
+                                        else:
+                                            sys.stdout.write(line)
+                                    except:
+                                        print "Malformed services file, not enough lines"
+                                with open(os.path.join(directory_services, "services"), 'a') as f:
+                                    # !! TODO edd in args.JSON
+                                    f.write(" \""+args.NAME+"\":\n" +
+                                            " {\n" +
+                                            "  \"title\": \""+args.NAME+"\",\n" +
+                                            "  \"type\": \"choice_menu\",\n" +
+                                            "  \"object\": \"services\",\n" +
+                                            " }\n" +
+                                            "}")
+                        else:
+                            with open(os.path.join(directory_services, "services"), 'a') as f:
+                                # !! TODO edd in args.JSON
+                                f.write("{\n" +
+                                        " \""+args.NAME+"\":\n" +
+                                        " {\n" +
+                                        "  \"title\": \""+args.NAME+"\",\n" +
+                                        "  \"type\": \"choice_menu\",\n" +
+                                        "  \"object\": \"services\",\n" +
+                                        " }\n" +
+                                        "}")
+                    except:
+                        print "unable to add services"
+                else:
+                    try:
+                        if !os.path.exists(os.path.join(directory_services, "services")):
+                            with open(os.path.join(directory_services, "services")) as f:
+                                f.write("{\n}")
+                    except:
+                        print "unable to add services file for that version"
+                # !! TODO !!!!!
+                if args.TYPE == 'tools':
+                    try:
+                        if os.path.exists(os.path.join(directory_tools, "tools")):
+                            tool_name = "\""+args.NAME+"\":"
+                            if not tool_name in open(os.path.join(directory_tools, "tools")).read():
+                                num_lines = sum(1 for line in open(os.path.join(directory_tools, "tools")))
+                                for line_number, line in enumerate(fileinput.input(os.path.join(directory_tools, "tools"), inplace=1)):
+                                    try:
+                                        if line_number == num_lines-2:
+                                            sys.stdout.write(line.rstrip('\n')+",\n")
+                                        elif line_number == num_lines-1:
+                                            sys.stdout.write("\n")
+                                        else:
+                                            sys.stdout.write(line)
+                                    except:
+                                        print "Malformed tools file, not enough lines"
+                                with open(os.path.join(directory_tools, "tools"), 'a') as f:
+                                    # !! TODO edd in args.JSON
+                                    f.write(" \""+args.NAME+"\":\n" +
+                                            " {\n" +
+                                            "  \"title\": \""+args.NAME+"\",\n" +
+                                            "  \"type\": \"choice_menu\",\n" +
+                                            "  \"object\": \"tools\",\n" +
+                                            " }\n" +
+                                            "}")
+                        else:
+                            with open(os.path.join(directory_tools, "tools"), 'a') as f:
+                                # !! TODO edd in args.JSON
+                                f.write("{\n" +
+                                        " \""+args.NAME+"\":\n" +
+                                        " {\n" +
+                                        "  \"title\": \""+args.NAME+"\",\n" +
+                                        "  \"type\": \"choice_menu\",\n" +
+                                        "  \"object\": \"tools\",\n" +
+                                        " }\n" +
+                                        "}")
+                    except:
+                        print "unable to add tools"
+                else:
+                    try:
+                        if !os.path.exists(os.path.join(directory_tools, "tools")):
+                            with open(os.path.join(directory_tools, "tools")) as f:
+                                f.write("{\n}")
+                    except:
+                        print "unable to add tools file for that version"
             else:
                 print "unable to link localhost as a repository"
 
@@ -213,7 +352,7 @@ class add(object):
         # ask the user if they would like remove .default from their services
 
         # !! TODO
-        # mkdir ~/.bowl/services
+        #DONE# mkdir ~/.bowl/services
         # contains a file that says what all of the service directories are
         #    most likely .default and/or ~/.bowl/services/
         # contains added services, unless specified to be somewhere else
