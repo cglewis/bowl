@@ -11,6 +11,7 @@ Tool for easily building and configuring virtual environments on top of Docker.
 Main features:
 
 - Works with multiple Docker hosts.
+- easily add new derives through a simple metadata JSON object and standard Dockerfile.
 - Snapshotting containers.
 - Spin up the same container on multiple Docker hosts in one go.
 - Configure containers at runtime, either in bulk or individually.
