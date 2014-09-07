@@ -341,6 +341,12 @@ class add(object):
         # check JSON for '' of key/values
         # check JSON for no quoting of key/values
         # check all necessary fields in JSON are there
+        #       cluster
+        #       combine_cmd
+        #       background_cmd
+        #       tty
+        #       interactive
+        #       command - can be inferred
         # check JSON dependencies like background_cmd only if combine_cmd is true, etc.
 
         # !! TODO
