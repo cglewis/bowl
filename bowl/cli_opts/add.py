@@ -149,7 +149,7 @@ class add(object):
                 except:
                     print "unable to add versions"
                 # !! TODO !!!!!
-                if args.TYPE == 'database':
+                if args.TYPE == 'databases':
                     try:
                         if os.path.exists(os.path.join(directory_databases, "databases")):
                             db_name = "\""+args.NAME+"\":"
@@ -171,6 +171,7 @@ class add(object):
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
                                             "  \"type\": \"choice_menu\",\n" +
+                                            "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"database\",\n" +
                                             " }\n" +
                                             "}")
@@ -182,6 +183,7 @@ class add(object):
                                         " {\n" +
                                         "  \"title\": \""+args.NAME+"\",\n" +
                                         "  \"type\": \"choice_menu\",\n" +
+                                        "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"database\",\n" +
                                         " }\n" +
                                         "}")
@@ -189,11 +191,11 @@ class add(object):
                         print "unable to add databases"
                 else:
                     try:
-                        if !os.path.exists(os.path.join(directory_databases, "databases")):
-                            with open(os.path.join(directory_databases, "databases")) as f:
+                        if not os.path.exists(os.path.join(directory_databases, "databases")):
+                            with open(os.path.join(directory_databases, "databases"), 'w') as f:
                                 f.write("{\n}")
                     except:
-                        print "unable to add databases file for that version"
+                        pass
                 # !! TODO !!!!!
                 if args.TYPE == 'environment':
                     try:
@@ -217,6 +219,7 @@ class add(object):
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
                                             "  \"type\": \"choice_menu\",\n" +
+                                            "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"environment\",\n" +
                                             " }\n" +
                                             "}")
@@ -228,6 +231,7 @@ class add(object):
                                         " {\n" +
                                         "  \"title\": \""+args.NAME+"\",\n" +
                                         "  \"type\": \"choice_menu\",\n" +
+                                        "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"environment\",\n" +
                                         " }\n" +
                                         "}")
@@ -235,11 +239,11 @@ class add(object):
                         print "unable to add environment"
                 else:
                     try:
-                        if !os.path.exists(os.path.join(directory_environment, "environment")):
-                            with open(os.path.join(directory_environment, "environment")) as f:
+                        if not os.path.exists(os.path.join(directory_environment, "environment")):
+                            with open(os.path.join(directory_environment, "environment"), 'w') as f:
                                 f.write("{\n}")
                     except:
-                        print "unable to add environment file for that version"
+                        pass
                 # !! TODO !!!!!
                 if args.TYPE == 'services':
                     try:
@@ -263,6 +267,7 @@ class add(object):
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
                                             "  \"type\": \"choice_menu\",\n" +
+                                            "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"services\",\n" +
                                             " }\n" +
                                             "}")
@@ -274,6 +279,7 @@ class add(object):
                                         " {\n" +
                                         "  \"title\": \""+args.NAME+"\",\n" +
                                         "  \"type\": \"choice_menu\",\n" +
+                                        "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"services\",\n" +
                                         " }\n" +
                                         "}")
@@ -281,11 +287,11 @@ class add(object):
                         print "unable to add services"
                 else:
                     try:
-                        if !os.path.exists(os.path.join(directory_services, "services")):
-                            with open(os.path.join(directory_services, "services")) as f:
+                        if not os.path.exists(os.path.join(directory_services, "services")):
+                            with open(os.path.join(directory_services, "services"), 'w') as f:
                                 f.write("{\n}")
                     except:
-                        print "unable to add services file for that version"
+                        pass
                 # !! TODO !!!!!
                 if args.TYPE == 'tools':
                     try:
@@ -309,6 +315,7 @@ class add(object):
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
                                             "  \"type\": \"choice_menu\",\n" +
+                                            "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"tools\",\n" +
                                             " }\n" +
                                             "}")
@@ -320,6 +327,7 @@ class add(object):
                                         " {\n" +
                                         "  \"title\": \""+args.NAME+"\",\n" +
                                         "  \"type\": \"choice_menu\",\n" +
+                                        "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"tools\",\n" +
                                         " }\n" +
                                         "}")
@@ -327,11 +335,11 @@ class add(object):
                         print "unable to add tools"
                 else:
                     try:
-                        if !os.path.exists(os.path.join(directory_tools, "tools")):
-                            with open(os.path.join(directory_tools, "tools")) as f:
+                        if not os.path.exists(os.path.join(directory_tools, "tools")):
+                            with open(os.path.join(directory_tools, "tools"), 'w') as f:
                                 f.write("{\n}")
                     except:
-                        print "unable to add tools file for that version"
+                        pass
             else:
                 print "unable to link localhost as a repository"
 
@@ -346,7 +354,6 @@ class add(object):
         #       background_cmd
         #       tty
         #       interactive
-        #       command - can be inferred
         # check JSON dependencies like background_cmd only if combine_cmd is true, etc.
 
         # !! TODO
