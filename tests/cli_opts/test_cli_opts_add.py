@@ -19,15 +19,19 @@ class TestClass:
     def test_cli_opts_add(self):
         if os.path.exists("test"):
             shutil.rmtree("test")
+        os.makedirs("test")
+        open('test/Dockerfile', 'a').close()
         args = Object()
         args.repository = "test"
-        a = add.add()
-        a.main(args)
-        args.repository = ""
         args.metadata_path = "test"
         args.OS = "OS"
         args.VERSION = "VERSION"
         args.TYPE = "TYPE"
         args.NAME = "NAME"
+        args.JSON = '{"cluster":"yes","combine_cmd":"yes","background_cmd":"bar","tty":"no","interactive":"no"}'
+        args.PATH = "test"
+        a = add.add()
+        a.main(args)
+        args.repository = ""
         a.main(args)
         assert 1

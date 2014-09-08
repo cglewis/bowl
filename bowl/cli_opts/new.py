@@ -48,7 +48,8 @@ class new(object):
             # !! TODO cleanup, but for now ensures that the build finishes prior to container creation
             print list(output)
 
-            # TODO check if tty and stdin_open (interactive) are needed
+            # !! TODO check if tty and stdin_open (interactive) are needed
+            # !! TODO get all args for create_container instead of if/else have args be None
             if len(self.names) != 0:
                 if self.unique:
                     container = c.create_container(image_tag,
@@ -68,7 +69,11 @@ class new(object):
                                                stdin_open=True,
                                                name=image_tag,
                                                hostname=image_tag)
-            c.start(container, publish_all_ports=True)
+            # !! TODO get all args for start instead of if/else have args be None
+            if self.link_names:
+                c.start(container, publish_all_ports=True, links=self.link_names)
+            else:
+                c.start(container, publish_all_ports=True)
 
             try:
                 directory = main_arg.metadata_path
@@ -289,6 +294,7 @@ class new(object):
     def main(self, args):
         # !! TODO this should be in __init__
         # build dictionary of available container options
+        self.link_names = {}
         self.combine_cmd_dict = {}
         self.background_cmd_dict = {}
         menu_dict = self.build_options(self, args)
@@ -525,6 +531,7 @@ class new(object):
                         for container in containers:
                             container_name = ""
                             names = container['Names']
+                            # !! TODO names list changes when linked, fix that
                             for n in names:
                                 container_name += n[1:] + " - "
                             container_id = container['Id']
@@ -532,10 +539,11 @@ class new(object):
                             options_dict['options'].append(
                                  {
                                   'title': '"'+container_name+'"',
-                                  'type': "choice_menu",
+                                  'type': "link_choice_menu",
                                   'options': [
                                    {
-                                    'link':'"'+container_id+'"'
+                                    # !! TODO names list changes when linked, fix that
+                                    'link':container['Names'][0][1:]
                                    }
                                   ]
                                  }
@@ -582,6 +590,7 @@ class new(object):
                         for container in host:
                             container_name = ""
                             names = container['Names']
+                            # !! TODO names list changes when linked, fix that
                             for n in names:
                                 container_name += n[1:] + " - "
                             container_id = container['Id']
@@ -589,10 +598,11 @@ class new(object):
                             options_dict['options'].append(
                                  {
                                   'title': '"'+container_name+'"',
-                                  'type': "choice_menu",
+                                  'type': "link_choice_menu",
                                   'options': [
                                    {
-                                    'link':'"'+container_id+'"'
+                                    # !! TODO names list changes when linked, fix that
+                                    'link':container['Names'][0][1:]
                                    }
                                   ]
                                  }
@@ -815,6 +825,7 @@ class new(object):
                 print line
             print "### END GENERATED DOCKERFILE ###\n"
             self.build_dockerfile(self, dockerfile, uuid_dir, args)
+            print self.link_names
 
     @staticmethod
     def display_menu(self, args, menu, parent, build_dict):
@@ -857,7 +868,7 @@ class new(object):
                 if not args.no_curses:
                     if menu['options'][index]['title'] == "Docker Hosts":
                         self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
-                    elif menu['options'][index]['type'] == "choice_menu":
+                    elif menu['options'][index]['type'] == "choice_menu" or menu['options'][index]['type'] == "link_choice_menu":
                         self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
                     elif menu['options'][index]['type'] == "launch":
                         self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
@@ -867,6 +878,7 @@ class new(object):
             textstyle = normal
             if position == option_size:
                 textstyle = highlighted
+
             if back != "Exit":
                 if "object" in parent and parent['object'] == "os":
                     if len(build_dict['services']) > 0:
@@ -877,8 +889,6 @@ class new(object):
             if not args.no_curses:
                 self.win.addstr(option_size+6, 4, "%d - %s" % (option_size+1, back), textstyle)
                 self.win.refresh()
-
-            if not args.no_curses:
                 key = self.win.getch()
 
             try:
@@ -894,6 +904,13 @@ class new(object):
                         position -= 1
                     else:
                         position = option_size
+                # !! TODO error check this!!
+                elif key == 32 and menu['options'][position]['type'] == "link_choice_menu":
+                    if choice[position] == " ":
+                        choice[position] = "x"
+                        self.link_names[menu['options'][position]['options'][0]['link']] = menu['options'][position]['options'][0]['link']
+                    else:
+                        choice[position] = " "
                 # !! TODO error check this!!
                 elif key == 32 and menu['options'][position]['type'] == "choice_menu":
                     if choice[position] == " ":

@@ -5,6 +5,7 @@ Created on 26 May 2014
 @author: Charlie Lewis
 """
 import ast
+import distutils.core
 import fileinput
 import json
 import os
@@ -21,6 +22,56 @@ class add(object):
     """
     @classmethod
     def main(self, args):
+        if os.path.exists(os.path.join(args.metadata_path,
+                                       args.OS,
+                                       args.VERSION,
+                                       args.TYPE,
+                                       'dockerfiles',
+                                       args.NAME)):
+            print "Service already exists."
+            sys.exit(0)
+        j_args = {}
+        try:
+            j_string = ""
+            # assume it's a path
+            if args.JSON[0] != '{':
+                try:
+                    with open(args.JSON, 'r') as f:
+                        for line in f:
+                            j_string += line
+                    j_string = j_string.replace("\n", "")
+                    j_string = j_string.replace("\r", "")
+                    j_string = j_string.replace("\t", "")
+                    j_string = j_string.replace(" ", "")
+                except:
+                    print "Unable to open the JSON file."
+                    sys.exit(0)
+            else:
+                j_string = args.JSON
+
+            try:
+                j_args = json.loads(j_string)
+            except:
+                if j_string[1] == "'":
+                    # "{'foo':'bar'}"
+                    # !! TODO
+                    junk = 1
+                # JSON object has no quotes
+                else:
+                    # '{foo:bar}'
+                    # !! TODO
+                    junk = 1
+        except:
+            print "Malformed JSON object."
+            sys.exit(0)
+
+        # !! TODO
+        # check field in JSON object exist
+
+        if not os.path.exists(os.path.join(args.PATH, 'Dockerfile')):
+            print "Dockerfile not found."
+            sys.exit(0)
+
         if args.repository:
             # !! TODO connect to api of repository
             print args.repository
@@ -173,6 +224,11 @@ class add(object):
                                             "  \"type\": \"choice_menu\",\n" +
                                             "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"database\",\n" +
+                                            "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                            "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                            "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                            "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                            "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                             " }\n" +
                                             "}")
                         else:
@@ -185,6 +241,11 @@ class add(object):
                                         "  \"type\": \"choice_menu\",\n" +
                                         "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"database\",\n" +
+                                        "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                        "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                        "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                        "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                        "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                         " }\n" +
                                         "}")
                     except:
@@ -221,6 +282,11 @@ class add(object):
                                             "  \"type\": \"choice_menu\",\n" +
                                             "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"environment\",\n" +
+                                            "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                            "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                            "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                            "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                            "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                             " }\n" +
                                             "}")
                         else:
@@ -233,6 +299,11 @@ class add(object):
                                         "  \"type\": \"choice_menu\",\n" +
                                         "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"environment\",\n" +
+                                        "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                        "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                        "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                        "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                        "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                         " }\n" +
                                         "}")
                     except:
@@ -269,6 +340,11 @@ class add(object):
                                             "  \"type\": \"choice_menu\",\n" +
                                             "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"services\",\n" +
+                                            "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                            "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                            "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                            "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                            "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                             " }\n" +
                                             "}")
                         else:
@@ -281,6 +357,11 @@ class add(object):
                                         "  \"type\": \"choice_menu\",\n" +
                                         "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"services\",\n" +
+                                        "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                        "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                        "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                        "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                        "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                         " }\n" +
                                         "}")
                     except:
@@ -317,6 +398,11 @@ class add(object):
                                             "  \"type\": \"choice_menu\",\n" +
                                             "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                             "  \"object\": \"tools\",\n" +
+                                            "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                            "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                            "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                            "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                            "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                             " }\n" +
                                             "}")
                         else:
@@ -329,6 +415,11 @@ class add(object):
                                         "  \"type\": \"choice_menu\",\n" +
                                         "  \"command\": \""+args.OS+":"+args.VERSION+":"+args.TYPE+":"+args.NAME+"\",\n" +
                                         "  \"object\": \"tools\",\n" +
+                                        "  \"cluster\": \""+j_args['cluster']+"\",\n" +
+                                        "  \"combine_cmd\": \""+j_args['combine_cmd']+"\",\n" +
+                                        "  \"background_cmd\": \""+j_args['background_cmd']+"\",\n" +
+                                        "  \"tty\": \""+j_args['tty']+"\",\n" +
+                                        "  \"interactive\": \""+j_args['interactive']+"\"\n" +
                                         " }\n" +
                                         "}")
                     except:
@@ -340,14 +431,20 @@ class add(object):
                                 f.write("{\n}")
                     except:
                         pass
+
+                try:
+                    distutils.dir_util.copy_tree(args.PATH,
+                                                 os.path.join(directory_version,
+                                                              args.TYPE,
+                                                              'dockerfiles',
+                                                              args.NAME))
+                except:
+                    print "failed to copy Dockerfile directory."
+
             else:
                 print "unable to link localhost as a repository"
 
         # !! TODO
-        # check JSON for path
-        # check JSON for "" of key/values
-        # check JSON for '' of key/values
-        # check JSON for no quoting of key/values
         # check all necessary fields in JSON are there
         #       cluster
         #       combine_cmd
@@ -357,21 +454,15 @@ class add(object):
         # check JSON dependencies like background_cmd only if combine_cmd is true, etc.
 
         # !! TODO
-        # get DOckerfile at path, but also everything in the context of that directory
-
-        # !! TODO
         # add to new container directory (not .default)
         # ask the user if they would like to use .default for default services
         # ask the user if they would like remove .default from their services
 
         # !! TODO
-        #DONE# mkdir ~/.bowl/services
         # contains a file that says what all of the service directories are
         #    most likely .default and/or ~/.bowl/services/
         # contains added services, unless specified to be somewhere else
 
         # !! TODO
         # add service to another repository ...
-
-        # !! TODO
         print args
