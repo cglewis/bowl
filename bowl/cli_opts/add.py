@@ -65,8 +65,39 @@ class add(object):
             print "Malformed JSON object."
             sys.exit(0)
 
-        # !! TODO
-        # check field in JSON object exist
+        if 'cluster' in j_args:
+            if j_args['cluster'] != 'yes' and j_args['cluster'] != 'no':
+                print "'cluster' key must be either 'yes' or 'no'."
+                sys.exit(0)
+        else:
+            print "Missing 'cluster' key in JSON object."
+            sys.exit(0)
+        if 'combine_cmd' in j_args:
+            if j_args['combine_cmd'] != 'yes' and j_args['combine_cmd'] != 'no':
+                print "'combine_cmd' key must be either 'yes' or 'no'."
+                sys.exit(0)
+            if 'background_cmd' in j_args:
+                check = 1
+            else:
+                print "Missing 'background_cmd' key in JSON object."
+                sys.exit(0)
+        else:
+            print "Missing 'combine_cmd' key in JSON object."
+            sys.exit(0)
+        if 'tty' in j_args:
+            if j_args['tty'] != 'yes' and j_args['tty'] != 'no':
+                print "'tty' key must be either 'yes' or 'no'."
+                sys.exit(0)
+        else:
+            print "Missing 'tty' key in JSON object."
+            sys.exit(0)
+        if 'interactive' in j_args:
+            if j_args['interactive'] != 'yes' and j_args['interactive'] != 'no':
+                print "'interactive' key must be either 'yes' or 'no'."
+                sys.exit(0)
+        else:
+            print "Missing 'interactive' key in JSON object."
+            sys.exit(0)
 
         if not os.path.exists(os.path.join(args.PATH, 'Dockerfile')):
             print "Dockerfile not found."
@@ -443,15 +474,6 @@ class add(object):
 
             else:
                 print "unable to link localhost as a repository"
-
-        # !! TODO
-        # check all necessary fields in JSON are there
-        #       cluster
-        #       combine_cmd
-        #       background_cmd
-        #       tty
-        #       interactive
-        # check JSON dependencies like background_cmd only if combine_cmd is true, etc.
 
         # !! TODO
         # add to new container directory (not .default)
