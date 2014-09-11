@@ -44,7 +44,6 @@ class services(object):
                         databases = json.loads(databases)
                         if args.quiet:
                             for database in databases:
-                                # !! TODO fix duplicates
                                 services_dict['databases'].append(database)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['databases'] = databases
@@ -58,7 +57,6 @@ class services(object):
                         environment = json.loads(environment)
                         if args.quiet:
                             for env in environment:
-                                # !! TODO fix duplicates
                                 services_dict['environment'].append(env)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['environment'] = environment
@@ -72,7 +70,6 @@ class services(object):
                         services = json.loads(services)
                         if args.quiet:
                             for service in services:
-                                # !! TODO fix duplicates
                                 services_dict['services'].append(service)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['services'] = services
@@ -86,7 +83,6 @@ class services(object):
                         tools = json.loads(tools)
                         if args.quiet:
                             for tool in tools:
-                                # !! TODO fix duplicates
                                 services_dict['tools'].append(tool)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['tools'] = tools
@@ -116,7 +112,6 @@ class services(object):
                         databases = json.loads(databases)
                         if args.quiet:
                             for database in databases:
-                                # !! TODO fix duplicates
                                 services_dict['databases'].append(database)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['databases'] = databases
@@ -130,7 +125,6 @@ class services(object):
                         environment = json.loads(environment)
                         if args.quiet:
                             for env in environment:
-                                # !! TODO fix duplicates
                                 services_dict['environment'].append(env)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['environment'] = environment
@@ -144,7 +138,6 @@ class services(object):
                         services = json.loads(services)
                         if args.quiet:
                             for service in services:
-                                # !! TODO fix duplicates
                                 services_dict['services'].append(service)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['services'] = services
@@ -158,7 +151,6 @@ class services(object):
                         tools = json.loads(tools)
                         if args.quiet:
                             for tool in tools:
-                                # !! TODO fix duplicates
                                 services_dict['tools'].append(tool)
                         elif args.json:
                             services_dict['oses'][os_key]['versions'][version_key]['tools'] = tools
