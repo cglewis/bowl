@@ -31,7 +31,7 @@ class image_import(object):
                         " 'host': '"+args.DOCKER_HOST+"'," +
                         " 'uuid': '"+args.uuid+"'," +
                         " 'description': '"+args.description+"'," +
-                        " 'type': 'choice_menu'" +
+                        " 'type': 'image_choice_menu'" +
                         "}\n")
         except:
             print "unable to import image"

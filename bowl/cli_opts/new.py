@@ -870,6 +870,8 @@ class new(object):
                         self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
                     elif menu['options'][index]['type'] == "choice_menu" or menu['options'][index]['type'] == "link_choice_menu":
                         self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
+                    elif menu['options'][index]['type'] == "image_choice_menu":
+                        self.win.addstr(index+5, 4, "%d - [%s] %s | %s" % (index+1, choice[index], menu['options'][index]['title'], menu['options'][index]['host']), textstyle)
                     elif menu['options'][index]['type'] == "launch":
                         self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
                     else:
@@ -912,7 +914,7 @@ class new(object):
                     else:
                         choice[position] = " "
                 # !! TODO error check this!!
-                elif key == 32 and menu['options'][position]['type'] == "choice_menu":
+                elif key == 32 and (menu['options'][position]['type'] == "choice_menu" or menu['options'][position]['type'] == "image_choice_menu"):
                     if choice[position] == " ":
                         choice[position] = "x"
                         if "command" in menu['options'][position]:

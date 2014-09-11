@@ -20,7 +20,7 @@ class images(object):
             with open(os.path.join(directory, "images"), 'r') as f:
                 for line in f:
                     image = ast.literal_eval(line.rstrip("\n"))
-                    images.append(image['title'])
+                    images.append(image['title']+" | "+image['host'])
         except:
             pass
         if not args.z:
