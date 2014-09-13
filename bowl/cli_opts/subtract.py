@@ -7,7 +7,6 @@ Created on 1 September 2014
 import fileinput
 import os
 import shutil
-import sys
 
 class subtract(object):
     """
@@ -49,4 +48,3 @@ class subtract(object):
             # if os versions are empty, remove it
         else:
             print "Service doesn't exist."
-            sys.exit(0)
