@@ -4,8 +4,9 @@ This module is the subtract command of bowl.
 Created on 1 September 2014
 @author: Charlie Lewis
 """
-import shutil
+import fileinput
 import os
+import shutil
 import sys
 
 class subtract(object):
@@ -27,14 +28,22 @@ class subtract(object):
                                        args.TYPE,
                                        'dockerfiles',
                                        args.NAME))
-            # !! TODO
             # remove service
-            # check if last item (need to remove comma from previous service if there is one
-            # check if not last item '},' as opposed to '}'
+            found = 0
+            for line in fileinput.input(os.path.join(args.metadata_path, args.OS, args.VERSION, args.TYPE, args.TYPE), inplace=True):
+                if args.NAME in line:
+                    found = 1
+                elif found == 1:
+                    if line == " }\n" or line == " },\n":
+                        found = 0
+                else:
+                    print "%s" (line),
+
+            # !! TODO
             # if result is just '{}' then do following todos, otherwise skip"
 
             # !! TODO
-            # if version services are empty, remove it
+            # if version services are empty, remove it and dockerfiles dir
 
             # !! TODO
             # if os versions are empty, remove it
