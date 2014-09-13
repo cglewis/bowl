@@ -230,7 +230,7 @@ class add(object):
                                     "}")
                 except:
                     print "unable to add versions"
-                # !! TODO !!!!!
+
                 if args.TYPE == 'databases':
                     try:
                         if os.path.exists(os.path.join(directory_databases, "databases")):
@@ -248,7 +248,6 @@ class add(object):
                                     except:
                                         print "Malformed databases file, not enough lines"
                                 with open(os.path.join(directory_databases, "databases"), 'a') as f:
-                                    # !! TODO edd in args.JSON
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
@@ -264,7 +263,6 @@ class add(object):
                                             "}")
                         else:
                             with open(os.path.join(directory_databases, "databases"), 'a') as f:
-                                # !! TODO edd in args.JSON
                                 f.write("{\n" +
                                         " \""+args.NAME+"\":\n" +
                                         " {\n" +
@@ -288,7 +286,7 @@ class add(object):
                                 f.write("{\n}")
                     except:
                         pass
-                # !! TODO !!!!!
+
                 if args.TYPE == 'environment':
                     try:
                         if os.path.exists(os.path.join(directory_environment, "environment")):
@@ -306,7 +304,6 @@ class add(object):
                                     except:
                                         print "Malformed environment file, not enough lines"
                                 with open(os.path.join(directory_environment, "environment"), 'a') as f:
-                                    # !! TODO edd in args.JSON
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
@@ -322,7 +319,6 @@ class add(object):
                                             "}")
                         else:
                             with open(os.path.join(directory_environment, "environment"), 'a') as f:
-                                # !! TODO edd in args.JSON
                                 f.write("{\n" +
                                         " \""+args.NAME+"\":\n" +
                                         " {\n" +
@@ -346,7 +342,7 @@ class add(object):
                                 f.write("{\n}")
                     except:
                         pass
-                # !! TODO !!!!!
+
                 if args.TYPE == 'services':
                     try:
                         if os.path.exists(os.path.join(directory_services, "services")):
@@ -364,7 +360,6 @@ class add(object):
                                     except:
                                         print "Malformed services file, not enough lines"
                                 with open(os.path.join(directory_services, "services"), 'a') as f:
-                                    # !! TODO edd in args.JSON
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
@@ -380,7 +375,6 @@ class add(object):
                                             "}")
                         else:
                             with open(os.path.join(directory_services, "services"), 'a') as f:
-                                # !! TODO edd in args.JSON
                                 f.write("{\n" +
                                         " \""+args.NAME+"\":\n" +
                                         " {\n" +
@@ -404,7 +398,7 @@ class add(object):
                                 f.write("{\n}")
                     except:
                         pass
-                # !! TODO !!!!!
+
                 if args.TYPE == 'tools':
                     try:
                         if os.path.exists(os.path.join(directory_tools, "tools")):
@@ -422,7 +416,6 @@ class add(object):
                                     except:
                                         print "Malformed tools file, not enough lines"
                                 with open(os.path.join(directory_tools, "tools"), 'a') as f:
-                                    # !! TODO edd in args.JSON
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
                                             "  \"title\": \""+args.NAME+"\",\n" +
@@ -438,7 +431,6 @@ class add(object):
                                             "}")
                         else:
                             with open(os.path.join(directory_tools, "tools"), 'a') as f:
-                                # !! TODO edd in args.JSON
                                 f.write("{\n" +
                                         " \""+args.NAME+"\":\n" +
                                         " {\n" +
