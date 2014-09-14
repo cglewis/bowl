@@ -49,7 +49,7 @@ class subtract(object):
                        empty = 0
                     else:
                         sl = f.readline()
-                        if sl != "}\n":
+                        if sl != "}" and sl != "}\n":
                             empty = 0
                 with open(os.path.join(args.metadata_path, 'services', args.OS, args.VERSION, 'environment/environment'), 'r') as f:
                     fl = f.readline()
@@ -57,7 +57,7 @@ class subtract(object):
                         empty = 0
                     else:
                         sl = f.readline()
-                        if sl != "}\n":
+                        if sl != "}" and sl != "}\n":
                             empty = 0
                 with open(os.path.join(args.metadata_path, 'services', args.OS, args.VERSION, 'services/services'), 'r') as f:
                     fl = f.readline()
@@ -65,7 +65,7 @@ class subtract(object):
                         empty = 0
                     else:
                         sl = f.readline()
-                        if sl != "}\n":
+                        if sl != "}" and sl != "}\n":
                             empty = 0
                 with open(os.path.join(args.metadata_path, 'services', args.OS, args.VERSION, 'tools/tools'), 'r') as f:
                     fl = f.readline()
@@ -73,7 +73,7 @@ class subtract(object):
                         empty = 0
                     else:
                         sl = f.readline()
-                        if sl != "}\n":
+                        if sl != "}" and sl != "}\n":
                             empty = 0
 
                 if empty == 1:
@@ -98,7 +98,7 @@ class subtract(object):
                             empty = 0
                         else:
                             sl = f.readline()
-                            if sl != "}\n":
+                            if sl != "}" and sl != "}\n":
                                 empty = 0
 
                     if empty == 1:
@@ -123,7 +123,7 @@ class subtract(object):
                                 empty = 0
                             else:
                                 sl = f.readline()
-                                if sl != "}\n":
+                                if sl != "}" and sl != "}\n":
                                     empty = 0
                         if empty == 1:
                             # if oses are empty, remove services

@@ -151,7 +151,7 @@ class TestClass:
 
     def test_subtract(self):
         a = api.api_subtract()
-        a.GET()
+        a.GET("os", "version", "type", "name")
         assert 1
 
     def test_test(self):

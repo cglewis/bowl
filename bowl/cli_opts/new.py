@@ -688,7 +688,7 @@ class new(object):
 
                 entrypoint = "/bin/sh -c"
                 cmd = ""
-                # !! error check that the array is this size
+                # !! TODO error check that the array is this size
                 service_name = service.split(':', 3)
                 key = ".".join(service_name)
                 os_flavor = "/".join(service_name[0:3])

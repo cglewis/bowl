@@ -80,7 +80,7 @@ class main(object):
             '/services', 'api_services',
             '/snapshot/(.*)', 'api_snapshot',
             '/snapshots', 'api_snapshots',
-            '/subtract', 'api_subtract',
+            '/subtract/(.*)/(.*)/(.*)/(.*)', 'api_subtract',
             '/test', 'api_test',
             '/unlink/(.*)', 'api_unlink',
             '/uptime', 'api_uptime',
@@ -522,11 +522,21 @@ class api_subtract:
     """
     This class is resposible for subtracting services.
     """
-    def GET(self):
+    def GET(self, os, version, service_type, name):
         """
         GETs the service to subtract.
         """
-        return ""
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        # !! TODO figure out a way to make this an option
+        args.metadata_path = "~/.bowl"
+        args.OS = os
+        args.VERSION = version
+        args.TYPE = service_type
+        args.NAME = name
+        return subtract.subtract.main(args)
 
 class api_test:
     """
