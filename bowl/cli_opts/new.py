@@ -666,166 +666,167 @@ class new(object):
                 username = raw_input("Enter username: ")
                 ssh_pubkey = raw_input("Enter path to ssh public key: ")
 
-            # !! TODO use this to build the dockerfile
-            # !! TODO if no services were selected, don't create a container
             # !! TODO if contains an ADD line, be sure and copy additional files
             this_dir, this_filename = os.path.split(__file__)
             services = self.build_dict['services']
-            print "The following services have been selected and will be packaged up into a container: "
-            # !! TODO parse this out by os/version/type/service
-            print services
-            dockerfile = []
-            num_services = len(services)
-            envs = {}
-            workdirs = {}
-            entrypoints = {}
-            cmds = {}
-            for service in sorted(services):
-                envs[service] = []
-                workdirs[service] = []
-                entrypoints[service] = []
-                cmds[service] = []
+            if len(services) == 0:
+                print "No services were selected."
+            else:
+                print "The following services have been selected and will be packaged up into a container: "
+                # !! TODO parse this out by os/version/type/service
+                print services
+                dockerfile = []
+                num_services = len(services)
+                envs = {}
+                workdirs = {}
+                entrypoints = {}
+                cmds = {}
+                for service in sorted(services):
+                    envs[service] = []
+                    workdirs[service] = []
+                    entrypoints[service] = []
+                    cmds[service] = []
 
-                entrypoint = "/bin/sh -c"
-                cmd = ""
-                # !! TODO error check that the array is this size
-                service_name = service.split(':', 3)
-                key = ".".join(service_name)
-                os_flavor = "/".join(service_name[0:3])
-                # !! TODO don't hard code .default, use services api
-                path = os.path.join(os.path.dirname(this_dir),
+                    entrypoint = "/bin/sh -c"
+                    cmd = ""
+                    # !! TODO error check that the array is this size
+                    service_name = service.split(':', 3)
+                    key = ".".join(service_name)
+                    os_flavor = "/".join(service_name[0:3])
+                    # !! TODO don't hard code .default, use services api
+                    path = os.path.join(os.path.dirname(this_dir),
                                     "containers/.default/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
-                try:
-                    with open(path, 'r') as f:
-                        for line in f:
-                            # remove duplicate lines
-                            if line.rstrip('\n'	) not in dockerfile:
-                                # combine EXPOSE commands
-                                if line.startswith("EXPOSE"):
-                                    if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
-                                        line = ' '.join(line.rstrip('\n').split(' ', 1)[1:])
-                                        # !! TODO make sure this is what the command starts with
-                                        # !! TODO display a warning to the user if there is overlapping ports
-                                        matching = [s for s in dockerfile if "EXPOSE" in s]
-                                        matching.append(line)
-                                        dockerfile.remove(matching[0])
-                                        dockerfile.append(' '.join(matching))
-                                    else:
-                                        dockerfile.append(line.rstrip('\n'))
-                                elif line.startswith("ADD") or line.startswith("COPY"):
-                                    # !! TODO
-                                    # copy context directory to tmp directory for building
-                                    dockerfile.append(line.rstrip('\n'))
-                                # check for multiple USER commands
-                                elif line.startswith("USER"):
-                                    # !! TODO
-                                    if num_services == 1:
-                                        dockerfile.append(line.rstrip('\n'))
-                                    else:
-                                        if self.combine_cmd_dict[key] == "yes":
-                                            envs[service].append(line.rstrip('\n'))
+                    try:
+                        with open(path, 'r') as f:
+                            for line in f:
+                                # remove duplicate lines
+                                if line.rstrip('\n'	) not in dockerfile:
+                                    # combine EXPOSE commands
+                                    if line.startswith("EXPOSE"):
+                                        if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
+                                            line = ' '.join(line.rstrip('\n').split(' ', 1)[1:])
+                                            # !! TODO make sure this is what the command starts with
+                                            # !! TODO display a warning to the user if there is overlapping ports
+                                            matching = [s for s in dockerfile if "EXPOSE" in s]
+                                            matching.append(line)
+                                            dockerfile.remove(matching[0])
+                                            dockerfile.append(' '.join(matching))
+                                        else:
+                                            dockerfile.append(line.rstrip('\n'))
+                                    elif line.startswith("ADD") or line.startswith("COPY"):
                                         # !! TODO
-                                        #dockerfile.append(line.rstrip('\n'))
-                                elif line.startswith("ENV"):
-                                    # !! TODO
-                                    if num_services == 1:
+                                        # copy context directory to tmp directory for building
                                         dockerfile.append(line.rstrip('\n'))
-                                    else:
-                                        if self.combine_cmd_dict[key] == "yes":
-                                            envs[service].append(line.rstrip('\n'))
+                                    # check for multiple USER commands
+                                    elif line.startswith("USER"):
                                         # !! TODO
-                                        dockerfile.append(line.rstrip('\n'))
-                                # check for multiple WORKDIR commands
-                                elif line.startswith("WORKDIR"):
-                                    # !! TODO
-                                    if num_services == 1:
-                                        dockerfile.append(line.rstrip('\n'))
-                                    else:
-                                        if self.combine_cmd_dict[key] == "yes":
-                                            workdirs[service].append(line.rstrip('\n'))
-                                        # !! TODO
-                                        dockerfile.append(line.rstrip('\n'))
-                                # check for multiple ENTRYPOINT commands
-                                elif line.startswith("ENTRYPOINT"):
-                                    # !! TODO
-                                    # check WORKDIR since CMD and ENTRYPOINT are modified
-                                    # use the ENTRYPOINT that corresponds with the chosen CMD
-                                    if num_services == 1:
-                                        dockerfile.append(line.rstrip('\n'))
-                                    else:
-                                        if self.combine_cmd_dict[key] == "yes":
-                                            entrypoints[service].append(line.rstrip('\n'))
-                                    entrypoint = (line.rstrip('\n')).split(" ", 1)[1:][0]
-                                # check for multiple CMD commands
-                                elif line.startswith("CMD"):
-                                    # !! TODO
-                                    # check WORKDIR since CMD and ENTRYPOINT are modified
-                                    if num_services == 1:
-                                        dockerfile.append(line.rstrip('\n'))
-                                    else:
-                                        if self.combine_cmd_dict[key] == "yes":
-                                            # !! TODO only append if there is only one
-                                            # if more than one, use supervisord or something
-                                            # if none of them are combine_cmds then use /bin/bash
-                                            cmds[service].append(self.background_cmd_dict[key])
-                                            #cmds[service].append(line.rstrip('\n'))
+                                        if num_services == 1:
+                                            dockerfile.append(line.rstrip('\n'))
+                                        else:
+                                            if self.combine_cmd_dict[key] == "yes":
+                                                envs[service].append(line.rstrip('\n'))
+                                            # !! TODO
                                             #dockerfile.append(line.rstrip('\n'))
-                                    cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
-                                else:
-                                    dockerfile.append(line.rstrip('\n'))
-                except:
-                    print "Dockerfile not found"
+                                    elif line.startswith("ENV"):
+                                        # !! TODO
+                                        if num_services == 1:
+                                            dockerfile.append(line.rstrip('\n'))
+                                        else:
+                                            if self.combine_cmd_dict[key] == "yes":
+                                                envs[service].append(line.rstrip('\n'))
+                                            # !! TODO
+                                            dockerfile.append(line.rstrip('\n'))
+                                    # check for multiple WORKDIR commands
+                                    elif line.startswith("WORKDIR"):
+                                        # !! TODO
+                                        if num_services == 1:
+                                            dockerfile.append(line.rstrip('\n'))
+                                        else:
+                                            if self.combine_cmd_dict[key] == "yes":
+                                                workdirs[service].append(line.rstrip('\n'))
+                                            # !! TODO
+                                            dockerfile.append(line.rstrip('\n'))
+                                    # check for multiple ENTRYPOINT commands
+                                    elif line.startswith("ENTRYPOINT"):
+                                        # !! TODO
+                                        # check WORKDIR since CMD and ENTRYPOINT are modified
+                                        # use the ENTRYPOINT that corresponds with the chosen CMD
+                                        if num_services == 1:
+                                            dockerfile.append(line.rstrip('\n'))
+                                        else:
+                                            if self.combine_cmd_dict[key] == "yes":
+                                                entrypoints[service].append(line.rstrip('\n'))
+                                        entrypoint = (line.rstrip('\n')).split(" ", 1)[1:][0]
+                                    # check for multiple CMD commands
+                                    elif line.startswith("CMD"):
+                                        # !! TODO
+                                        # check WORKDIR since CMD and ENTRYPOINT are modified
+                                        if num_services == 1:
+                                            dockerfile.append(line.rstrip('\n'))
+                                        else:
+                                            if self.combine_cmd_dict[key] == "yes":
+                                                # !! TODO only append if there is only one
+                                                # if more than one, use supervisord or something
+                                                # if none of them are combine_cmds then use /bin/bash
+                                                cmds[service].append(self.background_cmd_dict[key])
+                                                #cmds[service].append(line.rstrip('\n'))
+                                                #dockerfile.append(line.rstrip('\n'))
+                                        cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
+                                    else:
+                                        dockerfile.append(line.rstrip('\n'))
+                    except:
+                        print "Dockerfile not found"
 
-            uuid_dir = str(uuid.uuid4())
-            # !! TODO try/except
-            os.mkdir('/tmp/'+uuid_dir)
+                uuid_dir = str(uuid.uuid4())
+                # !! TODO try/except
+                os.mkdir('/tmp/'+uuid_dir)
 
-            # if more than one service with combine_cmd, use supervisord
-            if len(cmds) > 1:
-                print "\nFound more than one service that runs a command, installing supervisord..."
-                dockerfile.append("RUN apt-get install -y supervisor")
-                for cmd in cmds:
-                    cmd_a = cmd.split(":")
-                    with open("/tmp/"+uuid_dir+"/"+cmd_a[-1]+".conf", 'w') as f:
-                        f.write("[program:"+cmd_a[-1]+"]\n")
-                        f.write("command="+cmds[cmd][0])
-                        dockerfile.append("ADD "+cmd_a[-1]+".conf /etc/supervisor/conf.d/"+cmd_a[-1]+".conf")
-            if self.user:
-                try:
-                    # !! TODO try/except
-                    with open(os.path.expanduser(ssh_pubkey), 'r') as fi:
-                        with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
-                            for line in fi:
-                                fo.write(line)
-                    dockerfile.append("RUN useradd "+username)
-                    dockerfile.append("RUN mkdir -p /home/"+username+
-                                      "/.ssh && chown "+username+
-                                      " /home/"+username+
-                                      "/.ssh && chmod 700 /home/"+username+"/.ssh")
-                    dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
-                    # !! TODO ask if user needs sudo
-                    dockerfile.append("RUN apt-get install -y sudo")
-                    dockerfile.append('RUN echo "'+username+
-                                      ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
-                    # !! TODO ask if more than one user
-                except:
-                    print "SSH Key file not found, failed to create user"
-            print "\n### GENERATED DOCKERFILE ###"
-            cmd = False
-            for line in dockerfile:
-                if "CMD" in line:
-                    cmd = True
-            if not cmd:
+                # if more than one service with combine_cmd, use supervisord
                 if len(cmds) > 1:
-                    # !! TODO check user and workdir
-                    dockerfile.append("CMD /usr/bin/supervisord -n")
-                else:
-                    dockerfile.append("CMD /bin/bash")
-            for line in dockerfile:
-                print line
-            print "### END GENERATED DOCKERFILE ###\n"
-            self.build_dockerfile(self, dockerfile, uuid_dir, args)
-            print self.link_names
+                    print "\nFound more than one service that runs a command, installing supervisord..."
+                    dockerfile.append("RUN apt-get install -y supervisor")
+                    for cmd in cmds:
+                        cmd_a = cmd.split(":")
+                        with open("/tmp/"+uuid_dir+"/"+cmd_a[-1]+".conf", 'w') as f:
+                            f.write("[program:"+cmd_a[-1]+"]\n")
+                            f.write("command="+cmds[cmd][0])
+                            dockerfile.append("ADD "+cmd_a[-1]+".conf /etc/supervisor/conf.d/"+cmd_a[-1]+".conf")
+                if self.user:
+                    try:
+                        # !! TODO try/except
+                        with open(os.path.expanduser(ssh_pubkey), 'r') as fi:
+                            with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
+                                for line in fi:
+                                    fo.write(line)
+                        dockerfile.append("RUN useradd "+username)
+                        dockerfile.append("RUN mkdir -p /home/"+username+
+                                          "/.ssh && chown "+username+
+                                          " /home/"+username+
+                                          "/.ssh && chmod 700 /home/"+username+"/.ssh")
+                        dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
+                        # !! TODO ask if user needs sudo
+                        dockerfile.append("RUN apt-get install -y sudo")
+                        dockerfile.append('RUN echo "'+username+
+                                          ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
+                        # !! TODO ask if more than one user
+                    except:
+                        print "SSH Key file not found, failed to create user"
+                print "\n### GENERATED DOCKERFILE ###"
+                cmd = False
+                for line in dockerfile:
+                    if "CMD" in line:
+                        cmd = True
+                if not cmd:
+                    if len(cmds) > 1:
+                        # !! TODO check user and workdir
+                        dockerfile.append("CMD /usr/bin/supervisord -n")
+                    else:
+                        dockerfile.append("CMD /bin/bash")
+                for line in dockerfile:
+                    print line
+                print "### END GENERATED DOCKERFILE ###\n"
+                self.build_dockerfile(self, dockerfile, uuid_dir, args)
+                print self.link_names
 
     @staticmethod
     def display_menu(self, args, menu, parent, build_dict):
