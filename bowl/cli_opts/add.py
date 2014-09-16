@@ -111,6 +111,7 @@ class add(object):
             link_args = Object()
             link_args.z = True
             link_args.metadata_path = args.metadata_path
+            link_args.path = os.path.expanduser(args.metadata_path)
             link_args.SERVICE_HOST = "localhost"
             if link.link.main(link_args):
                 directory = os.path.join(args.metadata_path, "services")

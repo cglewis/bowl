@@ -271,6 +271,7 @@ class api_link:
         args.SERVICE_HOST = repository
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
+        args.path = "~/.bowl"
         return link.link.main(args)
 
 class api_list:

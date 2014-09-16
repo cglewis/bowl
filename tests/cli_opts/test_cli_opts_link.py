@@ -17,6 +17,7 @@ class TestClass:
     def test_cli_opts_link(self):
         args = Object()
         args.metadata_path="test"
+        args.path="test"
         args.z = True
         a = link.link()
         a.main(args)

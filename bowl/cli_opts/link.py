@@ -17,6 +17,9 @@ class link(object):
         directory = os.path.expanduser(directory)
         if not os.path.exists(directory):
             os.makedirs(directory)
+
+        path = os.path.expanduser(args.path)
+
         # !! TODO
         #    test connection
         exists = False
@@ -25,13 +28,14 @@ class link(object):
                 with open(os.path.join(directory, "repositories"), 'r') as f:
                     for line in f:
                         repo = ast.literal_eval(line.strip())
-                        if repo['title'] == args.SERVICE_HOST:
+                        if repo['title'] == args.SERVICE_HOST and repo['path'] == path:
                             exists = True
             if not exists:
                 with open(os.path.join(directory, "repositories"), 'a') as f:
                     f.write("{" +
                             "'title': '"+args.SERVICE_HOST+"'," +
-                            " 'type': 'choice_menu'" +
+                            " 'type': 'choice_menu'," +
+                            " 'path': '"+path+"'" +
                             "}\n")
             else:
                 if not args.z:

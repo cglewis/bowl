@@ -167,6 +167,9 @@ class cli(object):
                                            help='link to a service repository host')
         parse_link.add_argument('SERVICE_HOST',
                                 help='specify service repository host to connect to')
+        parse_link.add_argument('--path',
+                                default=default_metadata_path,
+                                help='specify path where services live, default '+default_metadata_path)
         parse_link.add_argument('--port', '-p',
                                 default='8080',
                                 help='specify port that service host is running on, default=8080')

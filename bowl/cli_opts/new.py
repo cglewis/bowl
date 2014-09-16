@@ -16,6 +16,7 @@ import sys
 import time
 import uuid
 
+from bowl.cli_opts import link
 from bowl.cli_opts import services
 
 class Object(object):
@@ -319,6 +320,15 @@ class new(object):
         self.port = False
         self.link = False
         self.volume = False
+
+        this_dir, this_filename = os.path.split(__file__)
+        link_path = os.path.join(os.path.dirname(this_dir), "containers/.default/")
+        link_args = Object()
+        link_args.z = False
+        link_args.metadata_path = os.path.expanduser(args.metadata_path)
+        link_args.SERVICE_HOST = "localhost"
+        link_args.path = link_path
+        link.link.main(link_args)
 
         if not args.no_curses:
             # init curses stuff

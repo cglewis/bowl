@@ -20,7 +20,7 @@ class unlink(object):
             # !! TODO need to do check if specfied repository was not there to begin with
             for line in fileinput.input(os.path.join(directory, "repositories"), inplace=True):
                 host = ast.literal_eval(line.rstrip('\n'))
-                if args.SERVICE_HOST != host['title']:
+                if args.SERVICE_HOST != host['title'] and directory != host['path']:
                     print "%s" % (line),
         except:
             print "unable to remove service repository"
