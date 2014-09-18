@@ -13,9 +13,11 @@ class services(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO this needs to be pull from repositories
         services_dir = os.path.join(args.metadata_path, "services")
         services_dir = os.path.expanduser(services_dir)
-        default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "containers/.default"))
+        default_dir = os.path.abspath(os.path.join(os.path.dirname(__file__),
+                                      "..", "containers/.default"))
         services_dict = {}
         # !! TODO still used for non-json, needs cleanup
         services_dict['databases'] = []
@@ -23,8 +25,13 @@ class services(object):
         services_dict['services'] = []
         services_dict['tools'] = []
 
-        # if services exist, use that, otherwise try to use .default
+        found_services = 0
+
+        # !! TODO note for multiple repositories, need to check if the os/version/service already exists, and provide all options
+        # !! TODO should services on remote repositories be able to run on other remote hosts?
+
         if os.path.exists(services_dir):
+            found_services = 1
             try:
                 # read oses
                 with open(os.path.join(services_dir, "oses"), 'r') as f:
@@ -92,13 +99,21 @@ class services(object):
             except:
                 if not args.z:
                     print "failed"
-        elif os.path.exists(default_dir):
+
+        if os.path.exists(default_dir):
+            found_services = 1
             try:
                 # read oses
                 with open(os.path.join(default_dir, "oses"), 'r') as f:
                     oses = f.read()
                 os_dict = json.loads(oses)
-                services_dict['oses'] = os_dict
+                if 'oses' in services_dict:
+                    for key in os_dict:
+                        # !! TODO do a similar check for versions and services
+                        if not key in services_dict['oses']:
+                            services_dict['oses'][key] = os_dict[key]
+                else:
+                    services_dict['oses'] = os_dict
                 for os_key in os_dict:
                     # read versions for each os
                     with open(os.path.join(default_dir, os_key, "versions"), 'r') as f:
@@ -160,7 +175,8 @@ class services(object):
             except:
                 if not args.z:
                     print "failed"
-        else:
+
+        if found_services == 0:
             if not args.z:
                 print "no services found!"
 
