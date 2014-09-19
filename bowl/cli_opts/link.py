@@ -18,7 +18,7 @@ class link(object):
         if not os.path.exists(directory):
             os.makedirs(directory)
 
-        path = os.path.expanduser(args.path)
+        path = os.path.join(os.path.expanduser(args.path), 'services')
 
         # !! TODO
         #    test connection

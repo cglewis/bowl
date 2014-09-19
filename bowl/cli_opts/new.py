@@ -298,6 +298,16 @@ class new(object):
         self.link_names = {}
         self.combine_cmd_dict = {}
         self.background_cmd_dict = {}
+
+        this_dir, this_filename = os.path.split(__file__)
+        link_path = os.path.join(os.path.dirname(this_dir), "containers/.default/")
+        link_args = Object()
+        link_args.z = True
+        link_args.metadata_path = os.path.expanduser(args.metadata_path)
+        link_args.SERVICE_HOST = "localhost"
+        link_args.path = link_path
+        link.link.main(link_args)
+
         menu_dict = self.build_options(self, args)
 
         if not args.no_curses:
@@ -320,15 +330,6 @@ class new(object):
         self.port = False
         self.link = False
         self.volume = False
-
-        this_dir, this_filename = os.path.split(__file__)
-        link_path = os.path.join(os.path.dirname(this_dir), "containers/.default/")
-        link_args = Object()
-        link_args.z = False
-        link_args.metadata_path = os.path.expanduser(args.metadata_path)
-        link_args.SERVICE_HOST = "localhost"
-        link_args.path = link_path
-        link.link.main(link_args)
 
         if not args.no_curses:
             # init curses stuff
@@ -705,7 +706,7 @@ class new(object):
                     os_flavor = "/".join(service_name[0:3])
                     # !! TODO don't hard code .default, use services api
                     path = os.path.join(os.path.dirname(this_dir),
-                                    "containers/.default/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
+                                    "containers/.default/services/"+os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
                     try:
                         with open(path, 'r') as f:
                             for line in f:

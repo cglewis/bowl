@@ -31,6 +31,7 @@ class add(object):
             print "Service already exists."
             sys.exit(0)
         j_args = {}
+        # !! TODO validate the type is databases|environment|services|tools
         try:
             j_string = ""
             # assume it's a path
