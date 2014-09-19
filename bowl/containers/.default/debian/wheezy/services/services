@@ -1,0 +1,14 @@
+{
+ "nginx":
+ {
+  "title": "nginx",
+  "type": "choice_menu",
+  "command": "debian:wheezy:services:nginx",
+  "object": "service",
+  "cluster": "no",
+  "combine_cmd": "yes",
+  "background_cmd": "TODO",
+  "tty": "no",
+  "interactive": "no"
+ }
+}

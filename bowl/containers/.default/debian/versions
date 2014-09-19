@@ -6,5 +6,14 @@
   "subtitle": "Please select services...",
   "object": "version",
   "options": []
+ },
+
+ "wheezy":
+ {
+  "title": "Wheezy",
+  "type": "menu",
+  "subtitle": "Please select services...",
+  "object": "version",
+  "options": []
  }
 }
