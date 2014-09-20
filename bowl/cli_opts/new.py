@@ -305,6 +305,7 @@ class new(object):
         link_args.z = True
         link_args.metadata_path = os.path.expanduser(args.metadata_path)
         link_args.SERVICE_HOST = "localhost"
+        link_args.NAME = "default"
         link_args.path = link_path
         link.link.main(link_args)
 

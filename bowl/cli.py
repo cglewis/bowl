@@ -167,6 +167,8 @@ class cli(object):
                                            help='link to a service repository host')
         parse_link.add_argument('SERVICE_HOST',
                                 help='specify service repository host to connect to')
+        parse_link.add_argument('NAME',
+                                help='specify a name for the repository')
         parse_link.add_argument('--path',
                                 default=default_metadata_path,
                                 help='specify path where services live, default '+default_metadata_path)
@@ -386,9 +388,9 @@ class cli(object):
 
         # unlink
         parse_unlink = subparsers.add_parser('unlink',
-                                             help='unlink a service repository host')
-        parse_unlink.add_argument('SERVICE_HOST',
-                                  help='specify service repository host to disconnect from')
+                                             help='unlink a service repository')
+        parse_unlink.add_argument('NAME',
+                                  help='specify name of service repository to disconnect from')
         parse_unlink.add_argument('--metadata_path', '-m',
                                   default=default_metadata_path,
                                   help='metadata path, default '+default_metadata_path)

@@ -20,7 +20,7 @@ class repositories(object):
             with open(os.path.join(directory, "repositories"), 'r') as f:
                 for line in f:
                     repository = ast.literal_eval(line.rstrip("\n"))
-                    repositories.append(repository['title']+", "+repository['path'])
+                    repositories.append(repository['name']+", "+repository['title']+", "+repository['path'])
         except:
             pass
         if not args.z:

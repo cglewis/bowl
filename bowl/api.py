@@ -269,6 +269,8 @@ class api_link:
             pass
         args = Object()
         args.SERVICE_HOST = repository
+        args.NAME = "test"
+        args.z = True
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
         args.path = "~/.bowl"

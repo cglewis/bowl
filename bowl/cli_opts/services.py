@@ -39,7 +39,7 @@ class services(object):
         for repo in repos:
             path = ''
             try:
-                path = repo.split(", ")[1]
+                path = repo.split(", ")[2]
             except:
                 print "unable to parse path from repo", repo
             if path != '' and os.path.exists(path):
@@ -51,7 +51,6 @@ class services(object):
                     os_dict = json.loads(oses)
                     if 'oses' in services_dict:
                         for key in os_dict:
-                            # !! TODO do a similar check for versions and services
                             if not key in services_dict['oses']:
                                 services_dict['oses'][key] = os_dict[key]
                     else:
@@ -61,8 +60,14 @@ class services(object):
                         with open(os.path.join(path, os_key, "versions"), 'r') as f:
                             versions = f.read()
                         version_dict = json.loads(versions)
-                        services_dict['oses'][os_key]['versions'] = version_dict
+                        if 'versions' in services_dict['oses'][os_key]:
+                            for key in version_dict:
+                                if not key in services_dict['oses'][os_key]['versions']:
+                                    services_dict['oses'][os_key]['versions'][key] = version_dict[key]
+                        else:
+                            services_dict['oses'][os_key]['versions'] = version_dict
                         for version_key in version_dict:
+                            # !! TODO check if keys already exist
                             # read databases for each version
                             with open(os.path.join(path, os_key, version_key, "databases/databases"), 'r') as f:
                                 databases = f.read()

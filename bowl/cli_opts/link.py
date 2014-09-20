@@ -20,6 +20,7 @@ class link(object):
 
         path = os.path.join(os.path.expanduser(args.path), 'services')
 
+        # !! TODO name must be unique
         # !! TODO
         #    test connection
         exists = False
@@ -35,6 +36,7 @@ class link(object):
                     f.write("{" +
                             "'title': '"+args.SERVICE_HOST+"'," +
                             " 'type': 'choice_menu'," +
+                            " 'name': '"+args.NAME+"'," +
                             " 'path': '"+path+"'" +
                             "}\n")
             else:
