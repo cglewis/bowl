@@ -28,6 +28,7 @@ class link(object):
             if os.path.exists(os.path.join(directory, "repositories")):
                 with open(os.path.join(directory, "repositories"), 'r') as f:
                     for line in f:
+                        print line
                         repo = ast.literal_eval(line.strip())
                         if repo['title'] == args.SERVICE_HOST and repo['path'] == path:
                             exists = True

@@ -24,6 +24,7 @@ class TestClass:
         assert isinstance(menu_dict, dict)
 
         args.no_curses = True
+        args.toggle_default = False
         args.host = []
         args.host.append("test")
 

@@ -23,6 +23,7 @@ class unlink(object):
                 if args.NAME != host['name'] and directory != host['path']:
                     print "%s" % (line),
         except:
-            print "unable to remove service repository"
+            # !! TODO don't print as it will replace what's in repositories
+            #print "unable to remove service repository"
             return False
         return True

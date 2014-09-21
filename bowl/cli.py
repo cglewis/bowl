@@ -229,6 +229,9 @@ class cli(object):
         parse_new.add_argument('--metadata_path', '-m',
                                default=default_metadata_path,
                                help='metadata path, default '+default_metadata_path)
+        parse_new.add_argument('--toggle_default',
+                               action='store_true',
+                               help='toggle using default services, uses them by default')
         parse_new.add_argument('--no_curses', '-n',
                                action='store_true',
                                help='do not use curses')

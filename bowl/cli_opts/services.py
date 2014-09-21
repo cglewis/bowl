@@ -72,6 +72,8 @@ class services(object):
                             with open(os.path.join(path, os_key, version_key, "databases/databases"), 'r') as f:
                                 databases = f.read()
                             databases = json.loads(databases)
+                            for database in databases:
+                                databases[database]['repository'] = repo.split(", ")[0]
                             if args.quiet:
                                 for database in databases:
                                     services_dict['databases'].append(database)
@@ -85,6 +87,8 @@ class services(object):
                             with open(os.path.join(path, os_key, version_key, "environment/environment"), 'r') as f:
                                 environment = f.read()
                             environment = json.loads(environment)
+                            for environ in environment:
+                                environment[environ]['repository'] = repo.split(", ")[0]
                             if args.quiet:
                                 for env in environment:
                                     services_dict['environment'].append(env)
@@ -98,6 +102,8 @@ class services(object):
                             with open(os.path.join(path, os_key, version_key, "services/services"), 'r') as f:
                                 services = f.read()
                             services = json.loads(services)
+                            for service in services:
+                                services[service]['repository'] = repo.split(", ")[0]
                             if args.quiet:
                                 for service in services:
                                     services_dict['services'].append(service)
@@ -111,6 +117,8 @@ class services(object):
                             with open(os.path.join(path, os_key, version_key, "tools/tools"), 'r') as f:
                                 tools = f.read()
                             tools = json.loads(tools)
+                            for tool in tools:
+                                tools[tool]['repository'] = repo.split(", ")[0]
                             if args.quiet:
                                 for tool in tools:
                                     services_dict['tools'].append(tool)
