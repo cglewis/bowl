@@ -6,7 +6,6 @@ Created on 17 July 2014
 """
 import json
 import os
-import sys
 
 from bowl.cli_opts import repositories
 
@@ -128,7 +127,6 @@ class services(object):
                                 for tool in tools:
                                     services_dict['tools'].append(tools[tool]['command'])
                 except:
-                    print sys.exc_info()
                     if not args.z:
                         print "failed"
 

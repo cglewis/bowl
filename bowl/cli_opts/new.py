@@ -108,7 +108,7 @@ class new(object):
             except:
                 pass
 
-        shutil.rmtree('/tmp/'+uuid_dir)
+        #shutil.rmtree('/tmp/'+uuid_dir)
         return
 
     @staticmethod
@@ -711,7 +711,13 @@ class new(object):
                 workdirs = {}
                 entrypoints = {}
                 cmds = {}
+
+                uuid_dir = str(uuid.uuid4())
+                # !! TODO try/except
+                os.mkdir('/tmp/'+uuid_dir)
+
                 for service in sorted(services):
+                    service_orig = service
                     service = service.split(", ")[0]
                     envs[service] = []
                     workdirs[service] = []
@@ -725,6 +731,7 @@ class new(object):
                     key = ".".join(service_name)
                     os_flavor = "/".join(service_name[0:3])
 
+
                     repo_args = Object()
                     repo_args.z = True
                     repo_args.metadata_path = os.path.expanduser(args.metadata_path)
@@ -732,7 +739,8 @@ class new(object):
 
                     try:
                         for repo in repos:
-                            if repo.split(", ")[0] == service.split(", ")[1]:
+                            if repo.split(", ")[0].strip() == service_orig.split(", ")[1].strip():
+                                shutil.copytree(os.path.join(repo.split(", ")[2], os_flavor+"/dockerfiles/"+service_name[3]), '/tmp/'+uuid_dir+"/"+service_name[3])
                                 path = os.path.join(repo.split(", ")[2], os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
 
                         with open(path, 'r') as f:
@@ -751,10 +759,14 @@ class new(object):
                                             dockerfile.append(' '.join(matching))
                                         else:
                                             dockerfile.append(line.rstrip('\n'))
-                                    elif line.startswith("ADD") or line.startswith("COPY"):
-                                        # !! TODO
-                                        # copy context directory to tmp directory for building
-                                        dockerfile.append(line.rstrip('\n'))
+                                    elif line.startswith("ADD"):
+                                        # !! TODO try/except
+                                        add_line = line.rstrip('\n').split()
+                                        dockerfile.append(add_line[0]+" "+service_name[3]+"/"+add_line[1]+" "+add_line[2])
+                                    elif line.startswith("COPY"):
+                                        # !! TODO try/except
+                                        copy_line = line.rstrip('\n').split()
+                                        dockerfile.append(copy_line[0]+" "+service_name[3]+"/"+copy_line[1]+" "+copy_line[2])
                                     # check for multiple USER commands
                                     elif line.startswith("USER"):
                                         # !! TODO
@@ -814,10 +826,6 @@ class new(object):
                                         dockerfile.append(line.rstrip('\n'))
                     except:
                         print "Dockerfile not found"
-
-                uuid_dir = str(uuid.uuid4())
-                # !! TODO try/except
-                os.mkdir('/tmp/'+uuid_dir)
 
                 # if more than one service with combine_cmd, use supervisord
                 if len(cmds) > 1:
