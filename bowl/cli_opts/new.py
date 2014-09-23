@@ -108,7 +108,7 @@ class new(object):
             except:
                 pass
 
-        #shutil.rmtree('/tmp/'+uuid_dir)
+        shutil.rmtree('/tmp/'+uuid_dir)
         return
 
     @staticmethod
