@@ -738,8 +738,11 @@ class new(object):
                     repos = repositories.repositories.main(repo_args)
 
                     try:
+                        copied = 0
                         for repo in repos:
-                            if repo.split(", ")[0].strip() == service_orig.split(", ")[1].strip():
+                            # !! TODO handle care where this matches on more than one repo
+                            if repo.split(", ")[0].strip() == service_orig.split(", ")[1].strip() and copied == 0:
+                                copied = 1
                                 shutil.copytree(os.path.join(repo.split(", ")[2], os_flavor+"/dockerfiles/"+service_name[3]), '/tmp/'+uuid_dir+"/"+service_name[3])
                                 path = os.path.join(repo.split(", ")[2], os_flavor+"/dockerfiles/"+service_name[3]+"/Dockerfile")
 
