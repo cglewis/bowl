@@ -1,15 +1,4 @@
 {
- "golang":
- {
-  "title": "golang",
-  "type": "choice_menu",
-  "command": "ubuntu:precise:environment:golang",
-  "object": "environment",
-  "combine_cmd": "no",
-  "tty": "yes",
-  "interactive": "yes"
- },
-
  "python":
  {
   "title": "python",
