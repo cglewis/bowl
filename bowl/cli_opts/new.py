@@ -45,6 +45,61 @@ class new(object):
             c = docker.Client(base_url='tcp://'+host['title']+':2375',
                               version='1.9', timeout=2)
 
+            # !! TODO prep, needs to be finished
+            # build
+            d_tag = None
+            d_quiet = False
+            d_nocache = False
+            d_rm = False
+            d_stream = False
+            d_fileobj=None
+            d_timeout=None
+            d_custom_context=False
+            d_encoding=None
+
+            d_tag = "bowl-"+uuid_dir
+            d_path = '/tmp/'+uuid_dir
+
+            # create_container
+            d_command=None
+            d_hostname=None
+            d_user=None
+            d_detach=False
+            d_stdin_open=False
+            d_tty=False
+            d_mem_limit=0
+            d_ports=None
+            d_environment=None
+            #dns=None
+            d_volumes=None
+            #volumes_from=None
+            d_network_disabled=False
+            d_name=None
+            d_entrypoint=None
+            d_cpu_shares=None
+            d_working_dir=None
+            d_memswap_limit=0
+
+            d_image = image_tag
+
+            # start
+            d_binds=None
+            d_port_bindings=None
+            d_lxc_conf=None
+            d_publish_all_ports=False
+            d_links=None
+            d_privileged=False
+            d_dns=None
+            d_dns_search=None
+            d_volumes_from=None
+            d_network_mode=None
+            d_restart_policy=None
+            d_cap_add=None
+            d_cap_drop=None
+
+            d_container = container
+            d_links = self.link_names
+
             # !! TODO check that the build actually created an image before trying to create the container
             output = c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
                                nocache=False, rm=False, stream=False)
