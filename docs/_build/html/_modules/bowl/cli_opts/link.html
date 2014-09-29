@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bowl.cli_opts.link &mdash; bowl 0.2.0 documentation</title>
+    <title>bowl.cli_opts.link &mdash; bowl 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="bowl 0.2.0 documentation" href="../../../index.html" />
+    <link rel="top" title="bowl 0.3.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -66,6 +66,10 @@
         <span class="n">directory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">directory</span><span class="p">):</span>
             <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">directory</span><span class="p">)</span>
+
+        <span class="n">path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">path</span><span class="p">),</span> <span class="s">&#39;services&#39;</span><span class="p">)</span>
+
+        <span class="c"># !! TODO name must be unique</span>
         <span class="c"># !! TODO</span>
         <span class="c">#    test connection</span>
         <span class="n">exists</span> <span class="o">=</span> <span class="bp">False</span>
@@ -74,13 +78,15 @@
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s">&quot;repositories&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                         <span class="n">repo</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">strip</span><span class="p">())</span>
-                        <span class="k">if</span> <span class="n">repo</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="o">.</span><span class="n">SERVICE_HOST</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">repo</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="o">.</span><span class="n">SERVICE_HOST</span> <span class="ow">and</span> <span class="n">repo</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">path</span><span class="p">:</span>
                             <span class="n">exists</span> <span class="o">=</span> <span class="bp">True</span>
             <span class="k">if</span> <span class="ow">not</span> <span class="n">exists</span><span class="p">:</span>
                 <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s">&quot;repositories&quot;</span><span class="p">),</span> <span class="s">&#39;a&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">f</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="s">&quot;{&quot;</span> <span class="o">+</span>
                             <span class="s">&quot;&#39;title&#39;: &#39;&quot;</span><span class="o">+</span><span class="n">args</span><span class="o">.</span><span class="n">SERVICE_HOST</span><span class="o">+</span><span class="s">&quot;&#39;,&quot;</span> <span class="o">+</span>
-                            <span class="s">&quot; &#39;type&#39;: &#39;choice_menu&#39;&quot;</span> <span class="o">+</span>
+                            <span class="s">&quot; &#39;type&#39;: &#39;choice_menu&#39;,&quot;</span> <span class="o">+</span>
+                            <span class="s">&quot; &#39;name&#39;: &#39;&quot;</span><span class="o">+</span><span class="n">args</span><span class="o">.</span><span class="n">NAME</span><span class="o">+</span><span class="s">&quot;&#39;,&quot;</span> <span class="o">+</span>
+                            <span class="s">&quot; &#39;path&#39;: &#39;&quot;</span><span class="o">+</span><span class="n">path</span><span class="o">+</span><span class="s">&quot;&#39;&quot;</span> <span class="o">+</span>
                             <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">)</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
@@ -123,7 +129,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

@@ -26,7 +26,7 @@ def files():
 
 setup(
     name='bowl',
-    version='0.2.0',
+    version='0.3.0',
     packages=find_packages(),
     license='LICENSE',
     description='Tool for easily building and configuring virtual environments on top of Docker.',
@@ -37,7 +37,7 @@ setup(
     package_data=files(),
     scripts=['scripts/build.sh'],
     cmdclass={'install': MyInstall},
-    install_requires=['docker-py==0.3.1', 'requests==2.2.1', 'web.py'],
+    install_requires=['docker-py==0.5.0', 'requests==2.2.1', 'web.py'],
     entry_points={
         'console_scripts': [
             'bowl = bowl.cli:main',

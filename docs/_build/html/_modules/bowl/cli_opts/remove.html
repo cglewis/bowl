@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bowl.cli_opts.remove &mdash; bowl 0.2.0 documentation</title>
+    <title>bowl.cli_opts.remove &mdash; bowl 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="bowl 0.2.0 documentation" href="../../../index.html" />
+    <link rel="top" title="bowl 0.3.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -74,7 +74,7 @@
                 <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="p">:</span>
                     <span class="n">container</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&quot;</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">))</span>
                     <span class="k">if</span> <span class="n">container</span><span class="p">[</span><span class="s">&#39;container_id&#39;</span><span class="p">]</span> <span class="o">==</span> <span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span><span class="p">:</span>
-                        <span class="n">c</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s">&#39;tcp://&#39;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;:2375&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.9&#39;</span><span class="p">,</span>
+                        <span class="n">c</span> <span class="o">=</span> <span class="n">docker</span><span class="o">.</span><span class="n">Client</span><span class="p">(</span><span class="n">base_url</span><span class="o">=</span><span class="s">&#39;tcp://&#39;</span><span class="o">+</span><span class="n">container</span><span class="p">[</span><span class="s">&#39;host&#39;</span><span class="p">]</span><span class="o">+</span><span class="s">&#39;:2375&#39;</span><span class="p">,</span> <span class="n">version</span><span class="o">=</span><span class="s">&#39;1.12&#39;</span><span class="p">,</span>
                                           <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
                         <span class="n">c</span><span class="o">.</span><span class="n">remove_container</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">CONTAINER</span><span class="p">)</span>
                         <span class="k">if</span> <span class="ow">not</span> <span class="n">args</span><span class="o">.</span><span class="n">z</span><span class="p">:</span>
@@ -117,7 +117,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

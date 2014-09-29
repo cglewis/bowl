@@ -1,3 +1,9 @@
+### 0.3.0 (2014-09-29)
+
+- update docker-py version
+- fix more bugs
+- additional features and options
+
 ### 0.2.0 (2014-08-09)
 
 - major improvements to both cli and api

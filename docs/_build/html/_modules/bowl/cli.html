@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bowl.cli &mdash; bowl 0.2.0 documentation</title>
+    <title>bowl.cli &mdash; bowl 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../_static/doctools.js"></script>
-    <link rel="top" title="bowl 0.2.0 documentation" href="../../index.html" />
+    <link rel="top" title="bowl 0.3.0 documentation" href="../../index.html" />
     <link rel="up" title="Module code" href="../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -77,6 +77,7 @@
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshots</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">start</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">stop</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">subtract</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">test</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">unlink</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">update</span>
@@ -102,7 +103,7 @@
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;VERSION&#39;</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify version of operating system&#39;</span><span class="p">)</span>
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;TYPE&#39;</span><span class="p">,</span>
-                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify type of service (database, environment, service)&#39;</span><span class="p">)</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify type of service (database, environment, service, tool)&#39;</span><span class="p">)</span>
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;NAME&#39;</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of service&#39;</span><span class="p">)</span>
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;JSON&#39;</span><span class="p">,</span>
@@ -215,6 +216,14 @@
                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;link to a service repository host&#39;</span><span class="p">)</span>
         <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;SERVICE_HOST&#39;</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify service repository host to connect to&#39;</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;NAME&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify a name for the repository&#39;</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--path&#39;</span><span class="p">,</span>
+                                <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify path where services live, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--port&#39;</span><span class="p">,</span> <span class="s">&#39;-p&#39;</span><span class="p">,</span>
+                                <span class="n">default</span><span class="o">=</span><span class="s">&#39;8080&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify port that service host is running on, default=8080&#39;</span><span class="p">)</span>
         <span class="n">parse_link</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
@@ -269,6 +278,9 @@
         <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
                                <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--toggle_default&#39;</span><span class="p">,</span>
+                               <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;toggle using default services, uses them by default&#39;</span><span class="p">)</span>
         <span class="n">parse_new</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--no_curses&#39;</span><span class="p">,</span> <span class="s">&#39;-n&#39;</span><span class="p">,</span>
                                <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not use curses&#39;</span><span class="p">)</span>
@@ -322,6 +334,9 @@
         <span class="c"># repositories</span>
         <span class="n">parse_repositories</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;repositories&#39;</span><span class="p">,</span>
                                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;list repositories that are registered&#39;</span><span class="p">)</span>
+        <span class="n">parse_repositories</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                        <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                        <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
         <span class="n">parse_repositories</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
                                     <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                                     <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
@@ -370,7 +385,7 @@
 
         <span class="c"># start</span>
         <span class="n">parse_start</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;start&#39;</span><span class="p">,</span>
-                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;start the api server&#39;</span><span class="p">)</span>
+                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;start the api/repository service server&#39;</span><span class="p">)</span>
         <span class="n">parse_start</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
@@ -381,7 +396,7 @@
 
         <span class="c"># stop</span>
         <span class="n">parse_stop</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;stop&#39;</span><span class="p">,</span>
-                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;stop the api server&#39;</span><span class="p">)</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;stop the api/repository service server&#39;</span><span class="p">)</span>
         <span class="n">parse_stop</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
@@ -389,6 +404,25 @@
                                 <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
         <span class="n">parse_stop</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">stop</span><span class="o">.</span><span class="n">stop</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># subtract</span>
+        <span class="n">parse_subtract</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;subtract&#39;</span><span class="p">,</span>
+                                           <span class="n">help</span><span class="o">=</span><span class="s">&#39;subtract a service&#39;</span><span class="p">)</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;OS&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify operating system for service&#39;</span><span class="p">)</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;VERSION&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify version of operating system&#39;</span><span class="p">)</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;TYPE&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify type of service (database, environment, service, tool)&#39;</span><span class="p">)</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;NAME&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of service&#39;</span><span class="p">)</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                               <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="c"># !! TODO use default, and restructure if/else in subtract</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--repository&#39;</span><span class="p">,</span> <span class="s">&#39;-r&#39;</span><span class="p">,</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify repository to subtract service from, use localhost by default&#39;</span><span class="p">)</span>
+        <span class="n">parse_subtract</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">subtract</span><span class="o">.</span><span class="n">subtract</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
 
         <span class="c"># test</span>
         <span class="n">parse_test</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;test&#39;</span><span class="p">,</span>
@@ -406,9 +440,9 @@
 
         <span class="c"># unlink</span>
         <span class="n">parse_unlink</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;unlink&#39;</span><span class="p">,</span>
-                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;unlink a service repository host&#39;</span><span class="p">)</span>
-        <span class="n">parse_unlink</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;SERVICE_HOST&#39;</span><span class="p">,</span>
-                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify service repository host to disconnect from&#39;</span><span class="p">)</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;unlink a service repository&#39;</span><span class="p">)</span>
+        <span class="n">parse_unlink</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;NAME&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of service repository to disconnect from&#39;</span><span class="p">)</span>
         <span class="n">parse_unlink</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
                                   <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
                                   <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
@@ -423,7 +457,7 @@
         <span class="n">parse_update</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-r&#39;</span> <span class="s">&#39;--repository&#39;</span><span class="p">,</span>
                                   <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify service repository host to get updates from&#39;</span><span class="p">)</span>
         <span class="n">parse_update</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
-                                  <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_false&#39;</span><span class="p">,</span>
+                                  <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                                   <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
         <span class="n">parse_update</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">update</span><span class="o">.</span><span class="n">update</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
 
@@ -431,7 +465,7 @@
         <span class="n">parse_version</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;version&#39;</span><span class="p">,</span>
                                               <span class="n">help</span><span class="o">=</span><span class="s">&#39;show version&#39;</span><span class="p">)</span>
         <span class="n">parse_version</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
-                                   <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_false&#39;</span><span class="p">,</span>
+                                   <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                                    <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
         <span class="n">parse_version</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">version</span><span class="o">.</span><span class="n">version</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
 
@@ -477,7 +511,7 @@
         <li class="right" >
           <a href="../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

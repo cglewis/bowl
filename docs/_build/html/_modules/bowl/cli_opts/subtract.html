@@ -1,0 +1,226 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>bowl.cli_opts.subtract &mdash; bowl 0.3.0 documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '0.3.0',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="bowl 0.3.0 documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for bowl.cli_opts.subtract</h1><div class="highlight"><pre>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">This module is the subtract command of bowl.</span>
+
+<span class="sd">Created on 1 September 2014</span>
+<span class="sd">@author: Charlie Lewis</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">fileinput</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<div class="viewcode-block" id="subtract"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.subtract.subtract">[docs]</a><span class="k">class</span> <span class="nc">subtract</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is responsible for the subtract command of the cli.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="nd">@classmethod</span>
+<div class="viewcode-block" id="subtract.main"><a class="viewcode-back" href="../../../bowl.cli_opts.html#bowl.cli_opts.subtract.subtract.main">[docs]</a>    <span class="k">def</span> <span class="nf">main</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">args</span><span class="p">):</span>
+        <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">expanduser</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span>
+                                       <span class="s">&#39;services&#39;</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">TYPE</span><span class="p">,</span>
+                                       <span class="s">&#39;dockerfiles&#39;</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">NAME</span><span class="p">)):</span>
+            <span class="c"># remove dockerfiles</span>
+            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span>
+                                       <span class="s">&#39;services&#39;</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">TYPE</span><span class="p">,</span>
+                                       <span class="s">&#39;dockerfiles&#39;</span><span class="p">,</span>
+                                       <span class="n">args</span><span class="o">.</span><span class="n">NAME</span><span class="p">))</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="c"># remove service</span>
+                <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">TYPE</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">TYPE</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                    <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">NAME</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">elif</span> <span class="n">found</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot; }</span><span class="se">\n</span><span class="s">&quot;</span> <span class="ow">or</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot; },</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                            <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">),</span>
+
+                <span class="n">empty</span> <span class="o">=</span> <span class="mi">1</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="s">&#39;databases/databases&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">fl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">fl</span> <span class="o">!=</span> <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                       <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}&quot;</span> <span class="ow">and</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                            <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="s">&#39;environment/environment&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">fl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">fl</span> <span class="o">!=</span> <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                        <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}&quot;</span> <span class="ow">and</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                            <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="s">&#39;services/services&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">fl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">fl</span> <span class="o">!=</span> <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                        <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}&quot;</span> <span class="ow">and</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                            <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">,</span> <span class="s">&#39;tools/tools&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                    <span class="n">fl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                    <span class="k">if</span> <span class="n">fl</span> <span class="o">!=</span> <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                        <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="n">sl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}&quot;</span> <span class="ow">and</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                            <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+
+                <span class="k">if</span> <span class="n">empty</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                    <span class="c"># if version services are empty, remove it and dockerfiles dir</span>
+                    <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span><span class="p">))</span>
+
+                    <span class="c"># remove service</span>
+                    <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+                    <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="s">&#39;versions&#39;</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">VERSION</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                            <span class="n">found</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="k">elif</span> <span class="n">found</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot; }</span><span class="se">\n</span><span class="s">&quot;</span> <span class="ow">or</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot; },</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                                <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">),</span>
+
+                    <span class="n">empty</span> <span class="o">=</span> <span class="mi">1</span>
+                    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">,</span> <span class="s">&#39;versions&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                        <span class="n">fl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                        <span class="k">if</span> <span class="n">fl</span> <span class="o">!=</span> <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                            <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">else</span><span class="p">:</span>
+                            <span class="n">sl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}&quot;</span> <span class="ow">and</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                                <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+
+                    <span class="k">if</span> <span class="n">empty</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                        <span class="c"># if os versions are empty, remove it</span>
+                        <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span><span class="p">))</span>
+
+                        <span class="c"># remove service</span>
+                        <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="s">&#39;oses&#39;</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
+                            <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">OS</span> <span class="ow">in</span> <span class="n">line</span><span class="p">:</span>
+                                <span class="n">found</span> <span class="o">=</span> <span class="mi">1</span>
+                            <span class="k">elif</span> <span class="n">found</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                                <span class="k">if</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot; }</span><span class="se">\n</span><span class="s">&quot;</span> <span class="ow">or</span> <span class="n">line</span> <span class="o">==</span> <span class="s">&quot; },</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                                    <span class="n">found</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">),</span>
+
+                        <span class="n">empty</span> <span class="o">=</span> <span class="mi">1</span>
+                        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">,</span> <span class="s">&#39;oses&#39;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+                            <span class="n">fl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                            <span class="k">if</span> <span class="n">fl</span> <span class="o">!=</span> <span class="s">&quot;{</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                                <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                            <span class="k">else</span><span class="p">:</span>
+                                <span class="n">sl</span> <span class="o">=</span> <span class="n">f</span><span class="o">.</span><span class="n">readline</span><span class="p">()</span>
+                                <span class="k">if</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}&quot;</span> <span class="ow">and</span> <span class="n">sl</span> <span class="o">!=</span> <span class="s">&quot;}</span><span class="se">\n</span><span class="s">&quot;</span><span class="p">:</span>
+                                    <span class="n">empty</span> <span class="o">=</span> <span class="mi">0</span>
+                        <span class="k">if</span> <span class="n">empty</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+                            <span class="c"># if oses are empty, remove services</span>
+                            <span class="n">shutil</span><span class="o">.</span><span class="n">rmtree</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span><span class="p">,</span> <span class="s">&#39;services&#39;</span><span class="p">))</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;Failed to remove service&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Service doesn&#39;t exist.&quot;</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014 Charlie Lewis, All Rights Reserved..
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

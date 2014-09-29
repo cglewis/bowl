@@ -33,7 +33,7 @@ class logs(object):
                  host = container.split(",")[1]
                  cont = container.split(",")[0]
                  try:
-                     c = docker.Client(base_url='tcp://'+host+':2375', version='1.9',
+                     c = docker.Client(base_url='tcp://'+host+':2375', version='1.12',
                                        timeout=2)
                      output = c.logs(cont)
                      if not args.z:

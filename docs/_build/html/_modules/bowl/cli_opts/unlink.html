@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>bowl.cli_opts.unlink &mdash; bowl 0.2.0 documentation</title>
+    <title>bowl.cli_opts.unlink &mdash; bowl 0.3.0 documentation</title>
     
     <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
     <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    '../../../',
-        VERSION:     '0.2.0',
+        VERSION:     '0.3.0',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true
@@ -23,7 +23,7 @@
     <script type="text/javascript" src="../../../_static/jquery.js"></script>
     <script type="text/javascript" src="../../../_static/underscore.js"></script>
     <script type="text/javascript" src="../../../_static/doctools.js"></script>
-    <link rel="top" title="bowl 0.2.0 documentation" href="../../../index.html" />
+    <link rel="top" title="bowl 0.3.0 documentation" href="../../../index.html" />
     <link rel="up" title="Module code" href="../../index.html" /> 
   </head>
   <body>
@@ -36,7 +36,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
       </ul>
     </div>  
@@ -69,10 +69,11 @@
             <span class="c"># !! TODO need to do check if specfied repository was not there to begin with</span>
             <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">fileinput</span><span class="o">.</span><span class="n">input</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">directory</span><span class="p">,</span> <span class="s">&quot;repositories&quot;</span><span class="p">),</span> <span class="n">inplace</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span>
                 <span class="n">host</span> <span class="o">=</span> <span class="n">ast</span><span class="o">.</span><span class="n">literal_eval</span><span class="p">(</span><span class="n">line</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="p">))</span>
-                <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">SERVICE_HOST</span> <span class="o">!=</span> <span class="n">host</span><span class="p">[</span><span class="s">&#39;title&#39;</span><span class="p">]:</span>
+                <span class="k">if</span> <span class="n">args</span><span class="o">.</span><span class="n">NAME</span> <span class="o">!=</span> <span class="n">host</span><span class="p">[</span><span class="s">&#39;name&#39;</span><span class="p">]</span> <span class="ow">and</span> <span class="n">directory</span> <span class="o">!=</span> <span class="n">host</span><span class="p">[</span><span class="s">&#39;path&#39;</span><span class="p">]:</span>
                     <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span><span class="n">line</span><span class="p">),</span>
         <span class="k">except</span><span class="p">:</span>
-            <span class="k">print</span> <span class="s">&quot;unable to remove service repository&quot;</span>
+            <span class="c"># !! TODO don&#39;t print as it will replace what&#39;s in repositories</span>
+            <span class="c">#print &quot;unable to remove service repository&quot;</span>
             <span class="k">return</span> <span class="bp">False</span>
         <span class="k">return</span> <span class="bp">True</span></div></div>
 </pre></div>
@@ -108,7 +109,7 @@
         <li class="right" >
           <a href="../../../py-modindex.html" title="Python Module Index"
              >modules</a> |</li>
-        <li><a href="../../../index.html">bowl 0.2.0 documentation</a> &raquo;</li>
+        <li><a href="../../../index.html">bowl 0.3.0 documentation</a> &raquo;</li>
           <li><a href="../../index.html" >Module code</a> &raquo;</li> 
       </ul>
     </div>

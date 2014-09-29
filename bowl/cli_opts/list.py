@@ -36,7 +36,7 @@ class list(object):
 
         host_c = []
         for host in host_a:
-            c = docker.Client(base_url='tcp://'+host+':2375', version='1.9',
+            c = docker.Client(base_url='tcp://'+host+':2375', version='1.12',
                               timeout=2)
             host_c.append(c.containers())
 
