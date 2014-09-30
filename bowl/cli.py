@@ -10,6 +10,7 @@ from bowl.cli_opts import add
 from bowl.cli_opts import connect
 from bowl.cli_opts import delete
 from bowl.cli_opts import disconnect
+from bowl.cli_opts import grant
 from bowl.cli_opts import hosts
 from bowl.cli_opts import image_import
 from bowl.cli_opts import images
@@ -23,6 +24,7 @@ from bowl.cli_opts import logs
 from bowl.cli_opts import new
 from bowl.cli_opts import remove
 from bowl.cli_opts import repositories
+from bowl.cli_opts import revoke
 from bowl.cli_opts import services
 from bowl.cli_opts import snapshot
 from bowl.cli_opts import snapshots
