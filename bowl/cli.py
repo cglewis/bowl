@@ -101,6 +101,22 @@ class cli(object):
                                       help='metadata path, default '+default_metadata_path)
         parse_disconnect.set_defaults(func=disconnect.disconnect.main)
 
+        # grant
+        parse_grant = subparsers.add_parser('grant',
+                                            help='grant access to container for a user')
+        parse_grant.add_argument('USER',
+                                 help='specify user to grant access')
+        parse_grant.add_argument('--container', '-c',
+                                 default="all",
+                                 help='specify container to add access to for the specified user, default all')
+        parse_grant.add_argument('--metadata_path', '-m',
+                                 default=default_metadata_path,
+                                 help='metadata path, default '+default_metadata_path)
+        parse_grant.add_argument('-z',
+                                 action='store_true',
+                                 help='do not print any output')
+        parse_grant.set_defaults(func=grant.grant.main)
+
         # hosts
         parse_hosts = subparsers.add_parser('hosts',
                                             help='list hosts that are registered')
@@ -294,6 +310,22 @@ class cli(object):
                                     action='store_true',
                                     help='do not print any output')
         parse_repositories.set_defaults(func=repositories.repositories.main)
+
+        # revoke
+        parse_revoke = subparsers.add_parser('revoke',
+                                             help='revoke access to container for a user')
+        parse_revoke.add_argument('USER',
+                                  help='specify user to revoke access')
+        parse_revoke.add_argument('--container', '-c',
+                                  default="all",
+                                  help='specify container to remove access to for the specified user, default all')
+        parse_revoke.add_argument('--metadata_path', '-m',
+                                  default=default_metadata_path,
+                                  help='metadata path, default '+default_metadata_path)
+        parse_revoke.add_argument('-z',
+                                  action='store_true',
+                                  help='do not print any output')
+        parse_revoke.set_defaults(func=revoke.revoke.main)
 
         # services
         parse_services = subparsers.add_parser('services',

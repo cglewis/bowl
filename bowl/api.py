@@ -66,6 +66,7 @@ class main(object):
             '/connect/(.*)', 'api_connect',
             '/delete/(.*)', 'api_delete',
             '/disconnect/(.*)', 'api_disconnect',
+            '/grant/(.*)/(.*)', 'api_grant',
             '/hosts', 'api_hosts',
             '/images', 'api_images',
             '/import', 'api_image_import',
@@ -80,6 +81,7 @@ class main(object):
             '/remove', 'api_remove',
             '/repositories', 'api_repositories',
             '/repo/services', 'api_repo_services',
+            '/revoke/(.*)/(.*)', 'api_revoke',
             '/services', 'api_services',
             '/snapshot/(.*)', 'api_snapshot',
             '/snapshots', 'api_snapshots',
@@ -176,6 +178,17 @@ class api_disconnect:
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
         return disconnect.disconnect.main(args)
+
+class api_grant:
+    """
+    This class is resposible for granting access to a container for a user.
+    """
+    def GET(self, user, container):
+        """
+        grants access for the specified user to a container.
+        """
+        # !! TODO
+        return
 
 class api_hosts:
     """
@@ -472,6 +485,17 @@ class api_repo_services:
         self.make_tarfile(os.path.join(cwd, "static/default.tar.gz"), os.path.join(cwd, "containers/.default"))
         f = open(os.path.join(cwd, "static/default.tar.gz"), 'r')
         return f.read()
+
+class api_revoke:
+    """
+    This class is resposible for revokeing access to a container for a user.
+    """
+    def GET(self, user, container):
+        """
+        revokes access for the specified user to a container.
+        """
+        # !! TODO
+        return
 
 class api_services:
     """
