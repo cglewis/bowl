@@ -14,6 +14,9 @@ class subtract(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         args.metadata_path = os.path.expanduser(args.metadata_path)
         if os.path.exists(os.path.join(args.metadata_path,
                                        'services',

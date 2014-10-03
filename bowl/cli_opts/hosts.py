@@ -13,6 +13,9 @@ class hosts(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         hosts = []
         try:
             directory = args.metadata_path

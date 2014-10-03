@@ -14,6 +14,9 @@ class remove(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         # !! TODO make more robust and read from connected hosts
         #         also deal with the possibility of more than one
         #         container having the same name on different hosts

@@ -28,6 +28,9 @@ class new(object):
     """
     This class is responsible for the new command of the cli.
     """
+    # !! TODO needs to implement login if using that
+
+
     @staticmethod
     def build_dockerfile(self, dockerfile, uuid_dir, main_arg):
         # try/catch

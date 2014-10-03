@@ -18,6 +18,9 @@ class services(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         repo_args = Object()
         repo_args.z = True
         repo_args.metadata_path = os.path.expanduser(args.metadata_path)

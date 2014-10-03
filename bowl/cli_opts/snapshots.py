@@ -13,6 +13,9 @@ class snapshots(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         snapshots = []
         try:
             directory = args.metadata_path

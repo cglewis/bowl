@@ -19,6 +19,9 @@ class update(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         # run through hosts in ~/.bowl/repositories
         repos = repositories.repositories.main(args)
 

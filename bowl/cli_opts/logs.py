@@ -18,6 +18,9 @@ class logs(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO needs to implement login if using that
+
+
         directory = args.metadata_path
         directory = os.path.expanduser(directory)
         if not os.path.exists(directory):
