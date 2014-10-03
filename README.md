@@ -17,6 +17,7 @@ Main features:
 - Configure containers at runtime, either in bulk or individually.
 - Provides a way to run multiple services on the same container without having to have a Dockerfile for the combined services i.e. Redis Server and SSH.
 - Provides a friendly end-user interface for running containers, as well as a straightforward way for operators to manage images, hosts, and available services.
+- Multiple repositories can be added for services across multiple hosts.
 - Services can be easily changed based on environments by changing the path to the metadata for the services.
 
 More information coming soon, including getting started, known issues, roadmap, and more.
