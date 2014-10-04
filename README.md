@@ -11,7 +11,7 @@ Tool for easily building and configuring virtual environments on top of Docker.
 Main features:
 
 - Works with multiple Docker hosts.
-- easily add new derives through a simple metadata JSON object and standard Dockerfile.
+- Easily add new derives through a simple metadata JSON object and standard Dockerfile.
 - Snapshotting containers.
 - Spin up the same container on multiple Docker hosts in one go.
 - Configure containers at runtime, either in bulk or individually.
@@ -19,5 +19,6 @@ Main features:
 - Provides a friendly end-user interface for running containers, as well as a straightforward way for operators to manage images, hosts, and available services.
 - Multiple repositories can be added for services across multiple hosts.
 - Services can be easily changed based on environments by changing the path to the metadata for the services.
+- Rich CLI and API so that bowl can be run from the command-line in a curses interface or from a RESTful interface served up by a webserver.
 
 More information coming soon, including getting started, known issues, roadmap, and more.
