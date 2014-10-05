@@ -1,0 +1,4 @@
+cert based authentication (or ssh keys?)
+authorize and authenticate hosts, services, images, and containers
+better curation of services
+integration with github and docker hub
