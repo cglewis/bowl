@@ -822,6 +822,7 @@ class new(object):
                                         else:
                                             dockerfile.append(line.rstrip('\n'))
                                     elif line.startswith("ADD"):
+                                        # !! TODO check if the add line is a url or a zip as well
                                         # !! TODO try/except
                                         add_line = line.rstrip('\n').split()
                                         dockerfile.append(add_line[0]+" "+service_name[3]+"/"+add_line[1]+" "+add_line[2])
