@@ -21,4 +21,5 @@ Main features:
 - Services can be easily changed based on environments by changing the path to the metadata for the services.
 - Rich CLI and API so that bowl can be run from the command-line in a curses interface or from a RESTful interface served up by a webserver.
 
+
 More information coming soon, including getting started, known issues, roadmap, and more.
