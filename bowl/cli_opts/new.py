@@ -827,8 +827,6 @@ class new(object):
                                         if "://" in line:
                                             # !! TODO
                                             junk = 1
-                                        # !! TODO
-                                        #elif zip/gz/etc.
                                         else:
                                             # !! TODO try/except
                                             add_line = line.rstrip('\n').split()
