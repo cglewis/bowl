@@ -15,6 +15,7 @@ import shutil
 import sys
 import time
 import uuid
+import wget
 
 from bowl.cli_opts import link
 from bowl.cli_opts import repositories
@@ -824,12 +825,21 @@ class new(object):
                                     elif line.startswith("ADD"):
                                         # !! TODO check if the add line is a url or a zip as well
                                         # cheap hack
+                                        add_line = line.rstrip('\n').split()
                                         if "://" in line:
-                                            # !! TODO
-                                            junk = 1
+                                            try:
+                                                url = add_line[1]
+                                                print 1
+                                                filename = wget.download(url, out="/tmp/"+uuid_dir+"/"+service_name[3])
+                                                filename = "/".join(filename.split('/')[-2:])
+                                                print 1
+                                                dockerfile.append(add_line[0]+" "+filename+" "+add_line[2])
+                                                print 1
+                                            except:
+                                                print "Failed to download add statement"
+                                                sys.exit(0)
                                         else:
                                             # !! TODO try/except
-                                            add_line = line.rstrip('\n').split()
                                             dockerfile.append(add_line[0]+" "+service_name[3]+"/"+add_line[1]+" "+add_line[2])
                                     elif line.startswith("COPY"):
                                         # !! TODO try/except

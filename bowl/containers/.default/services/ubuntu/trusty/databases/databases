@@ -62,5 +62,18 @@
   "background_cmd": "TODO",
   "tty": "no",
   "interactive": "no"
+ },
+
+ "rethinkdb":
+ {
+  "title": "rethinkdb",
+  "type": "choice_menu",
+  "command": "ubuntu:trusty:databases:rethinkdb",
+  "object": "database",
+  "cluster": "yes",
+  "combine_cmd": "yes",
+  "background_cmd": "TODO",
+  "tty": "no",
+  "interactive": "no"
  }
 }

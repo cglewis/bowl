@@ -36,7 +36,7 @@ from bowl.cli_opts import snapshots
 from bowl.cli_opts import subtract
 from bowl.cli_opts import test
 from bowl.cli_opts import unlink
-from bowl.cli_opts import update
+#from bowl.cli_opts import update
 from bowl.cli_opts import version
 
 START_TIME = datetime.datetime.now()
