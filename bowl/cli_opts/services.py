@@ -77,12 +77,15 @@ class services(object):
                                 for database in databases:
                                     services_dict['databases'].append(database)
                             elif args.json:
-                                for database in databases:
-                                    try:
-                                        services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
-                                    except:
-                                        services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
-                                        services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
+                                if databases:
+                                    for database in databases:
+                                        try:
+                                            services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
+                                        except:
+                                            services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
+                                            services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
+                                else:
+                                    services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
                             else:
                                 for database in databases:
                                     services_dict['databases'].append(databases[database]['command'])
@@ -97,12 +100,15 @@ class services(object):
                                 for env in environment:
                                     services_dict['environment'].append(env)
                             elif args.json:
-                                for environ in environment:
-                                    try:
-                                        services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
-                                    except:
-                                        services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
-                                        services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
+                                if environment:
+                                    for environ in environment:
+                                        try:
+                                            services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
+                                        except:
+                                            services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
+                                            services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
+                                else:
+                                    services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
                             else:
                                 for env in environment:
                                     services_dict['environment'].append(environment[env]['command'])
@@ -117,12 +123,15 @@ class services(object):
                                 for service in services:
                                     services_dict['services'].append(service)
                             elif args.json:
-                                for service in services:
-                                    try:
-                                        services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
-                                    except:
-                                        services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
-                                        services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
+                                if services:
+                                    for service in services:
+                                        try:
+                                            services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
+                                        except:
+                                            services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
+                                            services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
+                                else:
+                                    services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
                             else:
                                 for service in services:
                                     services_dict['services'].append(services[service]['command'])
@@ -137,12 +146,15 @@ class services(object):
                                 for tool in tools:
                                     services_dict['tools'].append(tool)
                             elif args.json:
-                                for tool in tools:
-                                    try:
-                                        services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
-                                    except:
-                                        services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
-                                        services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
+                                if tools:
+                                    for tool in tools:
+                                        try:
+                                            services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
+                                        except:
+                                            services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
+                                            services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
+                                else:
+                                    services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
                             else:
                                 for tool in tools:
                                     services_dict['tools'].append(tools[tool]['command'])
