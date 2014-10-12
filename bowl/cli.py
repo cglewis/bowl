@@ -56,7 +56,7 @@ class cli(object):
         parse_add.add_argument('VERSION',
                                 help='specify version of operating system')
         parse_add.add_argument('TYPE',
-                                help='specify type of service (database, environment, service, tool)')
+                                help='specify type of service (databases, environment, services, tools)')
         parse_add.add_argument('NAME',
                                 help='specify name of service')
         parse_add.add_argument('JSON',

@@ -20,7 +20,6 @@ class services(object):
     def main(self, args):
         # !! TODO needs to implement login if using that
 
-
         repo_args = Object()
         repo_args.z = True
         repo_args.metadata_path = os.path.expanduser(args.metadata_path)
@@ -35,7 +34,6 @@ class services(object):
 
         found_services = 0
 
-        # !! TODO note for multiple repositories, need to check if the os/version/service already exists, and provide all options
         # !! TODO should services on remote repositories be able to run on other remote hosts?
 
         for repo in repos:
@@ -69,7 +67,6 @@ class services(object):
                         else:
                             services_dict['oses'][os_key]['versions'] = version_dict
                         for version_key in version_dict:
-                            # !! TODO check if keys already exist
                             # read databases for each version
                             with open(os.path.join(path, os_key, version_key, "databases/databases"), 'r') as f:
                                 databases = f.read()
@@ -80,7 +77,12 @@ class services(object):
                                 for database in databases:
                                     services_dict['databases'].append(database)
                             elif args.json:
-                                services_dict['oses'][os_key]['versions'][version_key]['databases'] = databases
+                                for database in databases:
+                                    try:
+                                        services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
+                                    except:
+                                        services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
+                                        services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
                             else:
                                 for database in databases:
                                     services_dict['databases'].append(databases[database]['command'])
@@ -95,7 +97,12 @@ class services(object):
                                 for env in environment:
                                     services_dict['environment'].append(env)
                             elif args.json:
-                                services_dict['oses'][os_key]['versions'][version_key]['environment'] = environment
+                                for environ in environment:
+                                    try:
+                                        services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
+                                    except:
+                                        services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
+                                        services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
                             else:
                                 for env in environment:
                                     services_dict['environment'].append(environment[env]['command'])
@@ -110,7 +117,12 @@ class services(object):
                                 for service in services:
                                     services_dict['services'].append(service)
                             elif args.json:
-                                services_dict['oses'][os_key]['versions'][version_key]['services'] = services
+                                for service in services:
+                                    try:
+                                        services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
+                                    except:
+                                        services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
+                                        services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
                             else:
                                 for service in services:
                                     services_dict['services'].append(services[service]['command'])
@@ -125,7 +137,12 @@ class services(object):
                                 for tool in tools:
                                     services_dict['tools'].append(tool)
                             elif args.json:
-                                services_dict['oses'][os_key]['versions'][version_key]['tools'] = tools
+                                for tool in tools:
+                                    try:
+                                        services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
+                                    except:
+                                        services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
+                                        services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
                             else:
                                 for tool in tools:
                                     services_dict['tools'].append(tools[tool]['command'])

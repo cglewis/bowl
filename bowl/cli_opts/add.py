@@ -163,15 +163,18 @@ class add(object):
                         if not os_name in open(os.path.join(directory, "oses")).read():
                             num_lines = sum(1 for line in open(os.path.join(directory, "oses")))
                             for line_number, line in enumerate(fileinput.input(os.path.join(directory, "oses"), inplace=1)):
-                                try:
-                                    if line_number == num_lines-2:
-                                        sys.stdout.write(line.rstrip('\n')+",\n")
-                                    elif line_number == num_lines-1:
-                                        sys.stdout.write("\n")
-                                    else:
-                                        sys.stdout.write(line)
-                                except:
-                                    print "Malformed oses file, not enough lines"
+                                if num_lines == 2:
+                                    sys.stdout.write("")
+                                else:
+                                    try:
+                                        if line_number == num_lines-2:
+                                            sys.stdout.write(line.rstrip('\n')+",\n")
+                                        elif line_number == num_lines-1:
+                                            sys.stdout.write("\n")
+                                        else:
+                                            sys.stdout.write(line)
+                                    except:
+                                        print "Malformed oses file, not enough lines"
                             with open(os.path.join(directory, "oses"), 'a') as f:
                                 f.write(" \""+args.OS+"\":\n" +
                                         " {\n" +
@@ -203,15 +206,18 @@ class add(object):
                         if not version_name in open(os.path.join(directory, "versions")).read():
                             num_lines = sum(1 for line in open(os.path.join(directory, "versions")))
                             for line_number, line in enumerate(fileinput.input(os.path.join(directory, "versions"), inplace=1)):
-                                try:
-                                    if line_number == num_lines-2:
-                                        sys.stdout.write(line.rstrip('\n')+",\n")
-                                    elif line_number == num_lines-1:
-                                        sys.stdout.write("\n")
-                                    else:
-                                        sys.stdout.write(line)
-                                except:
-                                    print "Malformed version file, not enough lines"
+                                if num_lines == 2:
+                                    sys.stdout.write("")
+                                else:
+                                    try:
+                                        if line_number == num_lines-2:
+                                            sys.stdout.write(line.rstrip('\n')+",\n")
+                                        elif line_number == num_lines-1:
+                                            sys.stdout.write("\n")
+                                        else:
+                                            sys.stdout.write(line)
+                                    except:
+                                        print "Malformed version file, not enough lines"
                             with open(os.path.join(directory, "versions"), 'a') as f:
                                 f.write(" \""+args.VERSION+"\":\n" +
                                         " {\n" +
@@ -244,15 +250,18 @@ class add(object):
                             if not db_name in open(os.path.join(directory_databases, "databases")).read():
                                 num_lines = sum(1 for line in open(os.path.join(directory_databases, "databases")))
                                 for line_number, line in enumerate(fileinput.input(os.path.join(directory_databases, "databases"), inplace=1)):
-                                    try:
-                                        if line_number == num_lines-2:
-                                            sys.stdout.write(line.rstrip('\n')+",\n")
-                                        elif line_number == num_lines-1:
-                                            sys.stdout.write("\n")
-                                        else:
-                                            sys.stdout.write(line)
-                                    except:
-                                        print "Malformed databases file, not enough lines"
+                                    if num_lines == 2:
+                                        sys.stdout.write("")
+                                    else:
+                                        try:
+                                            if line_number == num_lines-2:
+                                                sys.stdout.write(line.rstrip('\n')+",\n")
+                                            elif line_number == num_lines-1:
+                                                sys.stdout.write("\n")
+                                            else:
+                                                sys.stdout.write(line)
+                                        except:
+                                            print "Malformed databases file, not enough lines"
                                 with open(os.path.join(directory_databases, "databases"), 'a') as f:
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
@@ -300,15 +309,18 @@ class add(object):
                             if not env_name in open(os.path.join(directory_environment, "environment")).read():
                                 num_lines = sum(1 for line in open(os.path.join(directory_environemnt, "environemnt")))
                                 for line_number, line in enumerate(fileinput.input(os.path.join(directory_environment, "environment"), inplace=1)):
-                                    try:
-                                        if line_number == num_lines-2:
-                                            sys.stdout.write(line.rstrip('\n')+",\n")
-                                        elif line_number == num_lines-1:
-                                            sys.stdout.write("\n")
-                                        else:
-                                            sys.stdout.write(line)
-                                    except:
-                                        print "Malformed environment file, not enough lines"
+                                    if num_lines == 2:
+                                        sys.stdout.write("")
+                                    else:
+                                        try:
+                                            if line_number == num_lines-2:
+                                                sys.stdout.write(line.rstrip('\n')+",\n")
+                                            elif line_number == num_lines-1:
+                                                sys.stdout.write("\n")
+                                            else:
+                                                sys.stdout.write(line)
+                                        except:
+                                            print "Malformed environment file, not enough lines"
                                 with open(os.path.join(directory_environment, "environment"), 'a') as f:
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
@@ -356,15 +368,18 @@ class add(object):
                             if not service_name in open(os.path.join(directory_services, "services")).read():
                                 num_lines = sum(1 for line in open(os.path.join(directory_services, "services")))
                                 for line_number, line in enumerate(fileinput.input(os.path.join(directory_services, "services"), inplace=1)):
-                                    try:
-                                        if line_number == num_lines-2:
-                                            sys.stdout.write(line.rstrip('\n')+",\n")
-                                        elif line_number == num_lines-1:
-                                            sys.stdout.write("\n")
-                                        else:
-                                            sys.stdout.write(line)
-                                    except:
-                                        print "Malformed services file, not enough lines"
+                                    if num_lines == 2:
+                                        sys.stdout.write("")
+                                    else:
+                                        try:
+                                            if line_number == num_lines-2:
+                                                sys.stdout.write(line.rstrip('\n')+",\n")
+                                            elif line_number == num_lines-1:
+                                                sys.stdout.write("\n")
+                                            else:
+                                                sys.stdout.write(line)
+                                        except:
+                                            print "Malformed services file, not enough lines"
                                 with open(os.path.join(directory_services, "services"), 'a') as f:
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
@@ -412,15 +427,18 @@ class add(object):
                             if not tool_name in open(os.path.join(directory_tools, "tools")).read():
                                 num_lines = sum(1 for line in open(os.path.join(directory_tools, "tools")))
                                 for line_number, line in enumerate(fileinput.input(os.path.join(directory_tools, "tools"), inplace=1)):
-                                    try:
-                                        if line_number == num_lines-2:
-                                            sys.stdout.write(line.rstrip('\n')+",\n")
-                                        elif line_number == num_lines-1:
-                                            sys.stdout.write("\n")
-                                        else:
-                                            sys.stdout.write(line)
-                                    except:
-                                        print "Malformed tools file, not enough lines"
+                                    if num_lines == 2:
+                                        sys.stdout.write("")
+                                    else:
+                                        try:
+                                            if line_number == num_lines-2:
+                                                sys.stdout.write(line.rstrip('\n')+",\n")
+                                            elif line_number == num_lines-1:
+                                                sys.stdout.write("\n")
+                                            else:
+                                                sys.stdout.write(line)
+                                        except:
+                                            print "Malformed tools file, not enough lines"
                                 with open(os.path.join(directory_tools, "tools"), 'a') as f:
                                     f.write(" \""+args.NAME+"\":\n" +
                                             " {\n" +
