@@ -800,7 +800,7 @@ class new(object):
                     try:
                         copied = 0
                         for repo in repos:
-                            # !! TODO handle care where this matches on more than one repo
+                            # !! TODO handle case where this matches on more than one repo
                             if repo.split(", ")[0].strip() == service_orig.split(", ")[1].strip() and copied == 0:
                                 copied = 1
                                 shutil.copytree(os.path.join(repo.split(", ")[2], os_flavor+"/dockerfiles/"+service_name[3]), '/tmp/'+uuid_dir+"/"+service_name[3])
@@ -823,18 +823,15 @@ class new(object):
                                         else:
                                             dockerfile.append(line.rstrip('\n'))
                                     elif line.startswith("ADD"):
-                                        # !! TODO check if the add line is a url or a zip as well
-                                        # cheap hack
+                                        # !! TODO check if the add line is a url
                                         add_line = line.rstrip('\n').split()
+                                        # cheap hack
                                         if "://" in line:
                                             try:
                                                 url = add_line[1]
-                                                print 1
                                                 filename = wget.download(url, out="/tmp/"+uuid_dir+"/"+service_name[3])
                                                 filename = "/".join(filename.split('/')[-2:])
-                                                print 1
                                                 dockerfile.append(add_line[0]+" "+filename+" "+add_line[2])
-                                                print 1
                                             except:
                                                 print "Failed to download add statement"
                                                 sys.exit(0)
