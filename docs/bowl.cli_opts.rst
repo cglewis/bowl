@@ -36,6 +36,14 @@ bowl.cli_opts.disconnect module
     :undoc-members:
     :show-inheritance:
 
+bowl.cli_opts.grant module
+--------------------------
+
+.. automodule:: bowl.cli_opts.grant
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 bowl.cli_opts.hosts module
 --------------------------
 
@@ -136,6 +144,14 @@ bowl.cli_opts.repositories module
 ---------------------------------
 
 .. automodule:: bowl.cli_opts.repositories
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+bowl.cli_opts.revoke module
+---------------------------
+
+.. automodule:: bowl.cli_opts.revoke
     :members:
     :undoc-members:
     :show-inheritance:

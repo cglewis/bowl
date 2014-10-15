@@ -64,6 +64,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.connect">bowl.cli_opts.connect module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.delete">bowl.cli_opts.delete module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.disconnect">bowl.cli_opts.disconnect module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.grant">bowl.cli_opts.grant module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.hosts">bowl.cli_opts.hosts module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.image_import">bowl.cli_opts.image_import module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.images">bowl.cli_opts.images module</a></li>
@@ -77,6 +78,7 @@
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.new">bowl.cli_opts.new module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.remove">bowl.cli_opts.remove module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.repositories">bowl.cli_opts.repositories module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.revoke">bowl.cli_opts.revoke module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.services">bowl.cli_opts.services module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.snapshot">bowl.cli_opts.snapshot module</a></li>
 <li class="toctree-l2"><a class="reference internal" href="bowl.cli_opts.html#module-bowl.cli_opts.snapshots">bowl.cli_opts.snapshots module</a></li>
@@ -145,6 +147,18 @@
 <dt id="bowl.api.api_disconnect.GET">
 <tt class="descname">GET</tt><big>(</big><em>host</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_disconnect.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_disconnect.GET" title="Permalink to this definition">¶</a></dt>
 <dd><p>disconnects the specified docker host.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_grant">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_grant</tt><a class="reference internal" href="_modules/bowl/api.html#api_grant"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_grant" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for granting access to a container for a user.</p>
+<dl class="method">
+<dt id="bowl.api.api_grant.GET">
+<tt class="descname">GET</tt><big>(</big><em>user</em>, <em>container</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_grant.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_grant.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>grants access for the specified user to a container.</p>
 </dd></dl>
 
 </dd></dl>
@@ -367,6 +381,18 @@ file.</p>
 </tr>
 </tbody>
 </table>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="bowl.api.api_revoke">
+<em class="property">class </em><tt class="descclassname">bowl.api.</tt><tt class="descname">api_revoke</tt><a class="reference internal" href="_modules/bowl/api.html#api_revoke"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_revoke" title="Permalink to this definition">¶</a></dt>
+<dd><p>This class is resposible for revokeing access to a container for a user.</p>
+<dl class="method">
+<dt id="bowl.api.api_revoke.GET">
+<tt class="descname">GET</tt><big>(</big><em>user</em>, <em>container</em><big>)</big><a class="reference internal" href="_modules/bowl/api.html#api_revoke.GET"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#bowl.api.api_revoke.GET" title="Permalink to this definition">¶</a></dt>
+<dd><p>revokes access for the specified user to a container.</p>
 </dd></dl>
 
 </dd></dl>

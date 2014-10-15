@@ -64,6 +64,7 @@
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">connect</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">delete</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">disconnect</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">grant</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">hosts</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">image_import</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">images</span>
@@ -77,12 +78,14 @@
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">new</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">remove</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">repositories</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">revoke</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">services</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshot</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshots</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">subtract</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">test</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">unlink</span>
+<span class="c">#from bowl.cli_opts import update</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">version</span>
 
 <span class="n">START_TIME</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
@@ -112,6 +115,7 @@
             <span class="s">&#39;/connect/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_connect&#39;</span><span class="p">,</span>
             <span class="s">&#39;/delete/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_delete&#39;</span><span class="p">,</span>
             <span class="s">&#39;/disconnect/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_disconnect&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/grant/(.*)/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_grant&#39;</span><span class="p">,</span>
             <span class="s">&#39;/hosts&#39;</span><span class="p">,</span> <span class="s">&#39;api_hosts&#39;</span><span class="p">,</span>
             <span class="s">&#39;/images&#39;</span><span class="p">,</span> <span class="s">&#39;api_images&#39;</span><span class="p">,</span>
             <span class="s">&#39;/import&#39;</span><span class="p">,</span> <span class="s">&#39;api_image_import&#39;</span><span class="p">,</span>
@@ -126,6 +130,7 @@
             <span class="s">&#39;/remove&#39;</span><span class="p">,</span> <span class="s">&#39;api_remove&#39;</span><span class="p">,</span>
             <span class="s">&#39;/repositories&#39;</span><span class="p">,</span> <span class="s">&#39;api_repositories&#39;</span><span class="p">,</span>
             <span class="s">&#39;/repo/services&#39;</span><span class="p">,</span> <span class="s">&#39;api_repo_services&#39;</span><span class="p">,</span>
+            <span class="s">&#39;/revoke/(.*)/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_revoke&#39;</span><span class="p">,</span>
             <span class="s">&#39;/services&#39;</span><span class="p">,</span> <span class="s">&#39;api_services&#39;</span><span class="p">,</span>
             <span class="s">&#39;/snapshot/(.*)&#39;</span><span class="p">,</span> <span class="s">&#39;api_snapshot&#39;</span><span class="p">,</span>
             <span class="s">&#39;/snapshots&#39;</span><span class="p">,</span> <span class="s">&#39;api_snapshots&#39;</span><span class="p">,</span>
@@ -222,6 +227,17 @@
         <span class="c"># !! TODO figure out a way to make this an option</span>
         <span class="n">args</span><span class="o">.</span><span class="n">metadata_path</span> <span class="o">=</span> <span class="s">&quot;~/.bowl&quot;</span>
         <span class="k">return</span> <span class="n">disconnect</span><span class="o">.</span><span class="n">disconnect</span><span class="o">.</span><span class="n">main</span><span class="p">(</span><span class="n">args</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="api_grant"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_grant">[docs]</a><span class="k">class</span> <span class="nc">api_grant</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for granting access to a container for a user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_grant.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_grant.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        grants access for the specified user to a container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
+        <span class="k">return</span>
 </div></div>
 <div class="viewcode-block" id="api_hosts"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_hosts">[docs]</a><span class="k">class</span> <span class="nc">api_hosts</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>
@@ -518,6 +534,17 @@
         <span class="bp">self</span><span class="o">.</span><span class="n">make_tarfile</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">&quot;static/default.tar.gz&quot;</span><span class="p">),</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">&quot;containers/.default&quot;</span><span class="p">))</span>
         <span class="n">f</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cwd</span><span class="p">,</span> <span class="s">&quot;static/default.tar.gz&quot;</span><span class="p">),</span> <span class="s">&#39;r&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">f</span><span class="o">.</span><span class="n">read</span><span class="p">()</span>
+</div></div>
+<div class="viewcode-block" id="api_revoke"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_revoke">[docs]</a><span class="k">class</span> <span class="nc">api_revoke</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    This class is resposible for revokeing access to a container for a user.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+<div class="viewcode-block" id="api_revoke.GET"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_revoke.GET">[docs]</a>    <span class="k">def</span> <span class="nf">GET</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">user</span><span class="p">,</span> <span class="n">container</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        revokes access for the specified user to a container.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c"># !! TODO</span>
+        <span class="k">return</span>
 </div></div>
 <div class="viewcode-block" id="api_services"><a class="viewcode-back" href="../../bowl.html#bowl.api.api_services">[docs]</a><span class="k">class</span> <span class="nc">api_services</span><span class="p">:</span>
     <span class="sd">&quot;&quot;&quot;</span>

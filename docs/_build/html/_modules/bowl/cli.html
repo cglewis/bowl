@@ -59,6 +59,7 @@
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">connect</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">delete</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">disconnect</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">grant</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">hosts</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">image_import</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">images</span>
@@ -72,6 +73,7 @@
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">new</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">remove</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">repositories</span>
+<span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">revoke</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">services</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshot</span>
 <span class="kn">from</span> <span class="nn">bowl.cli_opts</span> <span class="kn">import</span> <span class="n">snapshots</span>
@@ -103,7 +105,7 @@
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;VERSION&#39;</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify version of operating system&#39;</span><span class="p">)</span>
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;TYPE&#39;</span><span class="p">,</span>
-                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify type of service (database, environment, service, tool)&#39;</span><span class="p">)</span>
+                                <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify type of service (databases, environment, services, tools)&#39;</span><span class="p">)</span>
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;NAME&#39;</span><span class="p">,</span>
                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify name of service&#39;</span><span class="p">)</span>
         <span class="n">parse_add</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;JSON&#39;</span><span class="p">,</span>
@@ -147,6 +149,22 @@
                                       <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
                                       <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
         <span class="n">parse_disconnect</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">disconnect</span><span class="o">.</span><span class="n">disconnect</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># grant</span>
+        <span class="n">parse_grant</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;grant&#39;</span><span class="p">,</span>
+                                            <span class="n">help</span><span class="o">=</span><span class="s">&#39;grant access to container for a user&#39;</span><span class="p">)</span>
+        <span class="n">parse_grant</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;USER&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify user to grant access&#39;</span><span class="p">)</span>
+        <span class="n">parse_grant</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--container&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="s">&quot;all&quot;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify container to add access to for the specified user, default all&#39;</span><span class="p">)</span>
+        <span class="n">parse_grant</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                 <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_grant</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                 <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                 <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_grant</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">grant</span><span class="o">.</span><span class="n">grant</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
 
         <span class="c"># hosts</span>
         <span class="n">parse_hosts</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;hosts&#39;</span><span class="p">,</span>
@@ -341,6 +359,22 @@
                                     <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
                                     <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
         <span class="n">parse_repositories</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">repositories</span><span class="o">.</span><span class="n">repositories</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
+
+        <span class="c"># revoke</span>
+        <span class="n">parse_revoke</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;revoke&#39;</span><span class="p">,</span>
+                                             <span class="n">help</span><span class="o">=</span><span class="s">&#39;revoke access to container for a user&#39;</span><span class="p">)</span>
+        <span class="n">parse_revoke</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;USER&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify user to revoke access&#39;</span><span class="p">)</span>
+        <span class="n">parse_revoke</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--container&#39;</span><span class="p">,</span> <span class="s">&#39;-c&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="s">&quot;all&quot;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;specify container to remove access to for the specified user, default all&#39;</span><span class="p">)</span>
+        <span class="n">parse_revoke</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;--metadata_path&#39;</span><span class="p">,</span> <span class="s">&#39;-m&#39;</span><span class="p">,</span>
+                                  <span class="n">default</span><span class="o">=</span><span class="n">default_metadata_path</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;metadata path, default &#39;</span><span class="o">+</span><span class="n">default_metadata_path</span><span class="p">)</span>
+        <span class="n">parse_revoke</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">&#39;-z&#39;</span><span class="p">,</span>
+                                  <span class="n">action</span><span class="o">=</span><span class="s">&#39;store_true&#39;</span><span class="p">,</span>
+                                  <span class="n">help</span><span class="o">=</span><span class="s">&#39;do not print any output&#39;</span><span class="p">)</span>
+        <span class="n">parse_revoke</span><span class="o">.</span><span class="n">set_defaults</span><span class="p">(</span><span class="n">func</span><span class="o">=</span><span class="n">revoke</span><span class="o">.</span><span class="n">revoke</span><span class="o">.</span><span class="n">main</span><span class="p">)</span>
 
         <span class="c"># services</span>
         <span class="n">parse_services</span> <span class="o">=</span> <span class="n">subparsers</span><span class="o">.</span><span class="n">add_parser</span><span class="p">(</span><span class="s">&#39;services&#39;</span><span class="p">,</span>
