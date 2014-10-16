@@ -374,7 +374,7 @@ class new(object):
                 open(os.path.join(os.path.expanduser(args.metadata_path), 'no_default'), 'a').close()
 
         # !! TODO this should be in __init__
-        # build dictionary of available container options
+        # !! TODO build dictionary of available container options
         self.link_names = {}
         self.combine_cmd_dict = {}
         self.background_cmd_dict = {}
@@ -588,15 +588,14 @@ class new(object):
             if self.unique:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.12',
-                                      timeout=2)
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
+                                      version='1.12', timeout=2)
                     name = raw_input("Enter container name for container running on "+host['title']+":")
                     self.names.append(name)
             else:
                 # !! TODO validate
                 name = raw_input("Enter container name: ")
                 self.names.append(name)
-            print self.names
         if self.link:
             # !! TODO only list containers for each host of which the container is going to be spun up on
             #         can't link to a container that is not running on the same docker host
@@ -605,8 +604,8 @@ class new(object):
             if self.unique:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.12',
-                                      timeout=2)
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
+                                      version='1.12', timeout=2)
                     containers = c.containers()
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to link to."
@@ -617,7 +616,9 @@ class new(object):
                             curses.noecho()
                             curses.cbreak()
                             curses.start_color()
-                            curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+                            curses.init_pair(1,
+                                             curses.COLOR_BLACK,
+                                             curses.COLOR_WHITE)
 
                         options_dict = {
                          'title': "Containers to Link",
@@ -652,14 +653,17 @@ class new(object):
                             self.config_dict = {}
                             self.config_dict['services'] = []
                             config_dict = self.config_dict
-                            config_dict = self.options_menu(self, args, options_dict, config_dict)
+                            config_dict = self.options_menu(self,
+                                                            args,
+                                                            options_dict,
+                                                            config_dict)
                             self.config_dict = config_dict
                             curses.endwin()
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375', version='1.12',
-                                      timeout=2)
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375',i
+                                      version='1.12', timeout=2)
                     containers.append(c.containers())
                     print containers
 
@@ -675,7 +679,9 @@ class new(object):
                         curses.noecho()
                         curses.cbreak()
                         curses.start_color()
-                        curses.init_pair(1, curses.COLOR_BLACK, curses.COLOR_WHITE)
+                        curses.init_pair(1,
+                                         curses.COLOR_BLACK,
+                                         curses.COLOR_WHITE)
 
                     options_dict = {
                      'title': "Containers to Link",
@@ -711,12 +717,12 @@ class new(object):
                         self.config_dict = {}
                         self.config_dict['services'] = []
                         config_dict = self.config_dict
-                        config_dict = self.options_menu(self, args, options_dict, config_dict)
+                        config_dict = self.options_menu(self,
+                                                        args,
+                                                        options_dict,
+                                                        config_dict)
                         self.config_dict = config_dict
-
                         curses.endwin()
-
-            print self.link
         if self.port:
             # !! TODO present available exposed ports, and allow each to be assigned specifically
             print self.port
@@ -728,7 +734,9 @@ class new(object):
                 volume = raw_input("Enter a volume (path:path): ")
                 # !! TODO validate input
                 volumes.append(volume)
-                no = self.query_yes_no(self, "Would you like to add another volume?", default="no")
+                no = self.query_yes_no(self,
+                                       "Would you like to add another volume?",
+                                       default="no")
             print self.volume
             print volumes
         if self.entrypoint:
@@ -746,8 +754,8 @@ class new(object):
             for index, image_info in enumerate(self.build_dict['services']):
                 image_tag, image_host = image_info.split(",", 1)
                 # !! TODO try/except - verify that hosts specified can be reached
-                c = docker.Client(base_url='tcp://'+image_host+':2375', version='1.12',
-                                  timeout=2)
+                c = docker.Client(base_url='tcp://'+image_host+':2375',
+                                  version='1.12', timeout=2)
 
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed
@@ -824,7 +832,7 @@ class new(object):
                                         if any(cmd.startswith("EXPOSE") for cmd in dockerfile):
                                             line = ' '.join(line.rstrip('\n').split(' ', 1)[1:])
                                             # !! TODO make sure this is what the command starts with
-                                            # !! TODO display a warning to the user if there is overlapping ports
+                                            # !! TODO display a warning to the user if there are overlapping ports
                                             matching = [s for s in dockerfile if "EXPOSE" in s]
                                             matching.append(line)
                                             dockerfile.remove(matching[0])
@@ -899,12 +907,7 @@ class new(object):
                                             dockerfile.append(line.rstrip('\n'))
                                         else:
                                             if self.combine_cmd_dict[key] == "yes":
-                                                # !! TODO only append if there is only one
-                                                # if more than one, use supervisord or something
-                                                # if none of them are combine_cmds then use /bin/bash
                                                 cmds[service].append(self.background_cmd_dict[key])
-                                                #cmds[service].append(line.rstrip('\n'))
-                                                #dockerfile.append(line.rstrip('\n'))
                                         cmd = (line.rstrip('\n')).split(" ", 1)[1:][0]
                                     else:
                                         dockerfile.append(line.rstrip('\n'))
@@ -923,7 +926,6 @@ class new(object):
                             dockerfile.append("ADD "+cmd_a[-1]+".conf /etc/supervisor/conf.d/"+cmd_a[-1]+".conf")
                 if self.user:
                     try:
-                        # !! TODO try/except
                         with open(os.path.expanduser(ssh_pubkey), 'r') as fi:
                             with open("/tmp/"+uuid_dir+"/authorized_keys", 'w') as fo:
                                 for line in fi:
@@ -934,10 +936,11 @@ class new(object):
                                           " /home/"+username+
                                           "/.ssh && chmod 700 /home/"+username+"/.ssh")
                         dockerfile.append("ADD authorized_keys /home/"+username+"/.ssh/authorized_keys")
-                        # !! TODO ask if user needs sudo
-                        dockerfile.append("RUN apt-get install -y sudo")
-                        dockerfile.append('RUN echo "'+username+
-                                          ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
+                        sudo = self.query_yes_no(self, "Does the user "+username+" need sudo rights?", default="yes")
+                        if sudo:
+                            dockerfile.append("RUN apt-get install -y sudo")
+                            dockerfile.append('RUN echo "'+username+
+                                              ' ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers')
                         # !! TODO ask if more than one user
                     except:
                         print "SSH Key file not found, failed to create user"
@@ -956,7 +959,6 @@ class new(object):
                     print line
                 print "### END GENERATED DOCKERFILE ###\n"
                 self.build_dockerfile(self, dockerfile, uuid_dir, args)
-                print self.link_names
 
     @staticmethod
     def display_menu(self, args, menu, parent, build_dict):
