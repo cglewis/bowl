@@ -106,8 +106,17 @@ class new(object):
             #d_links = self.link_names
 
             # !! TODO check that the build actually created an image before trying to create the container
-            output = c.build(tag="bowl-"+uuid_dir, quiet=False, path='/tmp/'+uuid_dir,
-                               nocache=False, rm=False, stream=False)
+            output = c.build(tag=d_tag,
+                             quiet=d_quiet,
+                             path=d_path,
+                             nocache=d_nocache,
+                             rm=d_rm,
+                             stream=d_stream,
+                             fileobj=d_fileobj,
+                             timeout=d_timeout,
+                             custom_context=d_custom_context,
+                             encoding=d_encoding)
+
             # !! TODO cleanup, but for now ensures that the build finishes prior to container creation
             print list(output)
 
