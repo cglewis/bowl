@@ -35,6 +35,7 @@ class TestClass:
         args.command = False
         args.entrypoint = False
         args.volume = False
+        args.volume_from = False
         args.port = False
         args.link = False
         args.name = False

@@ -267,9 +267,12 @@ class cli(object):
         parse_new.add_argument('--entrypoint', '-e',
                                action='store_true',
                                help='override entrypoint at runtime of container, only used with no_curses')
-        parse_new.add_argument('--volume', '-v',
+        parse_new.add_argument('--volume',
                                action='store_true',
                                help='add volumes at runtime of container, only used with no_curses')
+        parse_new.add_argument('--volume_from',
+                               action='store_true',
+                               help='add volumes from other containers at runtime of container, only used with no_curses')
         parse_new.add_argument('--port', '-p',
                                action='store_true',
                                help='set ports at runtime of container, only used with no_curses')

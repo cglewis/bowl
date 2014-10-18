@@ -417,6 +417,7 @@ class new(object):
         self.port = False
         self.link = False
         self.volume = False
+        self.volume_from = False
 
         if not args.no_curses:
             # init curses stuff
@@ -441,6 +442,9 @@ class new(object):
                 self.default = False
             if args.volume:
                 self.volume = True
+                self.default = False
+            if args.volume_from:
+                self.volume_from = True
                 self.default = False
             if args.port:
                 self.port = True
@@ -520,6 +524,15 @@ class new(object):
                'options': [
                 {
                  'config':'volume'
+                }
+               ]
+              },
+              {
+               'title': "Do you want to attach a volume from another container to this container?",
+               'type': "choice_menu",
+               'options': [
+                {
+                 'config':'volume_from'
                 }
                ]
               },
@@ -662,7 +675,7 @@ class new(object):
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375',i
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
                                       version='1.12', timeout=2)
                     containers.append(c.containers())
                     print containers
@@ -1068,6 +1081,8 @@ class new(object):
                                             self.entrypoint = True
                                         if "volume" == menu['options'][position]['options'][0]['config']:
                                             self.volume = True
+                                        if "volume_from" == menu['options'][position]['options'][0]['config']:
+                                            self.volume_from = True
                                         if "port" == menu['options'][position]['options'][0]['config']:
                                             self.port = True
                                         if "link" == menu['options'][position]['options'][0]['config']:
