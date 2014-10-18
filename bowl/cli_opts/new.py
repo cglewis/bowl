@@ -144,6 +144,11 @@ class new(object):
             # !! TODO get all args for start instead of if/else have args be None
             if self.link_names:
                 c.start(container, publish_all_ports=True, links=self.link_names)
+            elif self.volume_from_names:
+                volumes_from = []
+                for volume in self.volume_from_names:
+                    volumes_from.append(volume)
+                c.start(container, publish_all_ports=True, volumes_from=volumes_from)
             else:
                 c.start(container, publish_all_ports=True)
 
@@ -376,6 +381,7 @@ class new(object):
         # !! TODO this should be in __init__
         # !! TODO build dictionary of available container options
         self.link_names = {}
+        self.volume_from_names = {}
         self.combine_cmd_dict = {}
         self.background_cmd_dict = {}
 
@@ -609,6 +615,133 @@ class new(object):
                 # !! TODO validate
                 name = raw_input("Enter container name: ")
                 self.names.append(name)
+        if self.volume_from:
+            # !! TODO only list containers for each host of which the container is going to be spun up on
+            #         can't add volume_from to a container that is not running on the same docker host
+            containers = []
+
+            if self.unique:
+                for host in self.hosts:
+                    # !! TODO try/except - verify that hosts specified can be reached
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
+                                      version='1.12', timeout=2)
+                    containers = c.containers()
+                    if len(containers) == 0:
+                        print "There are no running containers on the host "+host['title']+" to add volume_from to."
+                        junk = raw_input("Press enter to continue...")
+                    else:
+                        if not args.no_curses:
+                            # init curses stuff
+                            curses.noecho()
+                            curses.cbreak()
+                            curses.start_color()
+                            curses.init_pair(1,
+                                             curses.COLOR_BLACK,
+                                             curses.COLOR_WHITE)
+
+                        options_dict = {
+                         'title': "Containers to add Volume From",
+                         'type': "menu",
+                         'subtitle': "Please select the containers you would like to add volume_from on host "+host['title']+"...",
+                         'options': [
+                         ]
+                        }
+                        for container in containers:
+                            container_name = ""
+                            names = container['Names']
+                            # !! TODO names list changes when volume_from, fix that
+                            for n in names:
+                                container_name += n[1:] + " - "
+                            container_id = container['Id']
+                            container_name += container_id
+                            options_dict['options'].append(
+                                 {
+                                  'title': '"'+container_name+'"',
+                                  'type': "volume_from_choice_menu",
+                                  'options': [
+                                   {
+                                    # !! TODO names list changes when volume_from, fix that
+                                    'volume_from':container['Names'][0][1:]
+                                   }
+                                  ]
+                                 }
+                                )
+
+                        if not args.no_curses:
+                            # !! TODO cleanup
+                            self.config_dict = {}
+                            self.config_dict['services'] = []
+                            config_dict = self.config_dict
+                            config_dict = self.options_menu(self,
+                                                            args,
+                                                            options_dict,
+                                                            config_dict)
+                            self.config_dict = config_dict
+                            curses.endwin()
+            else:
+                for host in self.hosts:
+                    # !! TODO try/except - verify that hosts specified can be reached
+                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
+                                      version='1.12', timeout=2)
+                    containers.append(c.containers())
+                    print containers
+
+
+                if len(containers) == 0:
+                    print "There are no running containers on the host to add volume_from to."
+                    junk = raw_input("Press enter to continue...")
+                else:
+                    # !! TODO remove containers that are not on all hosts
+
+                    if not args.no_curses:
+                        # init curses stuff
+                        curses.noecho()
+                        curses.cbreak()
+                        curses.start_color()
+                        curses.init_pair(1,
+                                         curses.COLOR_BLACK,
+                                         curses.COLOR_WHITE)
+
+                    options_dict = {
+                     'title': "Containers to add Volume From",
+                     'type': "menu",
+                     'subtitle': "Please select the containers you would like to add volume_from...",
+                     'options': [
+                     ]
+                    }
+                    for host in containers:
+                        for container in host:
+                            container_name = ""
+                            names = container['Names']
+                            # !! TODO names list changes when volume_from, fix that
+                            for n in names:
+                                container_name += n[1:] + " - "
+                            container_id = container['Id']
+                            container_name += container_id
+                            options_dict['options'].append(
+                                 {
+                                  'title': '"'+container_name+'"',
+                                  'type': "volume_from_choice_menu",
+                                  'options': [
+                                   {
+                                    # !! TODO names list changes when volume_from, fix that
+                                    'volume_from':container['Names'][0][1:]
+                                   }
+                                  ]
+                                 }
+                                )
+
+                    if not args.no_curses:
+                        # !! TODO cleanup
+                        self.config_dict = {}
+                        self.config_dict['services'] = []
+                        config_dict = self.config_dict
+                        config_dict = self.options_menu(self,
+                                                        args,
+                                                        options_dict,
+                                                        config_dict)
+                        self.config_dict = config_dict
+                        curses.endwin()
         if self.link:
             # !! TODO only list containers for each host of which the container is going to be spun up on
             #         can't link to a container that is not running on the same docker host
@@ -1014,7 +1147,7 @@ class new(object):
                 if not args.no_curses:
                     if menu['options'][index]['title'] == "Docker Hosts":
                         self.win.addstr(index+6, 4, "%d - %s" % (index+1, menu['options'][index]['title']), textstyle)
-                    elif menu['options'][index]['type'] == "choice_menu" or menu['options'][index]['type'] == "link_choice_menu":
+                    elif menu['options'][index]['type'] == "choice_menu" or menu['options'][index]['type'] == "link_choice_menu" or menu['options'][index]['type'] == "volume_from_choice_menu":
                         self.win.addstr(index+5, 4, "%d - [%s] %s" % (index+1, choice[index], menu['options'][index]['title']), textstyle)
                     elif menu['options'][index]['type'] == "image_choice_menu":
                         self.win.addstr(index+5, 4, "%d - [%s] %s | %s" % (index+1, choice[index], menu['options'][index]['title'], menu['options'][index]['host']), textstyle)
@@ -1052,6 +1185,13 @@ class new(object):
                         position -= 1
                     else:
                         position = option_size
+                # !! TODO error check this!!
+                elif key == 32 and menu['options'][position]['type'] == "volume_from_choice_menu":
+                    if choice[position] == " ":
+                        choice[position] = "x"
+                        self.volume_from_names[menu['options'][position]['options'][0]['volume_from']] = menu['options'][position]['options'][0]['volume_from']
+                    else:
+                        choice[position] = " "
                 # !! TODO error check this!!
                 elif key == 32 and menu['options'][position]['type'] == "link_choice_menu":
                     if choice[position] == " ":
