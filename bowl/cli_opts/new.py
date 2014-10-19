@@ -69,8 +69,11 @@ class new(object):
             d_hostname=None
             d_user=None
             d_detach=False
-            d_stdin_open=False
-            d_tty=False
+
+            # !! TODO should be false by default and changed if needed
+            d_stdin_open=True
+            d_tty=True
+
             d_mem_limit=0
             d_ports=None
             d_environment=None
@@ -124,23 +127,31 @@ class new(object):
             # !! TODO get all args for create_container instead of if/else have args be None
             if len(self.names) != 0:
                 if self.unique:
-                    container = c.create_container(image_tag,
-                                                   tty=True,
-                                                   stdin_open=True,
-                                                   name=self.names[index],
-                                                   hostname=self.names[index])
+                    d_name = self.names[index]
+                    d_hostname = self.names[index]
                 else:
-                    container = c.create_container(image_tag,
-                                                   tty=True,
-                                                   stdin_open=True,
-                                                   name=self.names[0],
-                                                   hostname=self.names[0])
+                    d_name = self.names[0]
+                    d_hostname = self.names[0]
             else:
-                container = c.create_container(image_tag,
-                                               tty=True,
-                                               stdin_open=True,
-                                               name=image_tag,
-                                               hostname=image_tag)
+                d_name = image_tag
+                d_hostname = image_tag
+            container = c.create_container(d_image,
+                                           command=d_command,
+                                           hostname=d_hostname,
+                                           user=d_user,
+                                           detach=d_detach,
+                                           stdin_open=d_stdin_open,
+                                           tty=d_tty,
+                                           mem_limit=d_mem_limit,
+                                           ports=d_ports,
+                                           environment=d_environment,
+                                           volumes=d_volumes,
+                                           network_disabled=d_network_disabled,
+                                           name=d_name,
+                                           entrypoint=d_entrypoint,
+                                           cpu_shares=d_cpu_shares,
+                                           working_dir=d_working_dir,
+                                           memswap_limit=d_memswap_limit)
             # !! TODO get all args for start instead of if/else have args be None
             if self.link_names:
                 c.start(container, publish_all_ports=True, links=self.link_names)
