@@ -33,7 +33,7 @@
   "object": "database",
   "cluster": "no",
   "combine_cmd": "yes",
-  "background_cmd": "TODO",
+  "background_cmd": "/usr/local/bin/run &",
   "tty": "no",
   "interactive": "no"
  },
@@ -46,7 +46,7 @@
   "object": "database",
   "cluster": "no",
   "combine_cmd": "yes",
-  "background_cmd": "TODO",
+  "background_cmd": "/usr/lib/postgresql/9.3/bin/postgres -D /var/lib/postgresql/9.3/main -c config_file=/etc/postgresql/9.3/main/postgresql.conf &",
   "tty": "no",
   "interactive": "no"
  },
@@ -59,7 +59,7 @@
   "object": "database",
   "cluster": "yes",
   "combine_cmd": "yes",
-  "background_cmd": "TODO",
+  "background_cmd": "/usr/bin/redis-server &",
   "tty": "no",
   "interactive": "no"
  },
