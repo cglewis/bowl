@@ -76,6 +76,8 @@ class cli(object):
                                               help='connect to a docker host')
         parse_connect.add_argument('DOCKER_HOST',
                                    help='specify docker host to connect to')
+        parse_connect.add_argument('--port', '-p',
+                                   help='specify docker host port to connect to')
         parse_connect.add_argument('--metadata_path', '-m',
                                    default=default_metadata_path,
                                    help='metadata path, default '+default_metadata_path)
