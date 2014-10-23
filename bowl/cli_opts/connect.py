@@ -36,6 +36,7 @@ class connect(object):
                 with open(os.path.join(directory, "hosts"), 'a') as f:
                     f.write("{" +
                             "'title': '"+args.DOCKER_HOST+"'," +
+                            "'port': '"+args.port+"'," +
                             " 'type': 'choice_menu'" +
                             "}\n")
             else:

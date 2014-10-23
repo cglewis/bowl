@@ -77,6 +77,7 @@ class cli(object):
         parse_connect.add_argument('DOCKER_HOST',
                                    help='specify docker host to connect to')
         parse_connect.add_argument('--port', '-p',
+                                   default="2375",
                                    help='specify docker host port to connect to')
         parse_connect.add_argument('--metadata_path', '-m',
                                    default=default_metadata_path,
