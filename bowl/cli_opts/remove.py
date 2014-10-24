@@ -8,6 +8,8 @@ import ast
 import docker
 import os
 
+from bowl.cli_opts import hosts
+
 class remove(object):
     """
     This class is responsible for the rm command of the cli.

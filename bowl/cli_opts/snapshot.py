@@ -8,6 +8,7 @@ import docker
 import os
 import uuid
 
+from bowl.cli_opts import hosts
 from bowl.cli_opts import list
 
 class Object(object):

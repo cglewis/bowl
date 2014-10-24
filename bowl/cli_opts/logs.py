@@ -7,6 +7,7 @@ Created on 14 March 2014
 import docker
 import os
 
+from bowl.cli_opts import hosts
 from bowl.cli_opts import list
 
 class Object(object):

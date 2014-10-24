@@ -17,6 +17,7 @@ import time
 import uuid
 import wget
 
+from bowl.cli_opts import hosts
 from bowl.cli_opts import link
 from bowl.cli_opts import repositories
 from bowl.cli_opts import services
