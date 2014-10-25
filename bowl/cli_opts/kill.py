@@ -10,6 +10,9 @@ import os
 
 from bowl.cli_opts import hosts
 
+class Object(object):
+    pass
+
 class kill(object):
     """
     This class is responsible for the kill command of the cli.
@@ -25,12 +28,20 @@ class kill(object):
         try:
             directory = args.metadata_path
             directory = os.path.expanduser(directory)
+
+            host_args = Object()
+            host_args.metadata_path = args.metadata_path
+            host_args.z = True
+            host_a = hosts.hosts.main(host_args)
+
             with open(os.path.join(directory, "containers"), 'r') as f:
                 for line in f:
                     container = ast.literal_eval(line.rstrip("\n"))
                     if container['container_id'] == args.CONTAINER:
-                        c = docker.Client(base_url='tcp://'+container['host']+':2375', version='1.12',
-                                          timeout=10)
+                        for host in host_a:
+                            if container['host'] in host:
+                                c = docker.Client(base_url='tcp://'+host,
+                                                  version='1.12', timeout=10)
                         c.kill(args.CONTAINER)
                         if not args.z:
                             print "killed "+container['container_id']+" on "+container['host']
