@@ -29,7 +29,7 @@ class kill(object):
                 for line in f:
                     container = ast.literal_eval(line.rstrip("\n"))
                     if container['container_id'] == args.CONTAINER:
-                        c = docker.Client(base_url='tcp://'+container['host']+':2375', version='1.13',
+                        c = docker.Client(base_url='tcp://'+container['host']+':2375', version='1.12',
                                           timeout=10)
                         c.kill(args.CONTAINER)
                         if not args.z:

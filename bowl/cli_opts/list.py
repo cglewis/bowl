@@ -41,7 +41,7 @@ class list(object):
         for host in host_a:
             print host
             tls_config = docker.tls.TLSConfig(verify=False)
-            c = docker.Client(base_url='https://'+host, version='1.13',
+            c = docker.Client(base_url='https://'+host, version='1.12',
                               tls=tls_config,
                               timeout=2)
             print c
