@@ -39,8 +39,13 @@ class list(object):
 
         host_c = []
         for host in host_a:
-            c = docker.Client(base_url='tcp://'+host+':2375', version='1.12',
+            print host
+            tls_config = docker.tls.TLSConfig(verify=False)
+            c = docker.Client(base_url='https://'+host, version='1.13',
+                              tls=tls_config,
                               timeout=2)
+            print c
+            print c.containers()
             host_c.append(c.containers())
 
         compare_containers = []

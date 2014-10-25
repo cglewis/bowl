@@ -23,7 +23,7 @@ class hosts(object):
             with open(os.path.join(directory, "hosts"), 'r') as f:
                 for line in f:
                     host = ast.literal_eval(line.rstrip("\n"))
-                    hosts.append(host['title'])
+                    hosts.append(host['title']+":"+host['port'])
         except:
             pass
         if not args.z:

@@ -48,7 +48,7 @@ class new(object):
         for index, host in enumerate(self.hosts):
             # !! TODO try/except - verify that hosts specified can be reached
             c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                              version='1.12', timeout=2)
+                              version='1.13', timeout=2)
 
             # !! TODO prep, needs to be finished
             # build
@@ -620,7 +620,7 @@ class new(object):
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                                      version='1.13', timeout=2)
                     name = raw_input("Enter container name for container running on "+host['title']+":")
                     self.names.append(name)
             else:
@@ -636,7 +636,7 @@ class new(object):
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                                      version='1.13', timeout=2)
                     containers = c.containers()
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to add volume_from to."
@@ -694,7 +694,7 @@ class new(object):
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                                      version='1.13', timeout=2)
                     containers.append(c.containers())
                     print containers
 
@@ -763,7 +763,7 @@ class new(object):
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                                      version='1.13', timeout=2)
                     containers = c.containers()
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to link to."
@@ -821,7 +821,7 @@ class new(object):
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
                     c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                                      version='1.13', timeout=2)
                     containers.append(c.containers())
                     print containers
 
@@ -913,7 +913,7 @@ class new(object):
                 image_tag, image_host = image_info.split(",", 1)
                 # !! TODO try/except - verify that hosts specified can be reached
                 c = docker.Client(base_url='tcp://'+image_host+':2375',
-                                  version='1.12', timeout=2)
+                                  version='1.13', timeout=2)
 
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed

@@ -1,4 +1,4 @@
-docker-py==0.5.1
+docker-py==0.5.3
 requests==2.2.1
 wget
 web.py

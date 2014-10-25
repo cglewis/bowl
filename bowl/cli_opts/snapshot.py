@@ -42,7 +42,7 @@ class snapshot(object):
                  cont = container.split(",")[0]
                  commit_name = "bowl-snapshot-"+commit
                  try:
-                     c = docker.Client(base_url='tcp://'+host+':2375', version='1.12',
+                     c = docker.Client(base_url='tcp://'+host+':2375', version='1.13',
                                        timeout=2)
                      c.commit(cont, repository=commit_name)
                      snapshot[cont] = host+":"+commit_name
