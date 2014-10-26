@@ -42,8 +42,7 @@ class TestClass:
         args.unique = False
         args.user = False
 
-        with pytest.raises(exceptions.ConnectionError):
-            a.main(args)
+        a.main(args)
 
         #args.command = True
         #args.entrypoint = True

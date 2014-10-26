@@ -45,10 +45,18 @@ class new(object):
         if len(self.hosts) == 0:
             print "WARNING: No hosts were selected to run these services."
 
+        host_args = Object()
+        host_args.metadata_path = main_arg.metadata_path
+        host_args.z = True
+        host_a = hosts.hosts.main(host_args)
+
         for index, host in enumerate(self.hosts):
+            c = ""
             # !! TODO try/except - verify that hosts specified can be reached
-            c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                              version='1.12', timeout=2)
+            for h in host_a:
+                if host['title'] in h:
+                    c = docker.Client(base_url='tcp://'+h,
+                                      version='1.12', timeout=2)
 
             # !! TODO prep, needs to be finished
             # build
@@ -110,89 +118,90 @@ class new(object):
             #d_links = self.link_names
 
             # !! TODO check that the build actually created an image before trying to create the container
-            output = c.build(tag=d_tag,
-                             quiet=d_quiet,
-                             path=d_path,
-                             nocache=d_nocache,
-                             rm=d_rm,
-                             stream=d_stream,
-                             fileobj=d_fileobj,
-                             timeout=d_timeout,
-                             custom_context=d_custom_context,
-                             encoding=d_encoding)
+            if c != "":
+                output = c.build(tag=d_tag,
+                                 quiet=d_quiet,
+                                 path=d_path,
+                                 nocache=d_nocache,
+                                 rm=d_rm,
+                                 stream=d_stream,
+                                 fileobj=d_fileobj,
+                                 timeout=d_timeout,
+                                 custom_context=d_custom_context,
+                                 encoding=d_encoding)
 
-            # !! TODO cleanup, but for now ensures that the build finishes prior to container creation
-            print list(output)
+                # !! TODO cleanup, but for now ensures that the build finishes prior to container creation
+                print list(output)
 
-            # !! TODO check if tty and stdin_open (interactive) are needed
-            # !! TODO get all args for create_container instead of if/else have args be None
-            if len(self.names) != 0:
-                if self.unique:
-                    d_name = self.names[index]
-                    d_hostname = self.names[index]
+                # !! TODO check if tty and stdin_open (interactive) are needed
+                # !! TODO get all args for create_container instead of if/else have args be None
+                if len(self.names) != 0:
+                    if self.unique:
+                        d_name = self.names[index]
+                        d_hostname = self.names[index]
+                    else:
+                        d_name = self.names[0]
+                        d_hostname = self.names[0]
                 else:
-                    d_name = self.names[0]
-                    d_hostname = self.names[0]
-            else:
-                d_name = image_tag
-                d_hostname = image_tag
-            container = c.create_container(d_image,
-                                           command=d_command,
-                                           hostname=d_hostname,
-                                           user=d_user,
-                                           detach=d_detach,
-                                           stdin_open=d_stdin_open,
-                                           tty=d_tty,
-                                           mem_limit=d_mem_limit,
-                                           ports=d_ports,
-                                           environment=d_environment,
-                                           volumes=d_volumes,
-                                           network_disabled=d_network_disabled,
-                                           name=d_name,
-                                           entrypoint=d_entrypoint,
-                                           cpu_shares=d_cpu_shares,
-                                           working_dir=d_working_dir,
-                                           memswap_limit=d_memswap_limit)
-            # !! TODO get all args for start instead of if/else have args be None
-            if self.link_names:
-                c.start(container, publish_all_ports=True, links=self.link_names)
-            elif self.volume_from_names:
-                volumes_from = []
-                for volume in self.volume_from_names:
-                    volumes_from.append(volume)
-                c.start(container, publish_all_ports=True, volumes_from=volumes_from)
-            else:
-                c.start(container, publish_all_ports=True)
+                    d_name = image_tag
+                    d_hostname = image_tag
+                container = c.create_container(d_image,
+                                               command=d_command,
+                                               hostname=d_hostname,
+                                               user=d_user,
+                                               detach=d_detach,
+                                               stdin_open=d_stdin_open,
+                                               tty=d_tty,
+                                               mem_limit=d_mem_limit,
+                                               ports=d_ports,
+                                               environment=d_environment,
+                                               volumes=d_volumes,
+                                               network_disabled=d_network_disabled,
+                                               name=d_name,
+                                               entrypoint=d_entrypoint,
+                                               cpu_shares=d_cpu_shares,
+                                               working_dir=d_working_dir,
+                                               memswap_limit=d_memswap_limit)
+                # !! TODO get all args for start instead of if/else have args be None
+                if self.link_names:
+                    c.start(container, publish_all_ports=True, links=self.link_names)
+                elif self.volume_from_names:
+                    volumes_from = []
+                    for volume in self.volume_from_names:
+                        volumes_from.append(volume)
+                    c.start(container, publish_all_ports=True, volumes_from=volumes_from)
+                else:
+                    c.start(container, publish_all_ports=True)
 
-            try:
-                directory = main_arg.metadata_path
-                directory = os.path.expanduser(directory)
-                with open(os.path.join(directory, "containers"), 'a') as f:
-                    # !! TODO make this a more robust json blob
-                    if len(self.names) != 0:
-                        if self.unique:
-                            f.write("{" +
-                                    "'image_id': '"+image_tag+"'," +
-                                    " 'container_name': '"+self.names[index]+"'," +
-                                    " 'container_id': '"+container['Id']+"'," +
-                                    " 'host': '"+host['title']+"'" +
-                                    "}\n")
+                try:
+                    directory = main_arg.metadata_path
+                    directory = os.path.expanduser(directory)
+                    with open(os.path.join(directory, "containers"), 'a') as f:
+                        # !! TODO make this a more robust json blob
+                        if len(self.names) != 0:
+                            if self.unique:
+                                f.write("{" +
+                                        "'image_id': '"+image_tag+"'," +
+                                        " 'container_name': '"+self.names[index]+"'," +
+                                        " 'container_id': '"+container['Id']+"'," +
+                                        " 'host': '"+host['title']+"'" +
+                                        "}\n")
+                            else:
+                                f.write("{" +
+                                        "'image_id': '"+image_tag+"'," +
+                                        " 'container_name': '"+self.names[0]+"'," +
+                                        " 'container_id': '"+container['Id']+"'," +
+                                        " 'host': '"+host['title']+"'" +
+                                        "}\n")
                         else:
                             f.write("{" +
                                     "'image_id': '"+image_tag+"'," +
-                                    " 'container_name': '"+self.names[0]+"'," +
+                                    " 'container_name': '"+image_tag+"'," +
                                     " 'container_id': '"+container['Id']+"'," +
                                     " 'host': '"+host['title']+"'" +
                                     "}\n")
-                    else:
-                        f.write("{" +
-                                "'image_id': '"+image_tag+"'," +
-                                " 'container_name': '"+image_tag+"'," +
-                                " 'container_id': '"+container['Id']+"'," +
-                                " 'host': '"+host['title']+"'" +
-                                "}\n")
-            except:
-                pass
+                except:
+                    pass
 
         shutil.rmtree('/tmp/'+uuid_dir)
         return
@@ -615,12 +624,19 @@ class new(object):
 
                 curses.endwin()
 
+        host_args = Object()
+        host_args.metadata_path = args.metadata_path
+        host_args.z = True
+        host_a = hosts.hosts.main(host_args)
+
         if self.name:
             if self.unique:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                    for h in host_a:
+                        if host['title'] in h:
+                            c = docker.Client(base_url='tcp://'+h,
+                                              version='1.12', timeout=2)
                     name = raw_input("Enter container name for container running on "+host['title']+":")
                     self.names.append(name)
             else:
@@ -635,9 +651,11 @@ class new(object):
             if self.unique:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
-                    containers = c.containers()
+                    for h in host_a:
+                        if host['title'] in h:
+                            c = docker.Client(base_url='tcp://'+h,
+                                              version='1.12', timeout=2)
+                            containers = c.containers()
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to add volume_from to."
                         junk = raw_input("Press enter to continue...")
@@ -693,8 +711,10 @@ class new(object):
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                    for h in host_a:
+                        if host['title'] in h:
+                            c = docker.Client(base_url='tcp://'+h,
+                                              version='1.12', timeout=2)
                     containers.append(c.containers())
                     print containers
 
@@ -762,8 +782,10 @@ class new(object):
             if self.unique:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
+                    for h in host_a:
+                        if host['title'] in h:
+                            c = docker.Client(base_url='tcp://'+h,
+                                              version='1.12', timeout=2)
                     containers = c.containers()
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to link to."
@@ -820,10 +842,12 @@ class new(object):
             else:
                 for host in self.hosts:
                     # !! TODO try/except - verify that hosts specified can be reached
-                    c = docker.Client(base_url='tcp://'+host['title']+':2375',
-                                      version='1.12', timeout=2)
-                    containers.append(c.containers())
-                    print containers
+                    for h in host_a:
+                        if host['title'] in h:
+                            c = docker.Client(base_url='tcp://'+h,
+                                              version='1.12', timeout=2)
+                            containers.append(c.containers())
+                            print containers
 
 
                 if len(containers) == 0:
@@ -912,8 +936,10 @@ class new(object):
             for index, image_info in enumerate(self.build_dict['services']):
                 image_tag, image_host = image_info.split(",", 1)
                 # !! TODO try/except - verify that hosts specified can be reached
-                c = docker.Client(base_url='tcp://'+image_host+':2375',
-                                  version='1.12', timeout=2)
+                for h in host_a:
+                    if image_host in h:
+                        c = docker.Client(base_url='tcp://'+h,
+                                          version='1.12', timeout=2)
 
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed

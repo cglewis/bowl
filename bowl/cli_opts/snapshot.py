@@ -33,6 +33,11 @@ class snapshot(object):
         list_args.z = True
         list_a = list.list.main(list_args)
 
+        host_args = Object()
+        host_args.metadata_path = args.metadata_path
+        host_args.z = True
+        host_a = hosts.hosts.main(host_args)
+
         commit = str(uuid.uuid4())
         snapshot = {}
         found = 0
@@ -42,8 +47,11 @@ class snapshot(object):
                  cont = container.split(",")[0]
                  commit_name = "bowl-snapshot-"+commit
                  try:
-                     c = docker.Client(base_url='tcp://'+host+':2375', version='1.12',
-                                       timeout=2)
+                     for h in host_a:
+                         if host in h:
+                             c = docker.Client(base_url='tcp://'+h,
+                                               version='1.12',
+                                               timeout=2)
                      c.commit(cont, repository=commit_name)
                      snapshot[cont] = host+":"+commit_name
                  except:

@@ -8,7 +8,6 @@ import pytest
 import sys
 
 from docker import client
-from requests import exceptions
 
 from bowl import cli
 
@@ -24,7 +23,7 @@ class TestClass:
         sys.argv = ["", "new", "-n"]
         cli.main()
         sys.argv = ["", "new", "-n", "--host", "test", "-s", "os:version:type:service", "-l"]
-        with pytest.raises(exceptions.ConnectionError):
+        with pytest.raises(IOError):
             cli.main()
         #sys.argv = ["", "test"]
         #cli.main()

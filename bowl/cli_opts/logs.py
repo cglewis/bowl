@@ -32,13 +32,21 @@ class logs(object):
         list_args.z = True
         list_a = list.list.main(list_args)
 
+        host_args = Object()
+        host_args.metadata_path = args.metadata_path
+        host_args.z = True
+        host_a = hosts.hosts.main(host_args)
+
         for container in list_a:
             if args.CONTAINER in container:
                  host = container.split(",")[1]
                  cont = container.split(",")[0]
                  try:
-                     c = docker.Client(base_url='tcp://'+host+':2375', version='1.12',
-                                       timeout=2)
+                     for h in host_a:
+                         if host in h:
+                             c = docker.Client(base_url='tcp://'+h,
+                                               version='1.12',
+                                               timeout=2)
                      output = c.logs(cont)
                      if not args.z:
                          print output
