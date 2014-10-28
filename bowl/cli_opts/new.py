@@ -145,33 +145,37 @@ class new(object):
                 else:
                     d_name = image_tag
                     d_hostname = image_tag
-                container = c.create_container(d_image,
-                                               command=d_command,
-                                               hostname=d_hostname,
-                                               user=d_user,
-                                               detach=d_detach,
-                                               stdin_open=d_stdin_open,
-                                               tty=d_tty,
-                                               mem_limit=d_mem_limit,
-                                               ports=d_ports,
-                                               environment=d_environment,
-                                               volumes=d_volumes,
-                                               network_disabled=d_network_disabled,
-                                               name=d_name,
-                                               entrypoint=d_entrypoint,
-                                               cpu_shares=d_cpu_shares,
-                                               working_dir=d_working_dir,
-                                               memswap_limit=d_memswap_limit)
-                # !! TODO get all args for start instead of if/else have args be None
-                if self.link_names:
-                    c.start(container, publish_all_ports=True, links=self.link_names)
-                elif self.volume_from_names:
-                    volumes_from = []
-                    for volume in self.volume_from_names:
-                        volumes_from.append(volume)
-                    c.start(container, publish_all_ports=True, volumes_from=volumes_from)
-                else:
-                    c.start(container, publish_all_ports=True)
+                try:
+                    container = c.create_container(d_image,
+                                                   command=d_command,
+                                                   hostname=d_hostname,
+                                                   user=d_user,
+                                                   detach=d_detach,
+                                                   stdin_open=d_stdin_open,
+                                                   tty=d_tty,
+                                                   mem_limit=d_mem_limit,
+                                                   ports=d_ports,
+                                                   environment=d_environment,
+                                                   volumes=d_volumes,
+                                                   network_disabled=d_network_disabled,
+                                                   name=d_name,
+                                                   entrypoint=d_entrypoint,
+                                                   cpu_shares=d_cpu_shares,
+                                                   working_dir=d_working_dir,
+                                                   memswap_limit=d_memswap_limit)
+                    # !! TODO get all args for start instead of if/else have args be None
+                    if self.link_names:
+                        c.start(container, publish_all_ports=True, links=self.link_names)
+                    elif self.volume_from_names:
+                        volumes_from = []
+                        for volume in self.volume_from_names:
+                            volumes_from.append(volume)
+                        c.start(container, publish_all_ports=True, volumes_from=volumes_from)
+                    else:
+                        c.start(container, publish_all_ports=True)
+                except:
+                    print "Failed to build container."
+                    sys.exit(0)
 
                 try:
                     directory = main_arg.metadata_path
