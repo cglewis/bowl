@@ -85,7 +85,8 @@ class services(object):
                                             services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
                                             services_dict['oses'][os_key]['versions'][version_key]['databases'][database] = databases[database]
                                 else:
-                                    services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
+                                    if not 'databases' in services_dict['oses'][os_key]['versions'][version_key]:
+                                        services_dict['oses'][os_key]['versions'][version_key]['databases'] = {}
                             else:
                                 for database in databases:
                                     services_dict['databases'].append(databases[database]['command'])
@@ -108,7 +109,8 @@ class services(object):
                                             services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
                                             services_dict['oses'][os_key]['versions'][version_key]['environment'][environ] = environment[environ]
                                 else:
-                                    services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
+                                    if not 'environment' in services_dict['oses'][os_key]['versions'][version_key]:
+                                        services_dict['oses'][os_key]['versions'][version_key]['environment'] = {}
                             else:
                                 for env in environment:
                                     services_dict['environment'].append(environment[env]['command'])
@@ -131,7 +133,8 @@ class services(object):
                                             services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
                                             services_dict['oses'][os_key]['versions'][version_key]['services'][service] = services[service]
                                 else:
-                                    services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
+                                    if not 'services' in services_dict['oses'][os_key]['versions'][version_key]:
+                                        services_dict['oses'][os_key]['versions'][version_key]['services'] = {}
                             else:
                                 for service in services:
                                     services_dict['services'].append(services[service]['command'])
@@ -154,7 +157,8 @@ class services(object):
                                             services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
                                             services_dict['oses'][os_key]['versions'][version_key]['tools'][tool] = tools[tool]
                                 else:
-                                    services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
+                                    if not 'tools' in services_dict['oses'][os_key]['versions'][version_key]:
+                                        services_dict['oses'][os_key]['versions'][version_key]['tools'] = {}
                             else:
                                 for tool in tools:
                                     services_dict['tools'].append(tools[tool]['command'])
