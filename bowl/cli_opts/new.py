@@ -102,7 +102,10 @@ class new(object):
             d_binds=None
             d_port_bindings=None
             d_lxc_conf=None
-            d_publish_all_ports=False
+
+            # !! TODO should be false by default and changed if needed
+            d_publish_all_ports=True
+
             d_links=None
             d_privileged=False
             d_dns=None
@@ -112,10 +115,6 @@ class new(object):
             d_restart_policy=None
             d_cap_add=None
             d_cap_drop=None
-
-            # need to move to the proper location
-            #d_container = container
-            #d_links = self.link_names
 
             # !! TODO check that the build actually created an image before trying to create the container
             if c != "":
@@ -163,16 +162,30 @@ class new(object):
                                                    cpu_shares=d_cpu_shares,
                                                    working_dir=d_working_dir,
                                                    memswap_limit=d_memswap_limit)
-                    # !! TODO get all args for start instead of if/else have args be None
+
+                    # need to move to the proper location
+                    d_container = container
                     if self.link_names:
-                        c.start(container, publish_all_ports=True, links=self.link_names)
-                    elif self.volume_from_names:
+                        d_links = self.link_names
+                    if self.volume_from_names:
                         volumes_from = []
                         for volume in self.volume_from_names:
                             volumes_from.append(volume)
-                        c.start(container, publish_all_ports=True, volumes_from=volumes_from)
-                    else:
-                        c.start(container, publish_all_ports=True)
+                        d_volumes_from = volumes_from
+
+                    c.start(d_container,
+                            binds=d_binds,
+                            port_bindings=d_port_bindings,
+                            lxc_conf=d_lxc_conf,
+                            publish_all_ports=d_publish_all_ports,
+                            links=d_links,
+                            privileged=d_privileged,
+                            dns=d_dns,
+                            volumes_from=d_volumes_from,
+                            network_mode=d_network_mode,
+                            restart_policy=d_restart_policy,
+                            cap_add=d_cap_add,
+                            cap_drop=d_cap_drop)
                 except:
                     print "Failed to build container."
                     sys.exit(0)
