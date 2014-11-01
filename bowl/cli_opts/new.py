@@ -52,11 +52,13 @@ class new(object):
 
         for index, host in enumerate(self.hosts):
             c = ""
-            # !! TODO try/except - verify that hosts specified can be reached
             for h in host_a:
                 if host['title'] in h:
-                    c = docker.Client(base_url='tcp://'+h,
-                                      version='1.12', timeout=2)
+                    try:
+                        c = docker.Client(base_url='tcp://'+h,
+                                          version='1.12', timeout=2)
+                    except:
+                        print "unable to connect to ",h
 
             # !! TODO prep, needs to be finished
             # build
