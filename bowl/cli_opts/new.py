@@ -245,7 +245,6 @@ class new(object):
          ]
         }
 
-        # !! TODO use json.loads/dumps instead of literal_eval
         try:
             directory = main_arg.metadata_path
             directory = os.path.expanduser(directory)
@@ -536,7 +535,7 @@ class new(object):
             # !! TODO loop through X number of volumes they would like to add
             # !! TODO loop through X number of ports in the dockerfile they would like to modify
             # !! TODO loop through X number of containers they would like to link to
-            # !! TODO loop through X number of accounts they would like to add to teh container
+            # !! TODO loop through X number of accounts they would like to add to the container
             # !! TODO if image a user can't be added
             #                  also introspection of ports/volumes might be hard
             options_dict = {
@@ -649,11 +648,13 @@ class new(object):
         if self.name:
             if self.unique:
                 for host in self.hosts:
-                    # !! TODO try/except - verify that hosts specified can be reached
                     for h in host_a:
                         if host['title'] in h:
-                            c = docker.Client(base_url='tcp://'+h,
-                                              version='1.12', timeout=2)
+                            try:
+                                c = docker.Client(base_url='tcp://'+h,
+                                                  version='1.12', timeout=2)
+                            except:
+                                print "unable to connect to ",h
                     name = raw_input("Enter container name for container running on "+host['title']+":")
                     self.names.append(name)
             else:
@@ -667,12 +668,14 @@ class new(object):
 
             if self.unique:
                 for host in self.hosts:
-                    # !! TODO try/except - verify that hosts specified can be reached
                     for h in host_a:
                         if host['title'] in h:
-                            c = docker.Client(base_url='tcp://'+h,
-                                              version='1.12', timeout=2)
-                            containers = c.containers()
+                            try:
+                                c = docker.Client(base_url='tcp://'+h,
+                                                  version='1.12', timeout=2)
+                                containers = c.containers()
+                            except:
+                                print "unable to connect to ",h
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to add volume_from to."
                         junk = raw_input("Press enter to continue...")
@@ -727,13 +730,15 @@ class new(object):
                             curses.endwin()
             else:
                 for host in self.hosts:
-                    # !! TODO try/except - verify that hosts specified can be reached
                     for h in host_a:
                         if host['title'] in h:
-                            c = docker.Client(base_url='tcp://'+h,
-                                              version='1.12', timeout=2)
-                    containers.append(c.containers())
-                    print containers
+                            try:
+                                c = docker.Client(base_url='tcp://'+h,
+                                                  version='1.12', timeout=2)
+                                containers.append(c.containers())
+                                print containers
+                            except:
+                                print "unable to connect to ",h
 
 
                 if len(containers) == 0:
@@ -798,12 +803,14 @@ class new(object):
 
             if self.unique:
                 for host in self.hosts:
-                    # !! TODO try/except - verify that hosts specified can be reached
                     for h in host_a:
                         if host['title'] in h:
-                            c = docker.Client(base_url='tcp://'+h,
-                                              version='1.12', timeout=2)
-                    containers = c.containers()
+                            try:
+                                c = docker.Client(base_url='tcp://'+h,
+                                                  version='1.12', timeout=2)
+                                containers = c.containers()
+                            except:
+                                print "unable to connect to ",h
                     if len(containers) == 0:
                         print "There are no running containers on the host "+host['title']+" to link to."
                         junk = raw_input("Press enter to continue...")
@@ -858,13 +865,15 @@ class new(object):
                             curses.endwin()
             else:
                 for host in self.hosts:
-                    # !! TODO try/except - verify that hosts specified can be reached
                     for h in host_a:
                         if host['title'] in h:
-                            c = docker.Client(base_url='tcp://'+h,
-                                              version='1.12', timeout=2)
-                            containers.append(c.containers())
-                            print containers
+                            try:
+                                c = docker.Client(base_url='tcp://'+h,
+                                                  version='1.12', timeout=2)
+                                containers.append(c.containers())
+                                print containers
+                            except:
+                                print "unable to connect to ",h
 
 
                 if len(containers) == 0:
@@ -952,11 +961,13 @@ class new(object):
             # !! TODO this needs to be tested again
             for index, image_info in enumerate(self.build_dict['services']):
                 image_tag, image_host = image_info.split(",", 1)
-                # !! TODO try/except - verify that hosts specified can be reached
                 for h in host_a:
                     if image_host in h:
-                        c = docker.Client(base_url='tcp://'+h,
-                                          version='1.12', timeout=2)
+                        try:
+                            c = docker.Client(base_url='tcp://'+h,
+                                              version='1.12', timeout=2)
+                        except:
+                            print "unable to connect to ",h
 
                 cmd = raw_input("Enter command you wish to use for "+image_tag+": ")
                 # TODO check if tty and stdin_open (interactive) are needed
