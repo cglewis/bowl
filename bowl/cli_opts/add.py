@@ -22,6 +22,17 @@ class add(object):
     """
     @classmethod
     def main(self, args):
+        # !! TODO
+        # ask the user if they would like to use .default for default services
+        # ask the user if they would like remove .default from their services
+
+        # !! TODO
+        # contains a file that says what all of the service directories are
+        #    most likely .default and/or ~/.bowl/services/
+
+        # !! TODO
+        # add service to another repository ...
+
         # !! TODO needs to implement login if using that
 
 
@@ -490,17 +501,3 @@ class add(object):
 
             else:
                 print "unable to link localhost as a repository"
-
-        # !! TODO
-        # add to new container directory (not .default)
-        # ask the user if they would like to use .default for default services
-        # ask the user if they would like remove .default from their services
-
-        # !! TODO
-        # contains a file that says what all of the service directories are
-        #    most likely .default and/or ~/.bowl/services/
-        # contains added services, unless specified to be somewhere else
-
-        # !! TODO
-        # add service to another repository ...
-        print args
