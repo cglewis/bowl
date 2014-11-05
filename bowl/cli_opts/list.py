@@ -9,6 +9,8 @@ import docker
 import os
 
 from bowl.cli_opts import hosts
+from docker.client import Client
+from docker.utils import kwargs_from_env
 
 class Object(object):
     pass
@@ -39,6 +41,8 @@ class list(object):
 
         host_c = []
         for host in host_a:
+            # !! TODO is using TLS, put in env for each host
+            #client = Client(**kwargs_from_env())
             #tls_config = docker.tls.TLSConfig(verify=False)
             c = docker.Client(base_url='tcp://'+host, version='1.12',
                               #tls=tls_config,

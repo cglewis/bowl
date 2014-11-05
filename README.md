@@ -23,5 +23,3 @@ Main features:
 
 
 More information coming soon, including getting started, known issues, roadmap, and more.
-
-Note: currently broken with TLS enabled Docker hosts due to a bug in docker-py, as best as I can tell.  See #365.
