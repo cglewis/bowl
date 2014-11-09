@@ -460,6 +460,7 @@ class new(object):
         self.cmd = False
         self.entrypoint = False
         self.port = False
+        self.ports = []
         self.link = False
         self.volume = False
         self.volume_from = False
@@ -935,6 +936,10 @@ class new(object):
                         curses.endwin()
         if self.port:
             # !! TODO present available exposed ports, and allow each to be assigned specifically
+            port_a = self.ports.split(" ")
+            for port in port_a[1:]:
+                p = raw_input("Found port: "+str(port)+" Enter new value if you wish to expose as a specific number: ")
+                print p
             print self.port
         if self.volume:
             # !! TODO allow n number of runtime volumes (check if needs to be in dockerfile?)
@@ -1051,6 +1056,7 @@ class new(object):
                                             matching.append(line)
                                             dockerfile.remove(matching[0])
                                             dockerfile.append(' '.join(matching))
+                                            self.ports.append(' '.join(matching))
                                         else:
                                             dockerfile.append(line.rstrip('\n'))
                                     elif line.startswith("ADD"):
