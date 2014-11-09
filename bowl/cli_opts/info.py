@@ -25,6 +25,7 @@ class info(object):
         images = 0
         repositories = 0
         snapshots = 0
+        services = 0
         try:
             directory = args.metadata_path
             directory = os.path.expanduser(directory)
@@ -48,11 +49,13 @@ class info(object):
                 with open(os.path.join(directory, "snapshots"), 'r') as f:
                     for line in f:
                         snapshots += 1
+            # !! TODO count services
             print "containers: ",containers
             print "hosts: ",hosts
             print "images: ",images
             print "repositories: ",repositories
             print "snapshots: ",snapshots
+            print "services: ",services
             print "version: ",version.version.main(version_args)
         except:
             print "unable to get info"
