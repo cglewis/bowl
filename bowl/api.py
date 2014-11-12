@@ -88,6 +88,7 @@ class main(object):
             '/subtract/(.*)/(.*)/(.*)/(.*)', 'api_subtract',
             '/test', 'api_test',
             '/unlink/(.*)', 'api_unlink',
+            '/update', 'api_update',
             '/uptime', 'api_uptime',
             '/version', 'api_version',
         )
@@ -595,6 +596,17 @@ class api_unlink:
         # !! TODO figure out a way to make this an option
         args.metadata_path = "~/.bowl"
         return unlink.unlink.main(args)
+
+class api_update:
+    """
+    This class is resposible for updating the services.
+    """
+    def GET(self):
+        """
+        updates the services.
+        """
+        # !! TODO
+        return ""
 
 class api_uptime:
     """
