@@ -1,3 +1,4 @@
+- tls and non-tls support to make it easy to get started with (b2d, etc.)
 - cert based authentication (or ssh keys?)
 - authorize and authenticate hosts, services, images, and containers
 - better curation of services
