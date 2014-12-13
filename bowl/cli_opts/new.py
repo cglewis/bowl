@@ -196,29 +196,19 @@ class new(object):
                     directory = main_arg.metadata_path
                     directory = os.path.expanduser(directory)
                     with open(os.path.join(directory, "containers"), 'a') as f:
-                        # !! TODO make this a more robust json blob
-                        if len(self.names) != 0:
+                        # !! TODO test this
+                        container_dict = {}
+                        container_dict['image_id'] = image_tag
+                        container_dict['container_id'] = container['Id']
+                        container_dict['host'] = host['title']
+                        if len(self.names):
                             if self.unique:
-                                f.write("{" +
-                                        "'image_id': '"+image_tag+"'," +
-                                        " 'container_name': '"+self.names[index]+"'," +
-                                        " 'container_id': '"+container['Id']+"'," +
-                                        " 'host': '"+host['title']+"'" +
-                                        "}\n")
+                                container_dict['container_name'] = self.names[index]
                             else:
-                                f.write("{" +
-                                        "'image_id': '"+image_tag+"'," +
-                                        " 'container_name': '"+self.names[0]+"'," +
-                                        " 'container_id': '"+container['Id']+"'," +
-                                        " 'host': '"+host['title']+"'" +
-                                        "}\n")
+                                container_dict['container_name'] = self.names[0]
                         else:
-                            f.write("{" +
-                                    "'image_id': '"+image_tag+"'," +
-                                    " 'container_name': '"+image_tag+"'," +
-                                    " 'container_id': '"+container['Id']+"'," +
-                                    " 'host': '"+host['title']+"'" +
-                                    "}\n")
+                            container_dict['container_name'] = image_tag
+                        f.write(container_dict+"\n")
                 except:
                     pass
 
@@ -286,70 +276,47 @@ class new(object):
                           'subtitle': "Please select databases...",
                           'options': []
                         }
-                        for database_key in all_dict['oses'][os_key]['versions'][version_key]['databases']:
-                            database_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['databases'][database_key])
-                            key = os_key+"."+version_key+".databases."+database_key
-                            try:
-                                self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['databases'][database_key]['combine_cmd']
-                                if self.combine_cmd_dict[key] == "yes":
-                                    self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['databases'][database_key]['background_cmd']
-                            except:
-                                print "key error"
-
                         environment_dict = {
                           'title': "Environment Tools",
                           'type': "menu",
                           'subtitle': "Please select environment tools...",
                           'options': []
                         }
-                        for environment_key in all_dict['oses'][os_key]['versions'][version_key]['environment']:
-                            environment_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['environment'][environment_key])
-                            key = os_key+"."+version_key+".environment."+environment_key
-                            try:
-                                self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['environment'][environment_key]['combine_cmd']
-                                if self.combine_cmd_dict[key] == "yes":
-                                    self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['environment'][environment_key]['background_cmd']
-                            except:
-                                print "key error"
-
                         service_dict = {
                           'title': "Services",
                           'type': "menu",
                           'subtitle': "Please select services...",
                           'options': []
                         }
-                        for service_key in all_dict['oses'][os_key]['versions'][version_key]['services']:
-                            service_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['services'][service_key])
-                            key = os_key+"."+version_key+".services."+service_key
-                            try:
-                                self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['services'][service_key]['combine_cmd']
-                                if self.combine_cmd_dict[key] == "yes":
-                                    self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['services'][service_key]['background_cmd']
-                            except:
-                                print "key error"
-
                         tool_dict = {
                           'title': "Tools",
                           'type': "menu",
                           'subtitle': "Please select tools...",
                           'options': []
                         }
-                        for tool_key in all_dict['oses'][os_key]['versions'][version_key]['tools']:
-                            tool_dict['options'].append(all_dict['oses'][os_key]['versions'][version_key]['tools'][tool_key])
-                            key = os_key+"."+version_key+".tools."+tool_key
-                            try:
-                                self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['tools'][tool_key]['combine_cmd']
-                                if self.combine_cmd_dict[key] == "yes":
-                                    self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key]['tools'][tool_key]['background_cmd']
-                            except:
-                                print "key error"
-
                         host_dict = {
                           'title': "Docker Hosts",
                           'type': "menu",
                           'subtitle': "Please select which hosts are available to use for containers...",
                           'options': []
                         }
+                        types_dict = {
+                          'databases':database_dict,
+                          'environment':environment_dict,
+                          'services':service_dict,
+                          'tools':tool_dict
+                        }
+                        # !! TODO test this
+                        for type_service in types_dict:
+                            for type_key in all_dict['oses'][os_key]['versions'][version_key][type_service]:
+                                types_dict[type_service]['options'].append(all_dict['oses'][os_key]['versions'][version_key][type_service][type_key])
+                                key = os_key+"."+version_key+"."+type_service+"."+type_key
+                                try:
+                                    self.combine_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key][type_service][type_key]['combine_cmd']
+                                    if self.combine_cmd_dict[key] == "yes":
+                                        self.background_cmd_dict[key] = all_dict['oses'][os_key]['versions'][version_key][type_service][type_key]['background_cmd']
+                                except:
+                                    print "key error"
                         try:
                             directory = main_arg.metadata_path
                             directory = os.path.expanduser(directory)
