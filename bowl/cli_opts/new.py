@@ -22,6 +22,8 @@ from bowl.cli_opts import link
 from bowl.cli_opts import repositories
 from bowl.cli_opts import services
 from bowl.cli_opts import unlink
+from docker.client import Client
+from docker.utils import kwargs_from_env
 
 class Object(object):
     pass
@@ -55,8 +57,9 @@ class new(object):
             for h in host_a:
                 if host['title'] in h:
                     try:
-                        c = docker.Client(base_url='tcp://'+h,
-                                          version='1.12', timeout=2)
+                        c = Client(**kwargs_from_env())
+                        #c = docker.Client(base_url='tcp://'+h,
+                        #                  version='1.12', timeout=2)
                     except:
                         print "unable to connect to ",h
 
@@ -621,8 +624,9 @@ class new(object):
                     for h in host_a:
                         if host['title'] in h:
                             try:
-                                c = docker.Client(base_url='tcp://'+h,
-                                                  version='1.12', timeout=2)
+                                c = Client(**kwargs_from_env())
+                                #c = docker.Client(base_url='tcp://'+h,
+                                #                  version='1.12', timeout=2)
                             except:
                                 print "unable to connect to ",h
                     name = raw_input("Enter container name for container running on "+host['title']+":")
@@ -641,8 +645,9 @@ class new(object):
                     for h in host_a:
                         if host['title'] in h:
                             try:
-                                c = docker.Client(base_url='tcp://'+h,
-                                                  version='1.12', timeout=2)
+                                c = Client(**kwargs_from_env())
+                                #c = docker.Client(base_url='tcp://'+h,
+                                #                  version='1.12', timeout=2)
                                 containers = c.containers()
                             except:
                                 print "unable to connect to ",h
@@ -703,8 +708,9 @@ class new(object):
                     for h in host_a:
                         if host['title'] in h:
                             try:
-                                c = docker.Client(base_url='tcp://'+h,
-                                                  version='1.12', timeout=2)
+                                c = Client(**kwargs_from_env())
+                                #c = docker.Client(base_url='tcp://'+h,
+                                #                  version='1.12', timeout=2)
                                 containers.append(c.containers())
                                 print containers
                             except:
@@ -776,8 +782,9 @@ class new(object):
                     for h in host_a:
                         if host['title'] in h:
                             try:
-                                c = docker.Client(base_url='tcp://'+h,
-                                                  version='1.12', timeout=2)
+                                c = Client(**kwargs_from_env())
+                                #c = docker.Client(base_url='tcp://'+h,
+                                #                  version='1.12', timeout=2)
                                 containers = c.containers()
                             except:
                                 print "unable to connect to ",h
@@ -838,8 +845,9 @@ class new(object):
                     for h in host_a:
                         if host['title'] in h:
                             try:
-                                c = docker.Client(base_url='tcp://'+h,
-                                                  version='1.12', timeout=2)
+                                c = Client(**kwargs_from_env())
+                                #c = docker.Client(base_url='tcp://'+h,
+                                #                  version='1.12', timeout=2)
                                 containers.append(c.containers())
                                 print containers
                             except:
@@ -938,8 +946,9 @@ class new(object):
                 for h in host_a:
                     if image_host in h:
                         try:
-                            c = docker.Client(base_url='tcp://'+h,
-                                              version='1.12', timeout=2)
+                            c = Client(**kwargs_from_env())
+                            #c = docker.Client(base_url='tcp://'+h,
+                            #                  version='1.12', timeout=2)
                         except:
                             print "unable to connect to ",h
 
