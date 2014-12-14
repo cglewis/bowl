@@ -23,7 +23,6 @@ class connect(object):
             os.makedirs(directory)
         # !! TODO
         #    test connection
-        #    allow different port
         exists = False
         try:
             if os.path.exists(os.path.join(directory, "hosts")):

@@ -75,10 +75,28 @@ class cli(object):
         parse_connect = subparsers.add_parser('connect',
                                               help='connect to a docker host')
         parse_connect.add_argument('DOCKER_HOST',
-                                   help='specify docker host to connect to')
+                                   help='specify docker host to connect to (hostname or IP)')
+        parse_connect.add_argument('-e',
+                                   action='store_true',
+                                   help='use environment variables to establish connection details')
         parse_connect.add_argument('--port', '-p',
                                    default="2375",
                                    help='specify docker host port to connect to')
+        parse_connect.add_argument('--sock', '-s',
+                                   default=None,
+                                   help='specify docker host socket to connect to, i.e. unix://var/run/docker.sock')
+        parse_connect.add_argument('--tlsverify',
+                                   action='store_true',
+                                   help='verify the server certificate for TLS')
+        parse_connect.add_argument('--tlscert',
+                                   default=None,
+                                   help='/path/to/client-cert.pem for TLS')
+        parse_connect.add_argument('--tlskey',
+                                   default=None,
+                                   help='/path/to/client-key.pem for TLS')
+        parse_connect.add_argument('--tlscacert',
+                                   default=None,
+                                   help='/path/to/ca.pem for TLS')
         parse_connect.add_argument('--metadata_path', '-m',
                                    default=default_metadata_path,
                                    help='metadata path, default '+default_metadata_path)
