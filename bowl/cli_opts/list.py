@@ -42,11 +42,11 @@ class list(object):
         host_c = []
         for host in host_a:
             # !! TODO is using TLS, put in env for each host
-            #client = Client(**kwargs_from_env())
+            c = Client(**kwargs_from_env())
             #tls_config = docker.tls.TLSConfig(verify=False)
-            c = docker.Client(base_url='tcp://'+host, version='1.12',
-                              #tls=tls_config,
-                              timeout=2)
+            #c = docker.Client(base_url='tcp://'+host, version='1.12',
+            #                  #tls=tls_config,
+            #                  timeout=2)
             host_c.append(c.containers())
 
         compare_containers = []

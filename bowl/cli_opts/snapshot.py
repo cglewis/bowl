@@ -10,6 +10,7 @@ import uuid
 
 from bowl.cli_opts import hosts
 from bowl.cli_opts import list
+from docker import Client
 
 class Object(object):
     pass
@@ -49,9 +50,10 @@ class snapshot(object):
                  try:
                      for h in host_a:
                          if host in h:
-                             c = docker.Client(base_url='tcp://'+h,
-                                               version='1.12',
-                                               timeout=2)
+                             c = Client(**kwargs_from_env())
+                             #c = docker.Client(base_url='tcp://'+h,
+                             #                  version='1.12',
+                             #                  timeout=2)
                      c.commit(cont, repository=commit_name)
                      snapshot[cont] = host+":"+commit_name
                  except:

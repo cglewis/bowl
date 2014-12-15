@@ -7,7 +7,6 @@ Created on 15 March 2014
 
 import ast
 import os
-import sys
 
 class connect(object):
     """
@@ -42,7 +41,6 @@ class connect(object):
             else:
                 print "host has already been connected"
         except:
-            print sys.exc_info()
             print "unable to add docker host"
             return False
         return True

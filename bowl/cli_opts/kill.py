@@ -9,6 +9,7 @@ import docker
 import os
 
 from bowl.cli_opts import hosts
+from docker import Client
 
 class Object(object):
     pass
@@ -40,8 +41,9 @@ class kill(object):
                     if container['container_id'] == args.CONTAINER:
                         for host in host_a:
                             if container['host'] in host:
-                                c = docker.Client(base_url='tcp://'+host,
-                                                  version='1.12', timeout=10)
+                                c = Client(**kwargs_from_env())
+                                #c = docker.Client(base_url='tcp://'+host,
+                                #                  version='1.12', timeout=10)
                         c.kill(args.CONTAINER)
                         if not args.z:
                             print "killed "+container['container_id']+" on "+container['host']

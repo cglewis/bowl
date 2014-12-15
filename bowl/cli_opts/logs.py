@@ -9,6 +9,7 @@ import os
 
 from bowl.cli_opts import hosts
 from bowl.cli_opts import list
+from docker import Client
 
 class Object(object):
     pass
@@ -44,9 +45,10 @@ class logs(object):
                  try:
                      for h in host_a:
                          if host in h:
-                             c = docker.Client(base_url='tcp://'+h,
-                                               version='1.12',
-                                               timeout=2)
+                             c = Client(**kwargs_from_env())
+                             #c = docker.Client(base_url='tcp://'+h,
+                             #                  version='1.12',
+                             #                  timeout=2)
                      output = c.logs(cont)
                      if not args.z:
                          print output
