@@ -211,7 +211,7 @@ class new(object):
                                 container_dict['container_name'] = self.names[0]
                         else:
                             container_dict['container_name'] = image_tag
-                        f.write(container_dict+"\n")
+                        f.write(str(container_dict)+"\n")
                 except:
                     pass
 

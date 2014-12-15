@@ -7,6 +7,7 @@ Created on 15 March 2014
 
 import ast
 import os
+import sys
 
 class connect(object):
     """
@@ -33,14 +34,15 @@ class connect(object):
                             exists = True
             if not exists:
                 with open(os.path.join(directory, "hosts"), 'a') as f:
-                    f.write("{" +
-                            "'title': '"+args.DOCKER_HOST+"'," +
-                            "'port': '"+args.port+"'," +
-                            " 'type': 'choice_menu'" +
-                            "}\n")
+                    host_dict = {}
+                    host_dict['title'] = args.DOCKER_HOST
+                    host_dict['port'] = args.port
+                    host_dict['type'] = 'choice_menu'
+                    f.write(str(host_dict)+"\n")
             else:
                 print "host has already been connected"
         except:
+            print sys.exc_info()
             print "unable to add docker host"
             return False
         return True
