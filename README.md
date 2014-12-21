@@ -6,7 +6,7 @@ bowl
 [![PyPI version](https://badge.fury.io/py/bowl.svg)](http://badge.fury.io/py/bowl)
 [![downloads](https://pypip.in/d/bowl/badge.png)](https://pypi.python.org/pypi/bowl)
 
-Tool for easily building and configuring virtual environments on top of Docker.
+Tool for easily building and configuring containerized environments on top of Docker.
 
 Main features:
 
