@@ -1,4 +1,6 @@
 include LICENSE
 include *.md
 include docs/Makefile
+recursive-include bowl/static *.jpg *.gif *.png *.js *.css
+recursive-include bowl/templates *.html
 recursive-include docs *.md *.png *.rst *.bat *.pickle *.doctree *.html *.inv *.js *.txt *.gif *.css *.1 *.py

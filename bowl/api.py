@@ -5,10 +5,13 @@ Created on 14 March 2014
 @author: Charlie Lewis
 """
 import ast
+import bowl
 import datetime
 import os
+import posixpath
 import sys
 import tarfile
+import urllib
 import web
 
 from bowl.cli_opts import add
@@ -41,6 +44,31 @@ from bowl.cli_opts import version
 
 START_TIME = datetime.datetime.now()
 URLS = ()
+bowl_globals = {'bowl': bowl.cli_opts}
+render = web.template.render('templates/', globals=bowl_globals)
+
+class StaticMiddleware:
+    """WSGI middleware for serving static files."""
+    def __init__(self, app, prefix='/static/', root_path='static/'):
+        self.app = app
+        self.prefix = prefix
+        self.root_path = root_path
+
+    def __call__(self, environ, start_response):
+        path = environ.get('PATH_INFO', '')
+        path = self.normpath(path)
+
+        if path.startswith(self.prefix):
+            environ["PATH_INFO"] = os.path.join(self.root_path, web.lstrips(path, self.prefix))
+            return web.httpserver.StaticApp(environ, start_response)
+        else:
+            return self.app(environ, start_response)
+
+    def normpath(self, path):
+        path2 = posixpath.normpath(urllib.unquote(path))
+        if path.endswith("/"):
+            path2 += "/"
+        return path2
 
 class main(object):
     """
@@ -56,13 +84,26 @@ class main(object):
     def __init__(self, port=8080, host="0.0.0.0"): # pragma: no cover
         urls = self.setup()
         app = web.application(urls, globals())
-        web.httpserver.runsimple(app.wsgifunc(), (host, port))
+        wsgifunc = app.wsgifunc()
+        wsgifunc = StaticMiddleware(wsgifunc)
+        wsgifunc = web.httpserver.LogMiddleware(wsgifunc)
+        server = web.httpserver.WSGIServer((host, port), wsgifunc)
+        print "http://%s:%d/" % (host, port)
+        try:
+            server.start()
+        except KeyboardInterrupt:
+            server.stop()
 
     def setup(self):
         global URLS
         urls = (
             '/', 'root',
             '/add', 'api_add',
+            '/bowl/about', 'bowl_about',
+            '/bowl/configuration', 'bowl_configuration',
+            '/bowl/images', 'bowl_images',
+            '/bowl/running', 'bowl_running',
+            '/bowl/services', 'bowl_services',
             '/connect/(.*)', 'api_connect',
             '/delete/(.*)', 'api_delete',
             '/disconnect/(.*)', 'api_disconnect',
@@ -118,6 +159,46 @@ class root:
                 string += url+"\n"
             i += 1
         return string
+
+class bowl_about:
+    def GET(self):
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return render.about(args)
+
+class bowl_configuration:
+    def GET(self):
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return render.configuration(args)
+
+class bowl_images:
+    def GET(self):
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return render.images(args)
+
+class bowl_running:
+    def GET(self):
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return render.running(args)
+
+class bowl_services:
+    def GET(self):
+        class Object(object):
+            pass
+        args = Object()
+        args.z = True
+        return render.services(args)
 
 class api_add:
     """
@@ -378,14 +459,16 @@ class api_new:
         try:
             self.data = ast.literal_eval(self.data)
             if "host" in self.data:
-                args.host = []
-                args.host.append(self.data['host'])
+                #args.host = []
+                #args.host.append(self.data['host'])
+                args.host = self.data['host']
             else:
                 return "must specify a host to run the container on"
 
             if "service" in self.data:
-                args.service = []
-                args.service.append(self.data['service'])
+                #args.service = []
+                #args.service.append(self.data['service'])
+                args.service = self.data['service']
             else:
                 args.service = False
             if "image" in self.data:

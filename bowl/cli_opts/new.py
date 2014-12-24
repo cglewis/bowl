@@ -135,6 +135,35 @@ class new(object):
                                  encoding=d_encoding)
 
                 # !! TODO cleanup, but for now ensures that the build finishes prior to container creation
+                building = 1
+                i = 0
+                char = "-"
+                while building:
+                    if i == 1:
+                        char = "\\"
+                    elif i == 2:
+                        char = "|"
+                    elif i == 3:
+                        char = "/"
+                    elif i == 4:
+                        char = "-"
+                        i = 0
+                    images = c.images()
+                    tag_a = images[0]['RepoTags']
+                    for tag in tag_a:
+                        if d_tag in tag:
+                            building = 0
+                    rows,columns = os.popen('stty size', 'r').read().split()
+                    rows = int(rows)
+                    columns = int(columns)
+
+                    sys.stdout.write('\r')
+                    sys.stdout.write(' ' * columns)
+                    sys.stdout.write('\r')
+                    sys.stdout.write('building {}'.format(char))
+                    sys.stdout.flush()
+                    i += 1
+
                 print list(output)
 
                 # !! TODO check if tty and stdin_open (interactive) are needed
@@ -481,7 +510,7 @@ class new(object):
                 self.image = True
                 self.launch = True
             if args.service:
-                self.build_dict['services'] = args.service
+                self.build_dict['services'] = ast.literal_eval(args.service[0])
                 self.launch = True
             if args.host:
                 for host in args.host:
@@ -492,7 +521,6 @@ class new(object):
 
         if self.launch and not args.no_curses:
             self.default = self.query_yes_no(self, "Use default runtime settings?", default="yes")
-
 
         # !! TODO fix this!!!
         if not self.default:

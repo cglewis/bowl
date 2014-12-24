@@ -4,6 +4,7 @@ This module is the start command of bowl.
 Created on 14 July 2014
 @author: Charlie Lewis
 """
+import bowl
 import os
 import sys
 
@@ -56,4 +57,5 @@ class start(object):
                 sys.exit(1)
 
             # start api server in the background
+            os.chdir(os.path.dirname(bowl.__file__))
             bowl.api.main()
